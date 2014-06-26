@@ -86,6 +86,13 @@ int simpleMain(int argc, char* argv[]) {
 	return 0;
 }
 
+#if defined(__clang__)
+static std::string compilerVersion = "clang";
+#elif defined(__GNUC__) || defined(__GNUG__)
+static std::string compilerVersion =  "gxx";
+#else
+static std::string compilerVersion = "unrecognized";
+#endif
 
 int main(int argc, char* argv[]) {
 	uint32_t maxSize = 50;
@@ -97,6 +104,7 @@ int main(int argc, char* argv[]) {
 	bool verbose = false;
 	bool veryVerbose = false;
 	bool simple = false;
+	bool header = false;
 	programSetUp setUp(argc, argv);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
 	if(!setUp.setOption(minSize, "-minSize", "minSize")){
@@ -106,6 +114,7 @@ int main(int argc, char* argv[]) {
 		std::cout << "minSize can't be larger than maxSize, setting minSize to maxSize" << std::endl;
 		minSize = maxSize;
 	}
+	setUp.setOption(header, "-header", "header");
 	setUp.setOption(simple, "-simple", "simple");
 	setUp.setOption(strNum, "-strNum", "strNum");
 	setUp.setOption(runTimes, "-runTimes", "runTimes");
@@ -131,6 +140,13 @@ int main(int argc, char* argv[]) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
+
+
+	//std::cout << compilerVersion << std::endl;
+	if(header){
+		std::cout << "numType\talnType\tcompiler\tminSize\tmaxSize"
+				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
+	}
 	{
 		/*
 		 * double
@@ -153,7 +169,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			std::cout << "double\tglobal\t"
-										<< alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -176,7 +192,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t" << alnCount
+			std::cout << "float\tglobal\t" << compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -201,7 +217,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint16_t\tglobal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -225,7 +241,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint32_t\tglobal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -249,7 +265,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint64_t\tglobal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -274,7 +290,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			std::cout << "double\tlocal\t"
-										<< alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -297,7 +313,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t" << alnCount
+			std::cout << "float\tlocal\t" << compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -322,7 +338,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint16_t\tlocal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -346,7 +362,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint32_t\tlocal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -370,7 +386,9 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			std::cout << "uint64_t\tlocal\t"
-					<< alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< compilerVersion << "\t"
+					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
+					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 
