@@ -57,9 +57,9 @@ int simpleMain(int argc, char* argv[]) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
-	gapScoringParameters <uint32_t> gapPars(5,1);
+	gapScoringParameters <int32_t> gapPars(5,1);
 	substituteMatrix scoreMatrix(2,-2);
-	alignerTemp <uint32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+	alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 	for(uint32_t run = 0; run < runTimes; ++run){
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
