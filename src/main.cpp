@@ -198,15 +198,15 @@ int main(int argc, char* argv[]) {
 	}
 	{
 		/*
-		 * uint16_t
+		 * int16_t
 		 */
-		gapScoringParameters <uint16_t> gapPars(5,1);
+		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint16_t", false);
+			TicToc timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -216,21 +216,21 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint16_t\tglobal\t"
+			std::cout << "int16_t\tglobal\t"
 					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
 		/*
-		 * uint32_t
+		 * int32_t
 		 */
-		gapScoringParameters <uint32_t> gapPars(5,1);
+		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint32_t", false);
+			TicToc timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -240,21 +240,21 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint32_t\tglobal\t"
+			std::cout << "int32_t\tglobal\t"
 					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
 		/*
-		 * uint64_t
+		 * int64_t
 		 */
-		gapScoringParameters <uint64_t> gapPars(5,1);
+		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint64_t", false);
+			TicToc timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -264,7 +264,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint64_t\tglobal\t"
+			std::cout << "int64_t\tglobal\t"
 					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -319,15 +319,15 @@ int main(int argc, char* argv[]) {
 	}
 	{
 		/*
-		 * uint16_t
+		 * int16_t
 		 */
-		gapScoringParameters <uint16_t> gapPars(5,1);
+		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint16_t", false);
+			TicToc timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -337,21 +337,21 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint16_t\tlocal\t"
+			std::cout << "int16_t\tlocal\t"
 					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
 		/*
-		 * uint32_t
+		 * int32_t
 		 */
-		gapScoringParameters <uint32_t> gapPars(5,1);
+		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint32_t", false);
+			TicToc timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -361,21 +361,21 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint32_t\tlocal\t"
+			std::cout << "int32_t\tlocal\t"
 					<< compilerVersion << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
 		/*
-		 * uint64_t
+		 * int64_t
 		 */
-		gapScoringParameters <uint64_t> gapPars(5,1);
+		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <uint64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("uint64_t", false);
+			TicToc timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -385,7 +385,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-			std::cout << "uint64_t\tlocal\t"
+			std::cout << "int64_t\tlocal\t"
 					<< compilerVersion << "\t"
 					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
 					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
