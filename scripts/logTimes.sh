@@ -5,13 +5,13 @@ if [ ! -d profiles ]; then
 	mkdir profiles
 fi 
 
-bin/clangAlignTest -header "$@" > profiles/holdTimes.txt
-bin/gxxAlignTest "$@" >> profiles/holdTimes.txt
-bin/clangAlignTest "$@" >> profiles/holdTimes.txt
-bin/gxxAlignTest "$@" >> profiles/holdTimes.txt
-bin/clangAlignTest "$@" >> profiles/holdTimes.txt
-bin/gxxAlignTest "$@" >> profiles/holdTimes.txt
-bin/clangAlignTest "$@" >> profiles/holdTimes.txt
-bin/gxxAlignTest "$@" >> profiles/holdTimes.txt
-bin/clangAlignTest "$@" >> profiles/holdTimes.txt
-bin/gxxAlignTest "$@" >> profiles/holdTimes.txt
+bin/clangProfiler fullAlignmentProfiler -header "$@" > profiles/holdTimes.txt
+bin/gxxProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/clangProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/gxxProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/clangProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/gxxProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/clangProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/gxxProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/clangProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
+bin/gxxProfiler fullAlignmentProfiler "$@" >> profiles/holdTimes.txt
