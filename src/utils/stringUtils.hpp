@@ -31,6 +31,7 @@ std::string stringToUpperReturn(std::string str);
 std::string stringToLowerReturn(std::string str);
 void changeStringVectorToLowerCase(VecStr& vec) ;
 std::string get_cwd();
+bool stringContainsAllDigits(const std::string& str);
 
 template <typename T>
 std::string vectorToString(const std::vector<T>& vectorToConvert,

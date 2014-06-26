@@ -6,16 +6,30 @@
  *  Created on: Jun 25, 2014
  *      Author: nickhathaway
  */
+
+
+
 #include <stdio.h>
 #include <iostream>
 #include <vector>
 #include <array>
 #include <stdint.h>
-
-//#include "testAligner.hpp"
 #include "all.h"
+#include "profilerRunner.hpp"
 
-int simpleMain(int argc, char* argv[]) {
+
+/*
+ * get compiler constants
+ */
+#if defined(__clang__)
+static std::string compilerVersion = "clang";
+#elif defined(__GNUC__) || defined(__GNUG__)
+static std::string compilerVersion =  "gxx";
+#else
+static std::string compilerVersion = "unrecognized";
+#endif
+
+int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t maxSize = 50;
 	uint32_t minSize = 40;
 	uint32_t strNum = 50;
@@ -26,7 +40,7 @@ int simpleMain(int argc, char* argv[]) {
 	bool verbose = false;
 	bool veryVerbose = false;
 	bool simple = false;
-	programSetUp setUp(argc, argv);
+	programSetUp setUp(inputCommands);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
 	setUp.setOption(minSize, "-minSize", "minSize");
 	if(minSize > maxSize){
@@ -86,15 +100,9 @@ int simpleMain(int argc, char* argv[]) {
 	return 0;
 }
 
-#if defined(__clang__)
-static std::string compilerVersion = "clang";
-#elif defined(__GNUC__) || defined(__GNUG__)
-static std::string compilerVersion =  "gxx";
-#else
-static std::string compilerVersion = "unrecognized";
-#endif
 
-int main(int argc, char* argv[]) {
+
+int fullAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t maxSize = 50;
 	uint32_t minSize = 50;
 	uint32_t strNum = 50;
@@ -103,9 +111,8 @@ int main(int argc, char* argv[]) {
 	std::string alphDelim = ",";
 	bool verbose = false;
 	bool veryVerbose = false;
-	bool simple = false;
 	bool header = false;
-	programSetUp setUp(argc, argv);
+	programSetUp setUp(inputCommands);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
 	if(!setUp.setOption(minSize, "-minSize", "minSize")){
 		minSize = maxSize;
@@ -115,7 +122,6 @@ int main(int argc, char* argv[]) {
 		minSize = maxSize;
 	}
 	setUp.setOption(header, "-header", "header");
-	setUp.setOption(simple, "-simple", "simple");
 	setUp.setOption(strNum, "-strNum", "strNum");
 	setUp.setOption(runTimes, "-runTimes", "runTimes");
 	setUp.setOption(alphStr, "-alphStr", "alphStr");
@@ -123,9 +129,6 @@ int main(int argc, char* argv[]) {
 	setUp.setOption(verbose, "-verbose,-v", "verbose");
 	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
 	setUp.finishSetUp(std::cout);
-	if(simple){
-		return simpleMain(argc, argv);
-	}
 	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
 	std::vector<char> alphabet = processAlph.first;
 	std::vector<uint32_t> alphCounts = processAlph.second;
@@ -396,4 +399,21 @@ int main(int argc, char* argv[]) {
 		setUp.logRunTime(std::cout);
 	}
 	return 0;
+}
+
+profilerRunner::profilerRunner()
+    : programRunner(
+          {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
+					 addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false)
+           },
+          "profilerRunner") {}
+
+int main(int argc, char* argv[]) {
+
+  profilerRunner proRunner;
+  if (argc > 1) {
+    return proRunner.run(argc, argv);
+  }
+  proRunner.listPrograms(std::cout);
+  return 0;
 }

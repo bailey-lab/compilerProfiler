@@ -213,3 +213,12 @@ std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(
 	}
 	return {ansLets, ansCounts};
 }
+
+bool stringContainsAllDigits(const std::string& str) {
+  for (const auto& c : str) {
+    if (!isdigit(c)) {
+      return false;
+    }
+  }
+  return true;
+}

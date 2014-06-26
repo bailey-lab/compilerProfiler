@@ -24,8 +24,8 @@ HEADERS = $(call rwildcard, src/, *.h) \
 	$(call rwildcard, src/, *.hpp)
 
 
-BINGXX = bin/gxxAlignTest
-BINCLANG = bin/clangAlignTest
+BINGXX = bin/gxxProfiler
+BINCLANG = bin/clangProfiler
 
 #GXXCXXFLAGS = -std=c++11 -fopenmp -Wall
 GXXCXXFLAGS = -std=c++11 -Wall
