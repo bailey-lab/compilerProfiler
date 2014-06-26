@@ -699,6 +699,31 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 	return 0;
 }
 
+/* profiler template
+ * int nameOfProgram(MapStrStr inputCommands) {
+ *  //programSetUp for easy command line parsing
+ * 	programSetUp setUp(inputCommands);
+ * 	T variable1 = defaultValue;
+ * 	T2 variable2 = defaultValue2
+ * 	//setOption takes four options variableToSet, multipleFlags_commandDelimited, nameOfVariable, requried(byDeault false)
+ * 	//setOption is also overloaded to set more of the common std libary variable, int types (32_t, 64_t etc), double, std::string etc
+ *	setUp.setOption(variable1, "-variable1", "variable1");
+ *  setUp.setOption(variable2, "-variable2,-var2", "variable2", true);
+ *  //always finish with setUp.finishSetUp(std::cout); so you
+ *  //can use -getFlags and have the setUp print warnings
+ *  setUp.finishSetUp(std::cout);
+ *
+ *  //your code here, compilerVersion is a static variable set to clang or gcc so you can use to log which compiler you are using
+ *  //compilerProfiler comes with a random number generator, functions for generating random strings, an aligner, a timer to log run times
+ *  //can include own code to profile
+ *  // once you write your own profiler, just add to profilerRunner with the addFunc function in the initialization seen bellow
+ *  // which takes name to call the program at commandline, the function itself, and whether the name is an alias and
+ *  // shouldn't be printed to commandline, and whether to make the call lower case to make the calling case insensitive (default)
+ *
+ * return 0;
+ * }
+ */
+
 profilerRunner::profilerRunner()
     : programRunner(
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
