@@ -46,8 +46,10 @@ ifeq ($(UNAME_S),Darwin)
 	ifdef HATHAWAY
 		CLANGCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
+	
 	CLANGCXXOPT = -O2 -funroll-loops -DNDEBUG 
 else
+	CLANGCXXFLAGS += -stdlib=libstdc++
    	CLANGCXXOPT = -O2 -march=native -mtune=native -funroll-loops -DNDEBUG 
 endif
 
