@@ -86,5 +86,5 @@ _compProfiler()
     fi
    return 0
 }
-complete -F _compProfiler.sh compProfiler.sh
+complete -F _compProfiler compProfiler.sh
 
