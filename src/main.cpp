@@ -16,18 +16,9 @@
 #include <stdint.h>
 #include "all.h"
 #include "profilerRunner.hpp"
+#include <random>
 
 
-/*
- * get compiler constants
- */
-#if defined(__clang__)
-static std::string compilerVersion = "clang";
-#elif defined(__GNUC__) || defined(__GNUG__)
-static std::string compilerVersion =  "gxx";
-#else
-static std::string compilerVersion = "unrecognized";
-#endif
 
 int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t maxSize = 50;
@@ -400,6 +391,8 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 	}
 	return 0;
 }
+
+
 int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t maxSize = 50;
 	uint32_t minSize = 50;
@@ -699,6 +692,37 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 	return 0;
 }
 
+int randomNumberGeneration(MapStrStr inputCommands) {
+	programSetUp setUp(inputCommands);
+	uint64_t stop = 100;
+	setUp.setOption(stop, "-stop", "stop");
+	setUp.finishSetUp(std::cout);
+	std::random_device rd;
+	randomGenerator gen;
+	std::mt19937 mtGen(rd());
+	std::mt19937_64 mtGen64(rd());
+	{
+		TicToc timmer("random_device");
+		for(uint64_t run = 0; run < stop; ++run	){
+			rd();
+		}
+	}
+	{
+		TicToc timmer("mt");
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen();
+		}
+	}
+	{
+		TicToc timmer("mt64");
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen64();
+		}
+	}
+
+	return 0;
+}
+
 /* profiler template
  * int nameOfProgram(MapStrStr inputCommands) {
  *  //programSetUp for easy command line parsing
@@ -728,12 +752,13 @@ profilerRunner::profilerRunner()
     : programRunner(
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
 					 addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
-					 addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler, false)
+					 addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler, false),
+					 addFunc("randomNumberGeneration", randomNumberGeneration, false)
            },
           "profilerRunner") {}
 
 int main(int argc, char* argv[]) {
-	//std::cout << __VERSION__ << std::endl;
+	std::cout << __VERSION__ << std::endl;
   profilerRunner proRunner;
   if (argc > 1) {
     return proRunner.run(argc, argv);

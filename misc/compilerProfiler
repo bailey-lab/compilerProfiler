@@ -1,0 +1,90 @@
+_clangProfiler()
+{
+    local cur prev opts base
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    #echo ${COMP_WORDS[*]}
+    #
+    #  The basic options we'll complete.
+    #
+    opts=$(for x in `clangProfiler | grep ")" | sed "s/.*) //g"`; do echo ${x} ; done )
+
+    #
+    #  Complete the arguments to some of the basic commands.
+    #
+    #echo hello
+    if [[ $COMP_CWORD -lt 2 ]] ; then
+		COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	elif [[ ${cur} == -* ]]; then
+		flagopts=$(${COMP_WORDS[0]} ${COMP_WORDS[1]} -getFlags)
+		newopts=$(echo $flagopts | sed "s/,/ /g")
+		COMPREPLY=( $(compgen -W "${newopts}" -- ${cur}) )
+    else
+    	#COMPREPLY=($(compgen -o default -f -d -- ${cur}))
+    	_filedir
+    fi
+   return 0
+}
+complete -F _clangProfiler clangProfiler
+
+_gxxProfiler()
+{
+    local cur prev opts base
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    #echo ${COMP_WORDS[*]}
+    #
+    #  The basic options we'll complete.
+    #
+    opts=$(for x in `gxxProfiler | grep ")" | sed "s/.*) //g"`; do echo ${x} ; done )
+
+    #
+    #  Complete the arguments to some of the basic commands.
+    #
+    #echo hello
+    if [[ $COMP_CWORD -lt 2 ]] ; then
+		COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	elif [[ ${cur} == -* ]]; then
+		flagopts=$(${COMP_WORDS[0]} ${COMP_WORDS[1]} -getFlags)
+		newopts=$(echo $flagopts | sed "s/,/ /g")
+		COMPREPLY=( $(compgen -W "${newopts}" -- ${cur}) )
+    else
+    	#COMPREPLY=($(compgen -o default -f -d -- ${cur}))
+    	_filedir
+    fi
+   return 0
+}
+complete -F _gxxProfiler gxxProfiler
+
+_compProfiler()
+{
+    local cur prev opts base
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    #echo ${COMP_WORDS[*]}
+    #
+    #  The basic options we'll complete.
+    #
+    opts=$(for x in `gxxProfiler | grep ")" | sed "s/.*) //g"`; do echo ${x} ; done )
+
+    #
+    #  Complete the arguments to some of the basic commands.
+    #
+    #echo hello
+    if [[ $COMP_CWORD -lt 2 ]] ; then
+		COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	elif [[ ${cur} == -* ]]; then
+		flagopts=$(${COMP_WORDS[0]} ${COMP_WORDS[1]} -getFlags)
+		newopts=$(echo $flagopts | sed "s/,/ /g")
+		COMPREPLY=( $(compgen -W "${newopts}" -- ${cur}) )
+    else
+    	#COMPREPLY=($(compgen -o default -f -d -- ${cur}))
+    	_filedir
+    fi
+   return 0
+}
+complete -F _compProfiler.sh compProfiler.sh
+

@@ -45,3 +45,17 @@
 #include <cppitertools/enumerate.hpp>
 #include <cppitertools/range.hpp>
 #include <zi/time/time.hpp>
+
+/*
+ * get compiler constants
+ */
+std::string getCompilerVersion();
+#if defined(__clang__)
+static std::string compilerVersion = "clang";
+#elif defined(__GNUC__) || defined(__GNUG__)
+static std::string compilerVersion =  "gxx";
+#else
+static std::string compilerVersion = "unrecognized";
+#endif
+
+
