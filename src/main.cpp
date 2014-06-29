@@ -759,6 +759,7 @@ profilerRunner::profilerRunner()
 
 int main(int argc, char* argv[]) {
 	std::cout << __VERSION__ << std::endl;
+	std::cout << getCompilerVersion() << std::endl;
   profilerRunner proRunner;
   if (argc > 1) {
     return proRunner.run(argc, argv);

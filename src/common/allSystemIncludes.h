@@ -58,4 +58,12 @@ static std::string compilerVersion =  "gxx";
 static std::string compilerVersion = "unrecognized";
 #endif
 
+#if defined(__linux__)
+static std::string operatingSystem = "linux";
+#elif defined(__APPLE__)
+static std::string operatingSystem = "mac";
+#else
+static std::string operatingSystem = "other";
+#endif
+
 
