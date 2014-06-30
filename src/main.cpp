@@ -27,10 +27,9 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	bool local = false;
 	std::string alphStr = "A40,C10,G10,T40";
 	std::string alphDelim = ",";
-	bool verbose = false;
 	bool veryVerbose = false;
 	bool simple = false;
-	programSetUp setUp(inputCommands);
+	profilerSetUp setUp(inputCommands);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
 	setUp.setOption(minSize, "-minSize", "minSize");
 	if(minSize > maxSize){
@@ -43,13 +42,13 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	setUp.setOption(local, "-local", "local");
 	setUp.setOption(alphStr, "-alphStr", "alphStr");
 	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
-	setUp.setOption(verbose, "-verbose,-v", "verbose");
+
 	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
 	setUp.finishSetUp(std::cout);
 	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
 	std::vector<char> alphabet = processAlph.first;
 	std::vector<uint32_t> alphCounts = processAlph.second;
-	if(verbose){
+	if(setUp.verbose_){
 		std::cout << "minSize: " << minSize << std::endl;
 		std::cout << "maxSize: " << maxSize << std::endl;
 		std::cout << "strNum: " << strNum << std::endl;
@@ -72,7 +71,7 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
 			std::for_each(randStrings.begin(),
 						randStrings.end(), [&](const std::string & str){ std::cout << str << std::endl;});
 		}
-		if (verbose) {
+		if (setUp.verbose_) {
 			std::cout << alignerObj.alignObjectA_ << std::endl;
 			std::cout << alignerObj.alignObjectB_ << std::endl;
 		}
@@ -82,7 +81,7 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
 			}
 		}
 	}
-	if(verbose){
+	if(setUp.verbose_){
 		setUp.logRunTime(std::cout);
 	}else{
 		std::cout << setUp.timer_.getRunTime() << std::endl;
@@ -99,10 +98,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t runTimes = 1;
 	std::string alphStr = "A,C,G,T";
 	std::string alphDelim = ",";
-	bool verbose = false;
+
 	bool veryVerbose = false;
-	bool header = false;
-	programSetUp setUp(inputCommands);
+	profilerSetUp setUp(inputCommands);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
 	if(!setUp.setOption(minSize, "-minSize", "minSize")){
 		minSize = maxSize;
@@ -111,18 +109,16 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::cout << "minSize can't be larger than maxSize, setting minSize to maxSize" << std::endl;
 		minSize = maxSize;
 	}
-	setUp.setOption(header, "-header", "header");
 	setUp.setOption(strNum, "-strNum", "strNum");
 	setUp.setOption(runTimes, "-runTimes", "runTimes");
 	setUp.setOption(alphStr, "-alphStr", "alphStr");
 	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
-	setUp.setOption(verbose, "-verbose,-v", "verbose");
 	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
 	setUp.finishSetUp(std::cout);
 	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
 	std::vector<char> alphabet = processAlph.first;
 	std::vector<uint32_t> alphCounts = processAlph.second;
-	if(verbose){
+	if(setUp.verbose_){
 		std::cout << "minSize: " << minSize << std::endl;
 		std::cout << "maxSize: " << maxSize << std::endl;
 		std::cout << "strNum: " << strNum << std::endl;
@@ -136,7 +132,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 
 
 	//std::cout << compilerUsed << std::endl;
-	if(header){
+	if(setUp.header_){
 		std::cout << "numType\talnType\t"<< getCompilerInfo("\t", true) << "\tminSize\tmaxSize"
 				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
 	}
@@ -385,7 +381,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		}
 	}
 
-	if(verbose){
+	if(setUp.verbose_){
 		setUp.logRunTime(std::cout);
 	}
 	return 0;
@@ -399,11 +395,10 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t runTimes = 1;
 	std::string alphStr = "A,C,G,T";
 	std::string alphDelim = ",";
-	bool verbose = false;
 	bool veryVerbose = false;
-	bool header = false;
-	programSetUp setUp(inputCommands);
+	profilerSetUp setUp(inputCommands);
 	setUp.setOption(maxSize, "-maxSize", "maxSize");
+	setUp.processExtra();
 	if(!setUp.setOption(minSize, "-minSize", "minSize")){
 		minSize = maxSize;
 	}
@@ -411,18 +406,16 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::cout << "minSize can't be larger than maxSize, setting minSize to maxSize" << std::endl;
 		minSize = maxSize;
 	}
-	setUp.setOption(header, "-header", "header");
 	setUp.setOption(strNum, "-strNum", "strNum");
 	setUp.setOption(runTimes, "-runTimes", "runTimes");
 	setUp.setOption(alphStr, "-alphStr", "alphStr");
 	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
-	setUp.setOption(verbose, "-verbose,-v", "verbose");
 	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
 	setUp.finishSetUp(std::cout);
 	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
 	std::vector<char> alphabet = processAlph.first;
 	std::vector<uint32_t> alphCounts = processAlph.second;
-	if(verbose){
+	if(setUp.verbose_){
 		std::cout << "minSize: " << minSize << std::endl;
 		std::cout << "maxSize: " << maxSize << std::endl;
 		std::cout << "strNum: " << strNum << std::endl;
@@ -436,8 +429,12 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 
 
 	//std::cout << compilerUsed << std::endl;
-	if(header){
-		std::cout << "numType\talnType\t"<< getCompilerInfo("\t", true) << "\tminSize\tmaxSize"
+	if(setUp.header_){
+		std::cout << "numType\talnType\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColName_ << "\t";
+		}
+		std::cout<< getCompilerInfo("\t", true) << "\tminSize\tmaxSize"
 				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
 	}
 	{
@@ -461,8 +458,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tglobal\t"
-										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+			std::cout << "double\tglobal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ << "\t";
+			}
+			std::cout << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -485,7 +485,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tglobal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -509,7 +513,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tglobal\t"
+			std::cout << "int16_t\tglobal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -533,7 +541,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tglobal\t"
+			std::cout << "int32_t\tglobal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -557,7 +569,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tglobal\t"
+			std::cout << "int64_t\tglobal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -582,7 +598,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tlocal\t"
+			std::cout << "double\tlocal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
@@ -606,7 +626,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tlocal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -630,7 +654,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tlocal\t"
+			std::cout << "int16_t\tlocal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -654,7 +682,11 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tlocal\t"
+			std::cout << "int32_t\tlocal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
@@ -678,64 +710,87 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tlocal\t"
+			std::cout << "int64_t\tlocal\t";
+			if(setUp.addExtra_){
+				std::cout << setUp.extraColInfo_ <<"\t";
+			}
+			std::cout
 					<< getCompilerInfo("\t", false) << "\t"
 					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
 					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 
-	if(verbose){
+	if(setUp.verbose_){
 		setUp.logRunTime(std::cout);
 	}
 	return 0;
 }
 
 int randomNumberGeneration(MapStrStr inputCommands) {
-	programSetUp setUp(inputCommands);
+	profilerSetUp setUp(inputCommands);
 	uint64_t stop = 100;
 	bool randDeviceAsWell = false;
-	bool header = false;
 	setUp.setOption(randDeviceAsWell, "-randDev", "randDeviceAsWell");
 	setUp.setOption(stop, "-stop", "stop");
-	setUp.setOption(header, "-header", "header");
+	setUp.processExtra();
 	setUp.finishSetUp(std::cout);
 	std::random_device rd;
 	std::mt19937 mtGen(rd());
 	std::mt19937_64 mtGen64(rd());
 	randomGenerator gen;
-	//std::cout << mtGen.max() << std::endl;
-	//std::cout << mtGen64.max() << std::endl;
-	if(header){
-		std::cout << "generator\trunTimes\t" << getCompilerInfo("\t", true) << "\ttime" << std::endl;
+	std::cout << mtGen.max() << std::endl;
+	std::cout << mtGen64.max() << std::endl;
+	if(setUp.header_){
+		std::cout << "generator\trunTimes\t" ;
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColName_ << "\t";
+		}
+		std::cout << getCompilerInfo("\t", true) << "\ttime" << std::endl;
 	}
 	if(randDeviceAsWell){
 		TicToc timmer("random_device", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			rd();
 		}
-		std::cout << "random_device\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
+		std::cout << "random_device\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout  << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
 		TicToc timmer("mt",false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen();
 		}
-		std::cout << "mt19937\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
+		std::cout << "mt19937\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
 		TicToc timmer("mt64", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen64();
 		}
-		std::cout << "mt19937_64\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
+		std::cout << "mt19937_64\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
 		TicToc timmer("randomGenerator", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			gen.unifRand();
 		}
-		std::cout << "randomGenerator\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
+		std::cout << "randomGenerator\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 
 	return 0;

@@ -11,4 +11,5 @@
 #include "programUtils/parameter.hpp"
 #include "programUtils/commandLineArguments.hpp"
 #include "programUtils/programSetUp.hpp"
+#include "programUtils/profilerSetUp.hpp"
 #include "programUtils/programRunner.hpp"

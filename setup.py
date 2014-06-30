@@ -379,7 +379,9 @@ def main():
             print count , ")" , set
             count = count + 1
     elif args.addTabComplete:
-        cmd = "cat misc/sequenceTools >> ~/.bash_completion"
+        cmd = "cat misc/bibCppTools >> ~/.bash_completion"
+        Utils.run(cmd)
+        cmd = "cat misc/compilerProfiler >> ~/.bash_completion"
         Utils.run(cmd)
     else:     
         s.setup()
