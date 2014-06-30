@@ -363,7 +363,7 @@ def parse_args():
     parser.add_argument('dirsToDelete', type=str, nargs='*')
     parser.add_argument('-bib-cpp', dest = 'bib_cpp', action = 'store_true' );
     parser.add_argument('-libs', dest = 'print_libs', action = 'store_true' );
-    parser.add_argument('-addTabComplete', dest = 'addTabComplete', action = 'store_true' );
+    parser.add_argument('-addBashCompletion', dest = 'addBashCompletion', action = 'store_true' );
     parser.add_argument('-clang', dest = 'clang', action = 'store_true' );
     return parser.parse_args()
 
@@ -378,11 +378,10 @@ def main():
         for set in installs:
             print count , ")" , set
             count = count + 1
-    elif args.addTabComplete:
-        cmd = "cat misc/bibCppTools >> ~/.bash_completion"
-        Utils.run(cmd)
-        cmd = "cat misc/compilerProfiler >> ~/.bash_completion"
-        Utils.run(cmd)
+    elif args.addBashCompletion:
+        if(os.path.isdir("./bashCompletes")):
+            cmd = "cat bashCompletes/* >> ~/.bash_completion"
+            Utils.run(cmd)
     else:     
         s.setup()
 main()
