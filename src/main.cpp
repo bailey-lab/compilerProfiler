@@ -701,9 +701,9 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	setUp.setOption(header, "-header", "header");
 	setUp.finishSetUp(std::cout);
 	std::random_device rd;
-	randomGenerator gen;
 	std::mt19937 mtGen(rd());
 	std::mt19937_64 mtGen64(rd());
+	randomGenerator gen;
 	//std::cout << mtGen.max() << std::endl;
 	//std::cout << mtGen64.max() << std::endl;
 	if(header){
@@ -729,6 +729,13 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 			mtGen64();
 		}
 		std::cout << "mt19937_64\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
+	}
+	{
+		TicToc timmer("randomGenerator", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			gen.unifRand();
+		}
+		std::cout << "randomGenerator\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 
 	return 0;
