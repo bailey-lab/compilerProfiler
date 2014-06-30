@@ -11,7 +11,7 @@
 #include "programUtils/parameter.hpp"
 #include "timeProfiler/ticToc.hpp"
 #include "utils/ansiUtils.hpp"
-
+namespace compro{
 class programSetUp {
 
  public:
@@ -93,4 +93,5 @@ bool programSetUp::setOption(T &option, std::string flag,
     pars_.addParameter(parName, option, false);
   }
   return found;
+}
 }

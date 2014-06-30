@@ -10,3 +10,4 @@
 #include "common/allSystemIncludes.h"
 #include "common/stdAdditions.hpp"
 #include "common/typedefs.h"
+#include "common/compilerInfo.hpp"

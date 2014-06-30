@@ -9,7 +9,7 @@
 
 #include "common.h"
 
-
+namespace compro{
 template <typename T>
 std::string leftPadNumStr(T num, T highestNumber = 10) {
   std::stringstream ans;
@@ -52,3 +52,4 @@ std::vector<std::string> tokenizeString(const std::string& str, const std::strin
 std::vector<char> processAlphStrVecChar(const std::string & alphabetStr, const std::string & delim);
 std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(const std::string & alphabetStr,
 		const std::string & delim);
+}

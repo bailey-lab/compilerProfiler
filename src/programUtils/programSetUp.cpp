@@ -5,7 +5,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "programSetUp.hpp"
-
+namespace compro{
 programSetUp::programSetUp(int argc, char *argv[]) {
   commands_ = commandLineArguments(argc, argv);
   commands_.arguments["-program"] = argv[0];
@@ -147,3 +147,4 @@ void programSetUp::writeOutCommandLineArguments(
   }
   output.outPutContentOrganized(out);
 }*/
+}

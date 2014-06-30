@@ -6,7 +6,7 @@
  */
 
 #include "randomStrings.hpp"
-
+namespace compro{
 std::string randStrMap(
     uint32_t size,
     const std::multimap<double, std::string, std::less<double>> &likelihoods,
@@ -108,4 +108,5 @@ std::vector<std::string> evenRandStrsRandLen(uint32_t minLen, uint32_t maxLen,
                            randomGenerator &gen, uint32_t strNum) {
   return randStrsRandLenMap(minLen, maxLen, getEvenLikelihood(letters), gen,
                          strNum);
+}
 }

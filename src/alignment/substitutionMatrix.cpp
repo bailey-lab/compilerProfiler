@@ -2,10 +2,11 @@
  * 
  *
  *  Created on: Jun 25, 2014
+
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "substitutionMatrix.hpp"
-
+namespace compro{
 
 	void substituteMatrix::setWithZeros(){
 		for(const auto & row : iter::range(mat_.size())){
@@ -46,3 +47,4 @@
 	  	mat_[lowerCase[i]][upperCase[i]] = match;
 	  }
 	}
+}

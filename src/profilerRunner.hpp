@@ -5,9 +5,10 @@
  *      Author: nickhathaway
  */
 
-
+namespace compro{
 class profilerRunner : public programRunner {
  public:
 	profilerRunner();
 
 };
+} //compro

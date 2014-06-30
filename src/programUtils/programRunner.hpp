@@ -7,7 +7,7 @@
  */
 #include "common.h"
 #include "utils/stringUtils.hpp"
-
+namespace compro{
 class programRunner {
  protected:
   struct funcInfo {
@@ -66,5 +66,5 @@ class programRunner {
   }
 };
 
-
+}
 

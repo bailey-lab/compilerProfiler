@@ -9,6 +9,7 @@
 #include "stringUtils.hpp"
 #include "numUtils.hpp"
 
+namespace compro{
 std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
                           int secondsDecimalPlaces) {
   std::stringstream duration;
@@ -221,4 +222,5 @@ bool stringContainsAllDigits(const std::string& str) {
     }
   }
   return true;
+}
 }

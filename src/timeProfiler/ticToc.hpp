@@ -7,6 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "common.h"
+namespace compro{
 class TicToc : public zi::wall_timer {
  public:
   // Constructors
@@ -47,3 +48,4 @@ class TicToc : public zi::wall_timer {
   void print(const std::string& pre, std::ostream& out, uint32_t indentAmount,
              int decPlaces);
 };
+}

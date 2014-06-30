@@ -9,6 +9,7 @@
 
 #include "common.h"
 
-
+namespace compro{
 
 std::string convertBoolToString(bool convert);
+}

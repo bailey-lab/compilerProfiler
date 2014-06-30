@@ -9,7 +9,7 @@
 
 #include "alignment/aligner.hpp"
 #include "programUtils/commandLineArguments.hpp"
-
+namespace compro{
 programRunner::~programRunner() {}
 
 int programRunner::run(int argc, char *argv[]) {
@@ -99,7 +99,7 @@ void programRunner::listPrograms(std::ostream &out, const std::string &command,
   }
   listCommands(out);
 }
-
+}
 
 
 

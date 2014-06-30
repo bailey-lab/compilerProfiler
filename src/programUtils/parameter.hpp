@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "utils.h"
+namespace compro{
 class parameter {
  public:
   // bool constructor
@@ -79,3 +80,4 @@ class parametersHolder {
     }
   }
 };
+}

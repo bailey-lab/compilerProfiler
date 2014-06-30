@@ -7,7 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "common.h"
-
+namespace compro{
 class substituteMatrix {
 public:
 	//constructor
@@ -36,3 +36,4 @@ public:
 
 	void setWithCaseInsensitive(int32_t match, int32_t mismatch);
 };
+}

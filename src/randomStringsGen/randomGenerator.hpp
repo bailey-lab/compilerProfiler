@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "utils/vectorUtils.hpp"
+namespace compro{
 class randomGenerator {
 
  public:
@@ -107,3 +108,4 @@ class randomGenerator {
   	mtGen_.seed(givenSeed);
   }
 };
+}

@@ -34,9 +34,11 @@ ifeq ($(UNAME_S),Darwin)
 	ifdef HATHAWAY
 		GXXCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
-	GXXCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DNDEBUG 
+	GXXCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
+	#GXXCXXOPT = -O2 -DOPTLEV2 -DNDEBUG -DTESTMACRO="\"testdefines\""
 else
-    GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DNDEBUG 
+    GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
+    #GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
 endif
 #CLANGCXXFLAGS = -std=c++11 -fopenmp -Wall
 CLANGCXXFLAGS = -std=c++11 -Wall
@@ -47,10 +49,12 @@ ifeq ($(UNAME_S),Darwin)
 		CLANGCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
 	
-	CLANGCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DNDEBUG 
+	CLANGCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG
+	#CLANGCXXOPT = -O2 -DOPTLEV2 -DNDEBUG -DTESTMACRO="\"testdefines\""
 else
 	CLANGCXXFLAGS += -stdlib=libstdc++
-   	CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DNDEBUG 
+   	CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG
+   	#CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
 endif
 
 GXXCOMMON = $(GXXCXXFLAGS) $(GXXCXXOPT) $(COMLIBS)

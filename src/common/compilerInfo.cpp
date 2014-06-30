@@ -1,12 +1,12 @@
 /*
- * allSystemIncludes.cpp
+ * compilerInfo.cpp
  *
  *  Created on: Jun 29, 2014
  *      Author: nickhathaway
  */
 
-#include "allSystemIncludes.h"
-
+#include "compilerInfo.hpp"
+namespace compro{
 /*
  * get compiler constants
  */
@@ -38,4 +38,17 @@ std::string getCompilerVersion(){
 #endif
 
 
-
+std::string getCompilerInfo(const std::string & delim, bool getHeader){
+	std::stringstream tempStream;
+	if(getHeader){
+		tempStream << "compiler" << delim << "version"
+				<< delim << "optLevel" << delim << "funrollLoops"
+				<< delim << "operatingSystem";
+	}else{
+		tempStream << compilerUsed << delim << getCompilerVersion()
+				<< delim << optimizationLevel << delim <<unrollLoopsUsed
+				<< delim << operatingSystem;
+	}
+	return tempStream.str();
+}
+}

@@ -16,9 +16,8 @@
 #include <stdint.h>
 #include "all.h"
 #include "profilerRunner.hpp"
-#include <random>
 
-
+using namespace compro;
 
 int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	uint32_t maxSize = 50;
@@ -136,9 +135,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 	randomGenerator gen;
 
 
-	//std::cout << compilerVersion << std::endl;
+	//std::cout << compilerUsed << std::endl;
 	if(header){
-		std::cout << "numType\talnType\tcompiler\tversion\toptLevel\toperatingSystem\tminSize\tmaxSize"
+		std::cout << "numType\talnType\t"<< getCompilerInfo("\t", true) << "\tminSize\tmaxSize"
 				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
 	}
 	{
@@ -163,7 +162,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			std::cout << "double\tglobal\t"
-										<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -186,7 +185,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t" << compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tglobal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -211,7 +210,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int16_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -235,7 +234,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int32_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -259,7 +258,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int64_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -284,7 +283,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			std::cout << "double\tlocal\t"
-										<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -307,7 +306,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t" << compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tlocal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -332,7 +331,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int16_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -356,7 +355,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int32_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -380,7 +379,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int64_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t"
+					<< getCompilerInfo("\t", false) << "\t"
 					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
 					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
@@ -436,9 +435,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 	randomGenerator gen;
 
 
-	//std::cout << compilerVersion << std::endl;
+	//std::cout << compilerUsed << std::endl;
 	if(header){
-		std::cout << "numType\talnType\tcompiler\tversion\toptLevel\toperatingSystem\tminSize\tmaxSize"
+		std::cout << "numType\talnType\t"<< getCompilerInfo("\t", true) << "\tminSize\tmaxSize"
 				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
 	}
 	{
@@ -463,7 +462,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			std::cout << "double\tglobal\t"
-										<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -486,7 +485,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t" << compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tglobal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -511,7 +510,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int16_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -535,7 +534,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int32_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -559,7 +558,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int64_t\tglobal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -584,7 +583,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			std::cout << "double\tlocal\t"
-										<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+										<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
 			}
 		}
 	{
@@ -607,7 +606,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t" << compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
+			std::cout << "float\tlocal\t" << getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount
 								<< "\t" << timmerdoub.getRunTime() << std::endl;
 		}
 	}
@@ -632,7 +631,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int16_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -656,7 +655,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int32_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+					<< getCompilerInfo("\t", false) << "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t") << "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
 	}
 	{
@@ -680,7 +679,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 				}
 			}
 			std::cout << "int64_t\tlocal\t"
-					<< compilerVersion << "\t" << getCompilerVersion() << "\t" << optimizationLevel << "\t" << operatingSystem << "\t"
+					<< getCompilerInfo("\t", false) << "\t"
 					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
 					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
 		}
@@ -695,29 +694,41 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 int randomNumberGeneration(MapStrStr inputCommands) {
 	programSetUp setUp(inputCommands);
 	uint64_t stop = 100;
+	bool randDeviceAsWell = false;
+	bool header = false;
+	setUp.setOption(randDeviceAsWell, "-randDev", "randDeviceAsWell");
 	setUp.setOption(stop, "-stop", "stop");
+	setUp.setOption(header, "-header", "header");
 	setUp.finishSetUp(std::cout);
 	std::random_device rd;
 	randomGenerator gen;
 	std::mt19937 mtGen(rd());
 	std::mt19937_64 mtGen64(rd());
-	{
-		TicToc timmer("random_device");
+	//std::cout << mtGen.max() << std::endl;
+	//std::cout << mtGen64.max() << std::endl;
+	if(header){
+		std::cout << "generator\trunTimes\t" << getCompilerInfo("\t", true) << "\ttime" << std::endl;
+	}
+	if(randDeviceAsWell){
+		TicToc timmer("random_device", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			rd();
 		}
+		std::cout << "random_device\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
-		TicToc timmer("mt");
+		TicToc timmer("mt",false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen();
 		}
+		std::cout << "mt19937\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
-		TicToc timmer("mt64");
+		TicToc timmer("mt64", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen64();
 		}
+		std::cout << "mt19937_64\t" << stop << "\t" << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 
 	return 0;
@@ -737,7 +748,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
  *  //can use -getFlags and have the setUp print warnings
  *  setUp.finishSetUp(std::cout);
  *
- *  //your code here, compilerVersion is a static variable set to clang or gcc so you can use to log which compiler you are using
+ *  //your code here, compilerUsed is a static variable set to clang or gcc so you can use to log which compiler you are using
  *  //compilerProfiler comes with a random number generator, functions for generating random strings, an aligner, a timer to log run times
  *  //can include own code to profile
  *  // once you write your own profiler, just add to profilerRunner with the addFunc function in the initialization seen bellow
@@ -761,6 +772,8 @@ int main(int argc, char* argv[]) {
 	//std::cout << __VERSION__ << std::endl;
 	//std::cout << getCompilerVersion() << std::endl;
 	//std::cout << optimizationLevel << std::endl;
+	//std::cout << processorInfo << std::endl;
+	//std::cout << TESTMACRO << std::endl;
   profilerRunner proRunner;
   if (argc > 1) {
     return proRunner.run(argc, argv);

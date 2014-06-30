@@ -6,7 +6,7 @@
  */
 #include "ansiUtils.hpp"
 
-
+namespace compro{
 std::string centerText(const std::string & text, uint32_t maxWidth){
 	uint32_t halfWay = std::round(maxWidth/2.0);
 	uint32_t halfText = std::round(text.size()/2.0);
@@ -52,4 +52,5 @@ std::string endAllAttributes(const std::string & add){
 		output.append("\033[" + add + "m");
 	}
 	return output;
+}
 }

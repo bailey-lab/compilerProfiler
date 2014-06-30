@@ -8,7 +8,7 @@
  */
 
 #include "common.h"
-
+namespace compro{
 template <class T>
 void addOtherVec(std::vector<T>& reads, const std::vector<T>& otherVec) {
   reads.reserve(reads.size() + otherVec.size());
@@ -33,3 +33,4 @@ std::vector<T> getSubVector(const std::vector<T>& vec, uint32_t start,
 }
 std::string getSubVector(const std::string& vec, uint32_t start,
                             uint32_t size);
+}

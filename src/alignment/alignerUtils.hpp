@@ -7,7 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "common.h"
-
+namespace compro{
 template<typename NUM>
 struct gapScoringParameters {
 	//Constructors
@@ -103,3 +103,4 @@ struct gapScoringParameters {
     out << "}" << std::endl;
   }
 };
+}

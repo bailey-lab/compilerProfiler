@@ -46,38 +46,4 @@
 #include <cppitertools/range.hpp>
 #include <zi/time/time.hpp>
 
-/*
- * get compiler constants
- */
-std::string getCompilerVersion();
-#if defined(__clang__)
-static std::string compilerVersion = "clang";
-#elif defined(__GNUC__) || defined(__GNUG__)
-static std::string compilerVersion =  "gxx";
-#else
-static std::string compilerVersion = "unrecognized";
-#endif
 
-/*
- * get operating system
- */
-#if defined(__linux__)
-static std::string operatingSystem = "linux";
-#elif defined(__APPLE__)
-static std::string operatingSystem = "mac";
-#else
-static std::string operatingSystem = "other";
-#endif
-
-/*
- * define optimization
- */
-#if defined(OPTLEV1)
-static std::string optimizationLevel = "O1";
-#elif defined(OPTLEV2)
-static std::string optimizationLevel = "O2";
-#elif defined(OPTLEV3)
-static std::string optimizationLevel = "O3";
-#else
-static std::string optimizationLevel = "none";
-#endif

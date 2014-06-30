@@ -6,7 +6,7 @@
  */
 #include "commandLineArguments.hpp"
 #include "utils/stringUtils.hpp"
-
+namespace compro{
 std::string& commandLineArguments::lowerCaseGetArguments(const std::string& str) {
   if (arguments[stringToLowerReturn(str)] == "") {
     std::cout << "Argument " << str
@@ -171,4 +171,5 @@ MapStrStr commandLineArguments::convertCommandLineArguments(int argc, char* argv
     }
   }
   return storage;
+}
 }

@@ -9,7 +9,7 @@
 #include "alignment/substitutionMatrix.hpp"
 #include "alignment/alignerUtils.hpp"
 #include "alignment/alignInfoHolder.hpp"
-
+namespace compro{
 /*! \brief Aligner Class
  *
  *
@@ -635,3 +635,4 @@ class alignerTemp {
     }
   }
 };
+}

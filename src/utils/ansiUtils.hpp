@@ -8,7 +8,7 @@
  */
 #include "common.h"
 
-
+namespace compro{
 std::string centerText(const std::string & text, uint32_t maxWidth);
 std::string boldText(const std::string& title, const std::string& colorCode);
 std::string boldBlackText(const std::string& title) ;
@@ -21,3 +21,4 @@ std::string changeColor(const std::string & colorCode);
 std::string changeColor(uint32_t colorCode);
 std::string changeBackground(uint32_t colorCode);
 std::string endAllAttributes(const std::string & add);
+}

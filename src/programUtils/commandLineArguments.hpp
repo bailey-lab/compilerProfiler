@@ -8,6 +8,7 @@
  */
 
 #include "common.h"
+namespace compro{
 class commandLineArguments {
 
  public:
@@ -59,3 +60,4 @@ class commandLineArguments {
   static MapStrStr convertCommandLineArguments(int argc, char* argv[]);
   uint32_t numberOfCommands() ;
 };
+}

@@ -6,7 +6,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "common.h"
-
+namespace compro{
 struct gapInfo {
 
   gapInfo() : pos_(0), size_(0) {}
@@ -133,3 +133,4 @@ struct alnInfoGlobal {
     out << "}" << std::endl;
   }
 };
+}

@@ -7,3 +7,6 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "aligner.hpp"
+namespace compro{
+
+}

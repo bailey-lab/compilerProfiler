@@ -9,5 +9,6 @@
 
 #include "common.h"
 
-
+namespace compro{
 double roundDecPlaces(double num, int decPlaces);
+}

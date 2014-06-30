@@ -7,7 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "allSystemIncludes.h"
-
+namespace compro{
 template <typename NUM>
 std::string to_string(NUM number) {
   std::stringstream tempStream;
@@ -28,4 +28,5 @@ void sort(Container& con, Compare comp) {
 template <typename Container>
 void reverse(Container& con) {
   std::reverse(con.begin(), con.end());
+}
 }

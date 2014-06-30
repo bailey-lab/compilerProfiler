@@ -5,3 +5,6 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "alignInfoHolder.hpp"
+namespace compro{
+
+}

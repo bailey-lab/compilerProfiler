@@ -7,6 +7,7 @@
  */
 #include "common.h"
 #include "randomStringsGen/randomGenerator.hpp"
+namespace compro{
 std::string randStrMap(
     uint32_t size,
     const std::multimap<double, std::string, std::less<double>> &likelihoods,
@@ -44,3 +45,4 @@ std::vector<std::string> evenRandStrs(uint32_t size, const std::vector<char> &le
 std::vector<std::string> evenRandStrsRandLen(uint32_t minLen, uint32_t maxLen,
                            const std::vector<char> &letters,
                            randomGenerator &gen, uint32_t strNum);
+}
