@@ -5,7 +5,7 @@ USE_CPPITERTOOLS = 1
 #USE_BOOST = 0
 #USE_ZI_LIB = 1
 #USE_BAMTOOLS = 0
-HATHAWAY = 1
+#HATHAWAY = 1
 
 include $(ROOT)/makefile-common.mk
 
