@@ -22,20 +22,16 @@ GXXOBJ = $(addprefix $(OBJ_DIR_GXX)/, $(patsubst %.cpp, %.o, $(call rwildcard, s
 BINGXX = bin/gxxProfiler
 #GXXCXXFLAGS = -std=c++11 -fopenmp -Wall
 GXXCXXFLAGS = -std=c++11 -Wall
+GXXCXXOPT += -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
 ifeq ($(UNAME_S),Darwin)
-	#temp for now 
 	ifdef HATHAWAY
 		GXXCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
-	GXXCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
-	#GXXCXXOPT = -O2 -DOPTLEV2 -DNDEBUG -DTESTMACRO="\"testdefines\""
 else
-    GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
-    #GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
+    GXXCXXOPT += -march=native -mtune=native 
 endif
+
 GXXCOMMON = $(GXXCXXFLAGS) $(GXXCXXOPT) $(COMLIBS)
-
-
 
 
 #CLANGCPP = /usr/bin/clang++
@@ -45,16 +41,13 @@ CLANGOBJ = $(addprefix $(OBJ_DIR_CLANG)/, $(patsubst %.cpp, %.o, $(call rwildcar
 BINCLANG = bin/clangProfiler
 #CLANGCXXFLAGS = -std=c++11 -fopenmp -Wall
 CLANGCXXFLAGS = -std=c++11 -Wall -stdlib=libstdc++
-#CLANGCXXFLAGS = -std=c++11 -Wall 
+CLANGCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG
 ifeq ($(UNAME_S),Darwin)
 	ifdef HATHAWAY
 		CLANGCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
-	CLANGCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG
-	#CLANGCXXOPT = -O2 -DOPTLEV2 -DNDEBUG -DTESTMACRO="\"testdefines\""
 else
-   	CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG
-   	#CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
+   	CLANGCXXOPT += -O2 -march=native -mtune=native
 endif
 CLANGCOMMON = $(CLANGCXXFLAGS) $(CLANGCXXOPT) $(COMLIBS)
 
