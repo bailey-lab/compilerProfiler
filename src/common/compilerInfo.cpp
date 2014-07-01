@@ -53,7 +53,7 @@ std::string getCompilerInfo(const std::string & delim, bool getHeader,
 				<< delim << optimizationLevel << delim <<unrollLoopsUsed
 				<< delim << operatingSystem;
 		for(const auto & extra : extraInfo){
-			tempStream << delim << extra.first;
+			tempStream << delim << extra.second;
 		}
 	}
 	return tempStream.str();

@@ -32,7 +32,7 @@ public:
 	bool verbose_ = false;
 	std::string extraInfoStr_ = "";
 	std::vector<std::pair<std::string, std::string>> extraInfo;
-
+private:
 	void processHeader();
 	void processVerbose();
 	void processExtra();

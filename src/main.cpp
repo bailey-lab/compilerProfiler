@@ -721,7 +721,6 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	bool randDeviceAsWell = false;
 	setUp.setOption(randDeviceAsWell, "-randDev", "randDeviceAsWell");
 	setUp.setOption(stop, "-stop", "stop");
-	setUp.processExtra();
 	setUp.finishSetUp(std::cout);
 	std::random_device rd;
 	std::mt19937 mtGen(rd());
