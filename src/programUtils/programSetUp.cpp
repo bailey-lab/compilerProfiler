@@ -11,25 +11,25 @@ programSetUp::programSetUp(int argc, char *argv[]) {
   commands_.arguments["-program"] = argv[0];
   //commands_["-program"] = argv[0];
   if(commands_.arguments.find("-program") == commands_.arguments.end()){
-  	timer_ = TicToc(argv[0], false);
+  	timer_ = timeTracker(argv[0], false);
   }else{
-  	timer_ = TicToc(commands_["-program"], false);
+  	timer_ = timeTracker(commands_["-program"], false);
   }
 }
 programSetUp::programSetUp(const commandLineArguments &inputCommands) {
   commands_ = inputCommands;
   if(commands_.arguments.find("-program") == commands_.arguments.end()){
-  	timer_ = TicToc("program", false);
+  	timer_ = timeTracker("program", false);
   }else{
-  	timer_ = TicToc(commands_["-program"], false);
+  	timer_ = timeTracker(commands_["-program"], false);
   }
 }
 programSetUp::programSetUp(const MapStrStr &inputCommands) {
   commands_ = commandLineArguments(inputCommands);
   if(commands_.arguments.find("-program") == commands_.arguments.end()){
-  	timer_ = TicToc("program", false);
+  	timer_ = timeTracker("program", false);
   }else{
-  	timer_ = TicToc(commands_["-program"], false);
+  	timer_ = timeTracker(commands_["-program"], false);
   }
 }
 

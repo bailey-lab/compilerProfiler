@@ -3,30 +3,23 @@ EXT_PATH=$(realpath external)
 USE_CPPITERTOOLS = 1
 #USE_R = 0
 #USE_BOOST = 0
-USE_ZI_LIB = 1
+#USE_ZI_LIB = 1
 #USE_BAMTOOLS = 0
-#HATHAWAY = 1
+HATHAWAY = 1
 
 include $(ROOT)/makefile-common.mk
 
 UNAME_S := $(shell uname -s)
-
-GXXCPP = g++-4.8
-CLANGCPP = clang++
-
-OBJ_DIR_GXX = buildGxx
-OBJ_DIR_CLANG = buildClang
-
 # from http://stackoverflow.com/a/8654800
-GXXOBJ = $(addprefix $(OBJ_DIR_GXX)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
-CLANGOBJ = $(addprefix $(OBJ_DIR_CLANG)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
 HEADERS = $(call rwildcard, src/, *.h) \
 	$(call rwildcard, src/, *.hpp)
 
 
-BINGXX = bin/gxxProfiler
-BINCLANG = bin/clangProfiler
 
+GXXCPP = g++-4.8
+OBJ_DIR_GXX = buildGxx
+GXXOBJ = $(addprefix $(OBJ_DIR_GXX)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
+BINGXX = bin/gxxProfiler
 #GXXCXXFLAGS = -std=c++11 -fopenmp -Wall
 GXXCXXFLAGS = -std=c++11 -Wall
 ifeq ($(UNAME_S),Darwin)
@@ -40,39 +33,38 @@ else
     GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG 
     #GXXCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
 endif
+GXXCOMMON = $(GXXCXXFLAGS) $(GXXCXXOPT) $(COMLIBS)
+
+
+
+
+#CLANGCPP = /usr/bin/clang++
+CLANGCPP = clang++
+OBJ_DIR_CLANG = buildClang
+CLANGOBJ = $(addprefix $(OBJ_DIR_CLANG)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
+BINCLANG = bin/clangProfiler
 #CLANGCXXFLAGS = -std=c++11 -fopenmp -Wall
-CLANGCXXFLAGS = -std=c++11 -Wall
+CLANGCXXFLAGS = -std=c++11 -Wall -stdlib=libstdc++
+#CLANGCXXFLAGS = -std=c++11 -Wall 
 ifeq ($(UNAME_S),Darwin)
-	CLANGCXXFLAGS += -stdlib=libstdc++
-	#temp for now
 	ifdef HATHAWAY
 		CLANGCXXFLAGS += -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/ -I /Users/nickhathaway/source_codes/gccs/gcc_toolchains/include/c++/4.8.3/x86_64-apple-darwin13.2.0/ 
 	endif
-	
 	CLANGCXXOPT = -O2 -DOPTLEV2 -funroll-loops -DUNROLL_LOOPS -DNDEBUG
 	#CLANGCXXOPT = -O2 -DOPTLEV2 -DNDEBUG -DTESTMACRO="\"testdefines\""
 else
-	CLANGCXXFLAGS += -stdlib=libstdc++
    	CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -funroll-loops -DUNROLL_LOOPS -DNDEBUG
    	#CLANGCXXOPT = -O2 -DOPTLEV2 -march=native -mtune=native -DNDEBUG -DTESTMACRO="\"testdefines\""
 endif
-
-GXXCOMMON = $(GXXCXXFLAGS) $(GXXCXXOPT) $(COMLIBS)
 CLANGCOMMON = $(CLANGCXXFLAGS) $(CLANGCXXOPT) $(COMLIBS)
 
 ifdef HATHAWAY
 	LD_FLAGS += -L /Users/nickhathaway/source_codes/gccs/gcc_toolchains/lib/ -Wl,-rpath,/Users/nickhathaway/source_codes/gccs/gcc_toolchains/lib/
 endif	
 
-
 ############ main
 .PHONY: all
 all: $(OBJ_DIR_GXX) $(OBJ_DIR_CLANG) $(BINGXX) $(BINCLANG)
-	scripts/fixDyLinking_mac.sh bin external
-
-############ main
-.PHONY: dev
-dev: $(OBJ_DIR_GXX) $(OBJ_DIR_CLANG) $(BINGXX) $(BINCLANG)
 	scripts/fixDyLinking_mac.sh bin external
 
 $(OBJ_DIR_GXX):
@@ -85,6 +77,7 @@ $(OBJ_DIR_GXX)/%.o: %.cpp $(HEADERS)
 
 $(OBJ_DIR_GXX)/%.d: %.cpp
 	$(SHELL) -ec '$(GXXCPP) -M  $< | sed '\"s/$*.o/& $@/g'\" > $@'
+	
 
 $(OBJ_DIR_CLANG):
 	mkdir -p $(OBJ_DIR_CLANG)

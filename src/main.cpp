@@ -146,7 +146,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("double", false);
+			timeTracker timmerdoub("double", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 
@@ -171,7 +171,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("float", false);
+			timeTracker timmerdoub("float", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -195,7 +195,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int16_t", false);
+			timeTracker timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -219,7 +219,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int32_t", false);
+			timeTracker timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -243,7 +243,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int64_t", false);
+			timeTracker timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -267,7 +267,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("double", false);
+			timeTracker timmerdoub("double", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 
@@ -292,7 +292,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("float", false);
+			timeTracker timmerdoub("float", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -316,7 +316,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int16_t", false);
+			timeTracker timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -340,7 +340,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int32_t", false);
+			timeTracker timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -364,7 +364,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int64_t", false);
+			timeTracker timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -447,7 +447,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("double", false);
+			timeTracker timmerdoub("double", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 
@@ -475,7 +475,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("float", false);
+			timeTracker timmerdoub("float", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -503,7 +503,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int16_t", false);
+			timeTracker timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -531,7 +531,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int32_t", false);
+			timeTracker timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -559,7 +559,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int64_t", false);
+			timeTracker timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -587,7 +587,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("double", false);
+			timeTracker timmerdoub("double", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 
@@ -616,7 +616,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerdoub("float", false);
+			timeTracker timmerdoub("float", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -644,7 +644,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int16_t", false);
+			timeTracker timmerInt("int16_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -672,7 +672,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int32_t", false);
+			timeTracker timmerInt("int32_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -700,7 +700,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
-			TicToc timmerInt("int64_t", false);
+			timeTracker timmerInt("int64_t", false);
 			uint64_t alnCount = 0;
 			for(uint32_t run = 0; run < runTimes; ++run){
 				for(auto pos : iter::range(randStrings.size())){
@@ -749,7 +749,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		std::cout << getCompilerInfo("\t", true) << "\ttime" << std::endl;
 	}
 	if(randDeviceAsWell){
-		TicToc timmer("random_device", false);
+		timeTracker timmer("random_device", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			rd();
 		}
@@ -760,7 +760,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		std::cout  << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
-		TicToc timmer("mt",false);
+		timeTracker timmer("mt",false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen();
 		}
@@ -771,7 +771,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
-		TicToc timmer("mt64", false);
+		timeTracker timmer("mt64", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen64();
 		}
@@ -782,7 +782,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime() << std::endl;
 	}
 	{
-		TicToc timmer("randomGenerator", false);
+		timeTracker timmer("randomGenerator", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			gen.unifRand();
 		}
@@ -795,6 +795,70 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 
 	return 0;
 }
+int testingTracker(MapStrStr inputCommands) {
+	profilerSetUp setUp(inputCommands);
+	uint64_t stop = 100;
+	setUp.setOption(stop, "-stop", "stop");
+	setUp.processExtra();
+	setUp.finishSetUp(std::cout);
+	std::random_device rd;
+	std::mt19937 mtGen(rd());
+	std::cout << std::chrono::high_resolution_clock::period::den << std::endl;
+	if(setUp.header_){
+		std::cout << "generator\trunTimes\t" ;
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColName_ << "\t";
+		}
+		std::cout << getCompilerInfo("\t", true) << "\ttime" << std::endl;
+	}
+	{
+		timeTracker timmer("mt",false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen();
+		}
+		std::cout << "mt19937\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false) << "\t" << timmer.getRunTime();
+		std::cout << std::endl;
+	}
+	{
+
+		std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen();
+		}
+		std::cout << "mt19937\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false);
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::cout << "\t" << std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count() /static_cast<double>( std::chrono::high_resolution_clock::period::den);
+
+		std::cout << std::endl;
+	}
+	{
+
+		timeTracker timmer("mt", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen();
+		}
+		std::cout << "mt19937\t" << stop << "\t";
+		if(setUp.addExtra_){
+			std::cout << setUp.extraColInfo_ <<"\t";
+		}
+		std::cout << getCompilerInfo("\t", false);
+
+		std::cout << "\t" << timmer.getRunTime();
+		std::cout << std::endl;
+	}
+
+
+	return 0;
+}
+
 
 /* profiler template
  * int nameOfProgram(MapStrStr inputCommands) {
@@ -826,7 +890,8 @@ profilerRunner::profilerRunner()
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
 					 addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
 					 addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler, false),
-					 addFunc("randomNumberGeneration", randomNumberGeneration, false)
+					 addFunc("randomNumberGeneration", randomNumberGeneration, false),
+					 addFunc("testingTracker", testingTracker, false)
            },
           "profilerRunner") {}
 

@@ -22,7 +22,7 @@ class programSetUp {
   // map to hold the commands
   commandLineArguments commands_;
 
-  TicToc timer_;
+  timeTracker timer_;
   // valid options
   VecStr validOptions_;
   VecStr warnings_;
