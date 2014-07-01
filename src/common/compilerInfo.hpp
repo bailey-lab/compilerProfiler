@@ -39,12 +39,9 @@ static std::string operatingSystem = "other";
 /*
  * define optimization
  */
-#if defined(OPTLEV1)
-static std::string optimizationLevel = "O1";
-#elif defined(OPTLEV2)
-static std::string optimizationLevel = "O2";
-#elif defined(OPTLEV3)
-static std::string optimizationLevel = "O3";
+
+#if defined(OPTLEVEL)
+static std::string optimizationLevel = OPTLEVEL;
 #else
 static std::string optimizationLevel = "none";
 #endif
@@ -63,6 +60,7 @@ static std::string unrollLoopsUsed = "false";
  */
 
 
-std::string getCompilerInfo(const std::string & delim, bool getHeader);
+std::string getCompilerInfo(const std::string & delim, bool getHeader,
+		const std::vector<std::pair<std::string, std::string>> & extraInfo);
 
 }

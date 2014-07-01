@@ -30,10 +30,8 @@ public:
 	//some defaults
 	bool header_ = false;
 	bool verbose_ = false;
-	bool addExtra_ = false;
 	std::string extraInfoStr_ = "";
-	std::string extraColName_ = "";
-	std::string extraColInfo_ = "";
+	std::vector<std::pair<std::string, std::string>> extraInfo;
 
 	void processHeader();
 	void processVerbose();

@@ -30,7 +30,7 @@ CXXDEBUG = -g -gstabs+
 #boost
 ifdef USE_BOOST
 	CXXOPT += -DBOOST_UBLAS_NDEBUG
-	COMLIBS += -isystem$(LOCAL_PATH)/boost/include -L$(LOCAL_PATH)/boost/lib
+	COMLIBS += -isystem$(LOCAL_PATH)/boost/include
 	LD_FLAGS +=  -Wl,-rpath,$(LOCAL_PATH)/boost/lib \
 			-L$(LOCAL_PATH)/boost/lib  \
 			-lpthread -lboost_program_options -lboost_system -lboost_thread \

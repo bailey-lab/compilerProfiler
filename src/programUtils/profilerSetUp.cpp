@@ -12,6 +12,7 @@ namespace compro {
 void profilerSetUp::initializeDefaults(){
 	processHeader();
 	processVerbose();
+	processExtra();
 }
 
 void profilerSetUp::processHeader(){
@@ -23,15 +24,16 @@ void profilerSetUp::processVerbose(){
 }
 
 void profilerSetUp::processExtra(){
-	addExtra_ = setOption(extraInfoStr_, "-extra,-extraCol,-extraInfo", "extra");
-	if(addExtra_){
-		auto toks = tokenizeString(extraInfoStr_, ":");
-		if(toks.size() != 2){
-			std::cout << "Error, extra info needs to two strings seperated by a colon, eg. COLNAME:COLINFO" << std::endl;
-			std::cout << "This was given " << extraInfoStr_ <<std::endl;
-		}else{
-			extraColName_ = toks[0];
-			extraColInfo_ = toks[1];
+	if(setOption(extraInfoStr_, "-extra,-extraCol,-extraInfo", "extra")){
+		auto toks = tokenizeString(extraInfoStr_, ",");
+		for(const auto & tok : toks){
+			auto subToks = tokenizeString(tok, ":");
+			if(subToks.size() != 2){
+				std::cout << "Error, extra info needs to two strings separated by a colon, eg. COLNAME:COLINFO" << std::endl;
+				std::cout << "This was given " << extraInfoStr_ <<std::endl;
+			}else{
+				extraInfo.emplace_back(std::make_pair(subToks[0], subToks[1]));
+			}
 		}
 	}
 }
