@@ -725,6 +725,103 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	std::random_device rd;
 	std::mt19937 mtGen(rd());
 	std::mt19937_64 mtGen64(rd());
+	std::uniform_int_distribution<> disIntMt(1, 6);
+	std::uniform_int_distribution<> disIntMt64(1, 6);
+	std::uniform_real_distribution<> disDoubMt(0, 1);
+	std::uniform_real_distribution<> disDoubMt64(0, 1);
+	randomGenerator gen;
+	//std::cout << mtGen.max() << std::endl;
+	//std::cout << mtGen64.max() << std::endl;
+	if(setUp.header_){
+		std::cout << "generator\trunTimes\t"
+				<< getCompilerInfo("\t", true, setUp.extraInfo)
+				<< "\ttime" << std::endl;
+	}
+	if(randDeviceAsWell){
+		timeTracker timmer("random_device", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			rd();
+		}
+		std::cout << "random_device\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("mt",false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen();
+		}
+		std::cout << "mt19937\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("mt64", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			mtGen64();
+		}
+		std::cout << "mt19937_64\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("randomGenerator", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			gen.unifRand();
+		}
+		std::cout << "randomGenerator\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("uniIntMt",false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			disIntMt(mtGen());
+		}
+		std::cout << "uniIntMt\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("uniIntMt64", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			disIntMt64(mtGen64());
+		}
+		std::cout << "uniIntMt64\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("uniDoubMt",false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			disDoubMt(mtGen());
+		}
+		std::cout << "uniDoubMt\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("uniDoubMt64", false);
+		for(uint64_t run = 0; run < stop; ++run	){
+			disDoubMt64(mtGen64());
+		}
+		std::cout << "uniDoubMt64\t" << stop << "\t"
+							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+							<< timmer.getRunTime() << std::endl;
+	}
+	return 0;
+}
+
+int customRandomGenerator(MapStrStr inputCommands) {
+	profilerSetUp setUp(inputCommands);
+	uint64_t stop = 100;
+	bool randDeviceAsWell = false;
+	setUp.setOption(randDeviceAsWell, "-randDev", "randDeviceAsWell");
+	setUp.setOption(stop, "-stop", "stop");
+	setUp.finishSetUp(std::cout);
+	std::random_device rd;
+	std::mt19937 mtGen(rd());
+	std::mt19937_64 mtGen64(rd());
 	randomGenerator gen;
 	//std::cout << mtGen.max() << std::endl;
 	//std::cout << mtGen64.max() << std::endl;
