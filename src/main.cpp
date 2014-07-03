@@ -776,7 +776,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	{
 		timeTracker timmer("uniIntMt",false);
 		for(uint64_t run = 0; run < stop; ++run	){
-			disIntMt(mtGen());
+			disIntMt(mtGen);
 		}
 		std::cout << "uniIntMt\t" << stop << "\t"
 							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
@@ -785,7 +785,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	{
 		timeTracker timmer("uniIntMt64", false);
 		for(uint64_t run = 0; run < stop; ++run	){
-			disIntMt64(mtGen64());
+			disIntMt64(mtGen64);
 		}
 		std::cout << "uniIntMt64\t" << stop << "\t"
 							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
@@ -794,7 +794,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	{
 		timeTracker timmer("uniDoubMt",false);
 		for(uint64_t run = 0; run < stop; ++run	){
-			disDoubMt(mtGen());
+			disDoubMt(mtGen);
 		}
 		std::cout << "uniDoubMt\t" << stop << "\t"
 							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
@@ -803,7 +803,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	{
 		timeTracker timmer("uniDoubMt64", false);
 		for(uint64_t run = 0; run < stop; ++run	){
-			disDoubMt64(mtGen64());
+			disDoubMt64(mtGen64);
 		}
 		std::cout << "uniDoubMt64\t" << stop << "\t"
 							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
