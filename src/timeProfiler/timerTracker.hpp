@@ -57,7 +57,7 @@ class timeTracker {
   std::string fileName_;
   uint32_t defaultIndent_ = 0;
   // functions
-
+  void reset();
   double getRunTime();
   std::string getStringRunTime(bool wordy, int decPlaces);
   void print(const std::string& pre, std::ostream& out, uint32_t indentAmount,

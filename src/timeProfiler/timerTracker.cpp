@@ -7,7 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 
-#include "ticToc.hpp"
+#include "timerTracker.hpp"
 #include "utils/stringUtils.hpp"
 namespace compro{
 
@@ -27,5 +27,8 @@ void timeTracker::print(const std::string& pre, std::ostream& out,
     out << pre << " ";
   }
   out << "(" << getStringRunTime(true, decPlaces) << ")" << std::endl;
+}
+void timeTracker::reset(){
+	start_ = std::chrono::high_resolution_clock::now();
 }
 }

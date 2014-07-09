@@ -9,7 +9,7 @@
 #include "common.h"
 #include "programUtils/commandLineArguments.hpp"
 #include "programUtils/parameter.hpp"
-#include "timeProfiler/ticToc.hpp"
+#include "timeProfiler/timerTracker.hpp"
 #include "utils/ansiUtils.hpp"
 namespace compro{
 class programSetUp {

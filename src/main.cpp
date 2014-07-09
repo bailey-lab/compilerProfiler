@@ -870,6 +870,107 @@ int customRandomGenerator(MapStrStr inputCommands) {
 }
 
 int mapVsUnorderedMap(MapStrStr inputCommands) {
+	uint32_t maxSize = 50;
+	uint32_t minSize = 50;
+	uint32_t strNum = 50;
+	std::string alphStr = "A,C,G,T";
+	std::string alphDelim = ",";
+	bool veryVerbose = false;
+	profilerSetUp setUp(inputCommands);
+	setUp.setOption(maxSize, "-maxSize", "maxSize");
+	if(!setUp.setOption(minSize, "-minSize", "minSize")){
+		minSize = maxSize;
+	}
+	if(minSize > maxSize){
+		std::cout << "minSize can't be larger than maxSize, setting minSize to maxSize" << std::endl;
+		minSize = maxSize;
+	}
+	setUp.setOption(strNum, "-strNum", "strNum");
+	setUp.setOption(alphStr, "-alphStr", "alphStr");
+	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+	setUp.finishSetUp(std::cout);
+	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+	std::vector<char> alphabet = processAlph.first;
+	std::vector<uint32_t> alphCounts = processAlph.second;
+	if(setUp.verbose_){
+		std::cout << "minSize: " << minSize << std::endl;
+		std::cout << "maxSize: " << maxSize << std::endl;
+		std::cout << "strNum: " << strNum << std::endl;
+		std::cout << "alphStr: " << alphStr << std::endl;
+		std::cout << "alphDelim: " << alphDelim << std::endl;
+		std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
+	}
+	randomGenerator gen;
+	if(setUp.header_){
+		std::cout << "mapType\tmaxSize\tminSize\tstrNum\t"
+				<< getCompilerInfo("\t", true, setUp.extraInfo)
+				<< "\ttime" << std::endl;
+	}
+
+	VecStr randoms = evenRandStrsRandLen(minSize,maxSize,
+			alphabet, alphCounts,  gen, strNum);
+	VecStr randomsMix = evenRandStrsRandLen(minSize,maxSize,
+			alphabet, alphCounts,  gen, strNum/2);
+	addOtherVec(randomsMix, gen.unifRandSelectionVec(randoms, strNum/2, false));
+
+	{
+		std::unordered_map<std::string, uint32_t> strCounts;
+		{
+			timeTracker timmer("unordered_map", false);
+			for(const auto & str : randoms){
+				++strCounts[str];
+			}
+			std::cout << "unordered_map\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
+					<< getCompilerInfo("\t", false, setUp.extraInfo)
+					<< "\t" <<  timmer.getRunTime() << std::endl;
+		}
+		{
+			timeTracker timmer("unordered_map", false);
+			for(const auto & str : randomsMix){
+				strCounts[str];
+			}
+			std::cout << "unordered_mapAccess\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
+					<< getCompilerInfo("\t", false, setUp.extraInfo)
+					<< "\t" <<  timmer.getRunTime() << std::endl;
+		}
+		if(setUp.verbose_){
+			for(const auto & codon : strCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+	{
+		std::map<std::string, uint32_t> strCounts;
+		{
+			timeTracker timmer("map", false);
+			for(const auto & str : randoms){
+				++strCounts[str];
+			}
+			std::cout << "map\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
+					<< getCompilerInfo("\t", false, setUp.extraInfo)
+					<< "\t" <<  timmer.getRunTime() << std::endl;
+		}
+		{
+			timeTracker timmer("map", false);
+			for(const auto & str : randomsMix){
+				strCounts[str];
+			}
+			std::cout << "mapAccess\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
+					<< getCompilerInfo("\t", false, setUp.extraInfo)
+					<< "\t" <<  timmer.getRunTime() << std::endl;
+		}
+		if(setUp.verbose_){
+			for(const auto & codon : strCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+	return 0;
+}
+
+int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
 	uint32_t len = 51;
 	uint32_t strNum = 50;
 	std::string alphStr = "A,C,G,T";
@@ -918,6 +1019,7 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 		std::cout << "unordered_map\t" << len << "\t" << strNum << "\t"
 				<< getCompilerInfo("\t", false, setUp.extraInfo)
 				<< "\t" <<  timmer.getRunTime() << std::endl;
+		timmer.reset();
 		for(const auto & str : randoms){
 			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
 				codonCounts[str.substr(pos, 3)];
@@ -944,6 +1046,7 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 		std::cout << "mapAccess\t" << len << "\t" << strNum << "\t"
 						<< getCompilerInfo("\t", false, setUp.extraInfo)
 						<< "\t" <<   timmer.getRunTime() << std::endl;
+		timmer.reset();
 		for(const auto & str : randoms){
 			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
 				codonCounts[str.substr(pos, 3)];
@@ -1326,6 +1429,7 @@ profilerRunner::profilerRunner()
 					 addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
 					 addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler, false),
 					 addFunc("randomNumberGeneration", randomNumberGeneration, false),
+					 addFunc("mapVsUnorderedMapCodon", mapVsUnorderedMapCodon, false),
 					 addFunc("mapVsUnorderedMap", mapVsUnorderedMap, false),
 					 addFunc("translation", translation, false)
            },
