@@ -1,5 +1,7 @@
 complete -F _bibCppTools clangProfiler
 complete -F _bibCppTools gxxProfiler
+complete -F _bibCppTools clangProfilerNoOpt
+complete -F _bibCppTools gxxProfilerNoOpt
 
 _compProfiler()
 {

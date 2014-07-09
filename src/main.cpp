@@ -1064,8 +1064,10 @@ std::string convertToProteinWithMap(const std::string &seq, size_t start,
 	}
 	for(const auto & pos : iter::range<uint64_t> (start, stop, 3)){
 		cBstring = seq.substr(pos, 3);
-		if(dnaCodonToAminoAcid.find(cBstring) != dnaCodonToAminoAcid.end()){
-			outSeq[(pos - start) / 3] = (dnaCodonToAminoAcid.at(cBstring));
+		auto amino = dnaCodonToAminoAcid.find(cBstring);
+
+		if(amino != dnaCodonToAminoAcid.end()){
+			outSeq[(pos - start) / 3] = amino->second;
 		}else{
 			outSeq[(pos - start) / 3] = '1';
 		}
