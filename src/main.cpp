@@ -869,9 +869,428 @@ int customRandomGenerator(MapStrStr inputCommands) {
 	return 0;
 }
 
+int mapVsUnorderedMap(MapStrStr inputCommands) {
+	uint32_t len = 51;
+	uint32_t strNum = 50;
+	std::string alphStr = "A,C,G,T";
+	std::string alphDelim = ",";
+	bool veryVerbose = false;
+	profilerSetUp setUp(inputCommands);
+	setUp.setOption(len, "-len,-strLen", "len");
+	while (len % 3 != 0){
+		//just so length doesn't have to be worried about
+		++len;
+	}
+	setUp.setOption(strNum, "-strNum", "strNum");
+	setUp.setOption(alphStr, "-alphStr", "alphStr");
+	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+	setUp.finishSetUp(std::cout);
+	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+	std::vector<char> alphabet = processAlph.first;
+	std::vector<uint32_t> alphCounts = processAlph.second;
+	if(setUp.verbose_){
+		std::cout << "len: " << len << std::endl;
+		std::cout << "strNum: " << strNum << std::endl;
+		std::cout << "alphStr: " << alphStr << std::endl;
+		std::cout << "alphDelim: " << alphDelim << std::endl;
+		std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
+	}
+	randomGenerator gen;
+	if(setUp.header_){
+		std::cout << "mapType\tlen\tstrNum\t"
+				<< getCompilerInfo("\t", true, setUp.extraInfo)
+				<< "\ttime" << std::endl;
+	}
+
+	VecStr randoms = evenRandStrs(len,
+			alphabet, alphCounts,  gen, strNum);
+
+	{
+		timeTracker timmer("unordered_map", false);
+		std::unordered_map<std::string, uint32_t> codonCounts;
+		for(const auto & str : randoms){
+			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
+				++codonCounts[str.substr(pos, 3)];
+			}
+		}
+		std::cout << "unordered_map\t" << len << "\t" << strNum << "\t"
+				<< getCompilerInfo("\t", false, setUp.extraInfo)
+				<< "\t" <<  timmer.getRunTime() << std::endl;
+		for(const auto & str : randoms){
+			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
+				codonCounts[str.substr(pos, 3)];
+			}
+		}
+		std::cout << "unordered_mapAccess\t" << len << "\t" << strNum << "\t"
+				<< getCompilerInfo("\t", false, setUp.extraInfo)
+				<< "\t" <<  timmer.getRunTime() << std::endl;
+		if(setUp.verbose_){
+			for(const auto & codon : codonCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+	{
+		timeTracker timmer("map", false);
+		std::map<std::string, uint32_t> codonCounts;
+		for(const auto & str : randoms){
+			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
+				++codonCounts[str.substr(pos, 3)];
+			}
+		}
+
+		std::cout << "mapAccess\t" << len << "\t" << strNum << "\t"
+						<< getCompilerInfo("\t", false, setUp.extraInfo)
+						<< "\t" <<   timmer.getRunTime() << std::endl;
+		for(const auto & str : randoms){
+			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
+				codonCounts[str.substr(pos, 3)];
+			}
+		}
+
+		std::cout << "map\t" << len << "\t" << strNum << "\t"
+						<< getCompilerInfo("\t", false, setUp.extraInfo)
+						<< "\t" <<   timmer.getRunTime() << std::endl;
+		if(setUp.verbose_){
+			for(const auto & codon : codonCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+	return 0;
+}
+
+
+const static std::unordered_map<std::string, char> dnaCodonToAminoAcid = {{"GCA", 'A'},
+                                                                {"GCC", 'A'},
+                                                                {"GCG", 'A'},
+                                                                {"GCT", 'A'},
+                                                                {"CGA", 'R'},
+                                                                {"CGC", 'R'},
+                                                                {"CGG", 'R'},
+                                                                {"CGT", 'R'},
+                                                                {"AGA", 'R'},
+                                                                {"AGG", 'R'},
+                                                                {"AAC", 'N'},
+                                                                {"AAT", 'N'},
+                                                                {"GAC", 'D'},
+                                                                {"GAT", 'D'},
+                                                                {"TGC", 'C'},
+                                                                {"TGT", 'C'},
+                                                                {"CAA", 'Q'},
+                                                                {"CAG", 'Q'},
+                                                                {"GAA", 'E'},
+                                                                {"GAG", 'E'},
+                                                                {"GGA", 'G'},
+                                                                {"GGC", 'G'},
+                                                                {"GGG", 'G'},
+                                                                {"GGT", 'G'},
+                                                                {"CAC", 'H'},
+                                                                {"CAT", 'H'},
+                                                                {"ATA", 'I'},
+                                                                {"ATC", 'I'},
+                                                                {"ATT", 'I'},
+                                                                {"CTA", 'L'},
+                                                                {"CTC", 'L'},
+                                                                {"CTG", 'L'},
+                                                                {"CTT", 'L'},
+                                                                {"TTA", 'L'},
+                                                                {"TTG", 'L'},
+                                                                {"AAA", 'K'},
+                                                                {"AAG", 'K'},
+                                                                {"ATG", 'M'},
+                                                                {"TTC", 'F'},
+                                                                {"TTT", 'F'},
+                                                                {"CCA", 'P'},
+                                                                {"CCC", 'P'},
+                                                                {"CCG", 'P'},
+                                                                {"CCT", 'P'},
+                                                                {"TCA", 'S'},
+                                                                {"TCC", 'S'},
+                                                                {"TCG", 'S'},
+                                                                {"TCT", 'S'},
+                                                                {"AGC", 'S'},
+                                                                {"AGT", 'S'},
+                                                                {"ACA", 'T'},
+                                                                {"ACC", 'T'},
+                                                                {"ACG", 'T'},
+                                                                {"ACT", 'T'},
+                                                                {"TGG", 'W'},
+                                                                {"TAC", 'Y'},
+                                                                {"TAT", 'Y'},
+                                                                {"GTA", 'V'},
+                                                                {"GTC", 'V'},
+                                                                {"GTG", 'V'},
+                                                                {"GTT", 'V'},
+                                                                {"TAA", '*'},
+                                                                {"TAG", '*'},
+                                                                {"TGA", '*'}};
+std::string convertToProteinWithMapNoCheck(const std::string &seq, size_t start,
+                                      bool forceStartM) {
+  size_t numChar = seq.size();
+  std::string outSeq("");
+  outSeq.resize(numChar / 3);  // numChar is exactly divisible by 3.
+  std::string cBstring = "   ";
+	//check to see if stop is a divisible by three to prevent trying to count a codon less than three
+	uint64_t stop = seq.size();
+	while ((stop - start) % 3 != 0){
+		--stop;
+	}
+	for(const auto & pos : iter::range<uint64_t> (start, stop, 3)){
+		cBstring = seq.substr(pos, 3);
+		outSeq[(pos - start) / 3] = (dnaCodonToAminoAcid.at(cBstring));
+		if (forceStartM && (pos == start)) {
+			// Below are all the known start codons.
+			if ((cBstring == "ATG") || (cBstring == "GTG") || (cBstring == "TTG") ||
+					(cBstring == "ATT") || (cBstring == "CTG")) {
+				outSeq[(pos - start) / 3] = 'M';
+			}
+		}
+	}
+  return outSeq;
+}
+std::string convertToProteinWithMap(const std::string &seq, size_t start,
+                                      bool forceStartM) {
+  size_t numChar = seq.size();
+  std::string outSeq("");
+  outSeq.resize(numChar / 3);  // numChar is exactly divisible by 3.
+  std::string cBstring = "   ";
+	//check to see if stop is a divisible by three to prevent trying to count a codon less than three
+	uint64_t stop = seq.size();
+	while ((stop - start) % 3 != 0){
+		--stop;
+	}
+	for(const auto & pos : iter::range<uint64_t> (start, stop, 3)){
+		cBstring = seq.substr(pos, 3);
+		if(dnaCodonToAminoAcid.find(cBstring) != dnaCodonToAminoAcid.end()){
+			outSeq[(pos - start) / 3] = (dnaCodonToAminoAcid.at(cBstring));
+		}else{
+			outSeq[(pos - start) / 3] = '1';
+		}
+
+		if (forceStartM && (pos == start)) {
+			// Below are all the known start codons.
+			if ((cBstring == "ATG") || (cBstring == "GTG") || (cBstring == "TTG") ||
+					(cBstring == "ATT") || (cBstring == "CTG")) {
+				outSeq[(pos - start) / 3] = 'M';
+			}
+		}
+	}
+  return outSeq;
+}
+
+
+std::string convertToProtein(const std::string &seq, size_t start,
+                                      bool forceStartM) {
+  size_t numChar = seq.size();
+  std::string outSeq("");
+  outSeq.resize(numChar / 3);  // numChar is exactly divisible by 3.
+  // In below, cB is currentBase.
+  char cB[3], newBase;
+  std::string cBstring = "   ";
+  for (size_t i = start; i < numChar; i += 3) {
+    cB[0] = static_cast<char>(toupper(seq[i]));
+    cB[1] = static_cast<char>(toupper(seq[i + 1]));
+    cB[2] = static_cast<char>(toupper(seq[i + 2]));
+    if (cB[0] == 'T') {
+      cB[0] = 'U';
+    }
+    if (cB[1] == 'T') {
+      cB[1] = 'U';
+    }
+    if (cB[2] == 'T') {
+      cB[2] = 'U';
+    }
+    newBase = '0';  // We'll designate * as Stop,
+    // and 1 as error.
+    if (cB[0] == 'U') {
+      if (cB[1] == 'U') {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'F';
+        } else {
+          newBase = 'L';
+        }
+      } else if (cB[1] == 'C') {
+        newBase = 'S';
+      } else if (cB[1] == 'A') {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'Y';
+        } else {
+          newBase = '*';
+        }
+      } else  // cB[1] == 'G'
+      {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'C';
+        } else if (cB[2] == 'A') {
+          newBase = '*';
+        } else {
+          newBase = 'W';
+        }
+      }
+    } else if (cB[0] == 'C') {
+      if (cB[1] == 'U') {
+        newBase = 'L';
+      } else if (cB[1] == 'C') {
+        newBase = 'P';
+      } else if (cB[1] == 'A') {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'H';
+        } else if (cB[2] == 'A') {
+          newBase = 'Q';
+        } else {
+          newBase = 'Q';
+        }
+      } else  // cB[1] == 'G'
+      {
+        newBase = 'R';
+      }
+    } else if (cB[0] == 'A') {
+      if (cB[1] == 'U') {
+        if (cB[2] == 'G') {
+          newBase = 'M';
+        } else {
+          newBase = 'I';
+        }
+      } else if (cB[1] == 'C') {
+        newBase = 'T';
+      } else if (cB[1] == 'A') {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'N';
+        } else {
+          newBase = 'K';
+        }
+      } else  // cB[1] == 'G'
+      {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'S';
+        } else {
+          newBase = 'R';
+        }
+      }
+    } else  // cb[0] == 'G'
+    {
+      if (cB[1] == 'U') {
+        newBase = 'V';
+      } else if (cB[1] == 'C') {
+        newBase = 'A';
+      } else if (cB[1] == 'A') {
+        if (cB[2] == 'U' || cB[2] == 'C') {
+          newBase = 'D';
+        } else {
+          newBase = 'E';
+        }
+      } else  // cB[1] == 'G'
+      {
+        newBase = 'G';
+      }
+    }
+
+    if (forceStartM && (i == start)) {
+      cBstring[0] = cB[0];
+      cBstring[1] = cB[1];
+      cBstring[2] = cB[2];
+      // Below are all the known start codons.
+      if ((cBstring == "AUG") || (cBstring == "GUG") || (cBstring == "UUG") ||
+          (cBstring == "AUU") || (cBstring == "CUG")) {
+        newBase = 'M';
+      }
+    }
+    outSeq[(i - start) / 3] = newBase;
+  }
+  return outSeq;
+}
 
 
 
+int translation(MapStrStr inputCommands) {
+	uint32_t len = 51;
+	uint32_t strNum = 50;
+	std::string alphStr = "A,C,G,T";
+	std::string alphDelim = ",";
+	bool veryVerbose = false;
+	profilerSetUp setUp(inputCommands);
+	setUp.setOption(len, "-len,-strLen", "len");
+	while (len % 3 != 0){
+		//just so length doesn't have to be worried about
+		++len;
+	}
+	setUp.setOption(strNum, "-strNum", "strNum");
+	setUp.setOption(alphStr, "-alphStr", "alphStr");
+	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+	setUp.finishSetUp(std::cout);
+	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+	std::vector<char> alphabet = processAlph.first;
+	std::vector<uint32_t> alphCounts = processAlph.second;
+	if(setUp.verbose_){
+		std::cout << "len: " << len << std::endl;
+		std::cout << "strNum: " << strNum << std::endl;
+		std::cout << "alphStr: " << alphStr << std::endl;
+		std::cout << "alphDelim: " << alphDelim << std::endl;
+		std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
+	}
+	randomGenerator gen;
+	if(setUp.header_){
+		std::cout << "mapType\tlen\tstrNum\t"
+				<< getCompilerInfo("\t", true, setUp.extraInfo)
+				<< "\ttime" << std::endl;
+	}
+
+	VecStr randoms = evenRandStrs(len,
+			alphabet, alphCounts,  gen, strNum);
+
+	//check to see if translation is the same
+	std::string translated1 = convertToProtein(randoms.front(), 0, false);
+	std::string translated2 = convertToProteinWithMap(randoms.front(), 0, false);
+	std::string translated3 = convertToProteinWithMapNoCheck(randoms.front(), 0, false);
+	if(translated1 != translated2){
+		std::cout << "translated1 does not equal translated2" << std::endl;
+		std::cout << translated1 << std::endl;
+		std::cout << translated2 << std::endl;
+		exit(1);
+	}
+	if(translated1 != translated3){
+		std::cout << "translated1 does not equal translated3" << std::endl;
+		std::cout << translated1 << std::endl;
+		std::cout << translated3 << std::endl;
+		exit(1);
+	}
+	{
+		timeTracker timmer("oldWay", false);
+		std::string translated = ""	;
+		for(const auto & str : randoms){
+			translated = convertToProtein(str, 0, false);
+		}
+		std::cout << "oldWay\t" << len << "\t" << strNum << "\t"
+				<< getCompilerInfo("\t", false, setUp.extraInfo)
+				<< "\t" <<  timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("map", false);
+		std::string translated = ""	;
+		for(const auto & str : randoms){
+			translated = convertToProteinWithMap(str, 0, false);
+		}
+		std::cout << "map\t" << len << "\t" << strNum << "\t"
+				<< getCompilerInfo("\t", false, setUp.extraInfo)
+				<< "\t" <<  timmer.getRunTime() << std::endl;
+	}
+	{
+		timeTracker timmer("mapNoCheck", false);
+		std::string translated = ""	;
+		for(const auto & str : randoms){
+			translated = convertToProteinWithMapNoCheck(str, 0, false);
+		}
+		std::cout << "mapNoCheck\t" << len << "\t" << strNum << "\t"
+				<< getCompilerInfo("\t", false, setUp.extraInfo)
+				<< "\t" <<  timmer.getRunTime() << std::endl;
+	}
+	return 0;
+}
 
 
 /* profiler template
@@ -904,7 +1323,9 @@ profilerRunner::profilerRunner()
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
 					 addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
 					 addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler, false),
-					 addFunc("randomNumberGeneration", randomNumberGeneration, false)
+					 addFunc("randomNumberGeneration", randomNumberGeneration, false),
+					 addFunc("mapVsUnorderedMap", mapVsUnorderedMap, false),
+					 addFunc("translation", translation, false)
            },
           "profilerRunner") {}
 

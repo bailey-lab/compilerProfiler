@@ -1,7 +1,7 @@
 CXX = g++
-CXXOUTNAME = gxxProfiler
+CXXOUTNAME = gxxProfilerNoOpt
 CXXFLAGS = -std=c++11 -Wall
-CXXOPT += -O2 -DOPTLEVEL=\"O2\" -funroll-loops -DUNROLL_LOOPS -DNDEBUG  
+CXXOPT += -DNDEBUG 
 ifneq ($(UNAME_S),Darwin)
 	CXXOPT += -march=native -mtune=native 
 endif
