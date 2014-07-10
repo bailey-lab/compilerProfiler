@@ -58,10 +58,10 @@ class timeTracker {
   uint32_t defaultIndent_ = 0;
   // functions
   void reset();
-  double getRunTime();
-  std::string getStringRunTime(bool wordy, int decPlaces);
+  double getRunTime() const ;
+  std::string getStringRunTime(bool wordy, int decPlaces) const;
   void print(const std::string& pre, std::ostream& out, uint32_t indentAmount,
-             int decPlaces);
+             int decPlaces) const;
 };
 
 

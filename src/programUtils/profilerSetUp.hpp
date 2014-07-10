@@ -8,6 +8,7 @@
 
 
 #include "common.h"
+#include "utils.h"
 #include "programSetUp.hpp"
 
 namespace compro {
@@ -28,14 +29,30 @@ public:
 	void initializeDefaults();
 
 	//some defaults
+	std::string logFileName_ = "";
 	bool header_ = false;
 	bool verbose_ = false;
 	std::string extraInfoStr_ = "";
-	std::vector<std::pair<std::string, std::string>> extraInfo;
+	std::vector<std::pair<std::string, std::string>> extraInfo_;
+
+	//for logging, will print to logFile or to std::cout if no log file specified
+	std::stringstream logging_;
+
+	~profilerSetUp() {
+		if(logFileName_ != ""){
+			std::ofstream logFile;
+			//open file for appending if it already exists
+			openTextFile(logFile, logFileName_, false, true, false);
+			logFile << logging_.str()	;
+		}else{
+			std::cout << logging_.str();
+		}
+	}
 private:
 	void processHeader();
 	void processVerbose();
 	void processExtra();
+	void processLogFileName();
 };
 
 } /* namespace compro */

@@ -8,6 +8,7 @@
 
 #include "allSystemIncludes.h"
 namespace compro{
+class timeTracker;
 /*
  * get compiler version
  */
@@ -60,7 +61,8 @@ static std::string unrollLoopsUsed = "false";
  */
 
 
-std::string getCompilerInfo(const std::string & delim, bool getHeader,
-		const std::vector<std::pair<std::string, std::string>> & extraInfo);
+std::string getRunInfo(const std::string & delim, bool getHeader,
+		const std::vector<std::pair<std::string, std::string>> & extraInfo,
+		const timeTracker & timmer);
 
 }

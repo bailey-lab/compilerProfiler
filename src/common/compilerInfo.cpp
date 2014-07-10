@@ -6,6 +6,7 @@
  */
 
 #include "compilerInfo.hpp"
+#include "timeProfiler/timerTracker.hpp"
 namespace compro{
 /*
  * get compiler constants
@@ -38,23 +39,27 @@ std::string getCompilerVersion(){
 #endif
 
 
-std::string getCompilerInfo(const std::string & delim, bool getHeader,
-		const std::vector<std::pair<std::string, std::string>> & extraInfo){
+std::string getRunInfo(const std::string & delim, bool getHeader,
+		const std::vector<std::pair<std::string, std::string>> & extraInfo,
+		const timeTracker & timmer){
 	std::stringstream tempStream;
 	if(getHeader){
+		for(const auto & extra : extraInfo){
+			tempStream << extra.first << delim ;
+		}
 		tempStream << "compiler" << delim << "version"
 				<< delim << "optLevel" << delim << "funrollLoops"
 				<< delim << "operatingSystem";
-		for(const auto & extra : extraInfo){
-			tempStream << delim << extra.first;
-		}
+		tempStream << delim << "time";
 	}else{
+		for(const auto & extra : extraInfo){
+			tempStream << extra.second << delim ;
+		}
 		tempStream << compilerUsed << delim << getCompilerVersion()
 				<< delim << optimizationLevel << delim <<unrollLoopsUsed
 				<< delim << operatingSystem;
-		for(const auto & extra : extraInfo){
-			tempStream << delim << extra.second;
-		}
+
+		tempStream << delim << timmer.getRunTime();
 	}
 	return tempStream.str();
 }

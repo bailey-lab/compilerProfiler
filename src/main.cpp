@@ -129,13 +129,15 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
+	setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+	setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
+	setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
 
-
-	//std::cout << compilerUsed << std::endl;
 	if(setUp.header_){
-		std::cout << "numType\talnType\t"<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\tminSize\tmaxSize"
-				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
+		setUp.logging_ << "numType\talnType\talnCount\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 	{
 		/*
@@ -158,10 +160,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tglobal\t"
-										<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"double\tglobal\t" << alnCount << "\t"
+										<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+										<< std::endl;
 			}
 		}
 	{
@@ -184,10 +185,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t"
-										<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t" << timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"float\tglobal\t" << alnCount << "\t"
+										<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+										<< std::endl;
 		}
 	}
 	{
@@ -210,10 +210,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tglobal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int16_t\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -236,10 +235,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tglobal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int32_t\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -262,10 +260,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tglobal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int64_t\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -289,10 +286,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tlocal\t"
-										<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"double\tlocal\t" << alnCount << "\t"
+										<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+										<< std::endl;
 			}
 		}
 	{
@@ -315,10 +311,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t"
-										<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t" << timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"float\tlocal\t" << alnCount << "\t"
+										<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+										<< std::endl;
 		}
 	}
 	{
@@ -341,10 +336,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tlocal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int16_t\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -367,10 +361,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tlocal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-										<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-										<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int32_t\tlocal\t"  << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -393,10 +386,9 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tlocal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int64_t\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 
@@ -444,13 +436,14 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
-
-
-	//std::cout << compilerUsed << std::endl;
+	setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+	setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
+	setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
 	if(setUp.header_){
-		std::cout << "numType\talnType\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo) << "\tminSize\tmaxSize"
-				"\tstrNum\trunTimes\talnCount\ttime(sec)" << std::endl;
+		setUp.logging_ <<"numType\talnType\talnCount"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 	{
 		/*
@@ -473,9 +466,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tglobal\t" << getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"double\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+					<< std::endl;
 			}
 		}
 	{
@@ -498,10 +491,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tglobal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount
-								<< "\t" << timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"float\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+					<< std::endl;
 		}
 	}
 	{
@@ -524,9 +516,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tglobal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int16_t\tglobal\t"<< alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -549,9 +541,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tglobal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int32_t\tglobal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -574,9 +566,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tglobal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int64_t\tglobal\t"<< alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -600,10 +592,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 						}
 					}
 				}
-			std::cout << "double\tlocal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-					<< "\t" << alnCount << "\t"<< timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"double\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+					<< std::endl;
 			}
 		}
 	{
@@ -626,10 +617,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "float\tlocal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount
-								<< "\t" << timmerdoub.getRunTime() << std::endl;
+			setUp.logging_ <<"float\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+					<< std::endl;
 		}
 	}
 	{
@@ -652,9 +642,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int16_t\tlocal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int16_t\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -677,9 +667,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int32_t\tlocal\t"<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" << vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-						<< "\t" << alnCount << "\t"<< timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int32_t\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 	{
@@ -702,10 +692,9 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 					}
 				}
 			}
-			std::cout << "int64_t\tlocal\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
-					<< vectorToString(std::vector<uint32_t>{minSize, maxSize, strNum, runTimes}, "\t")
-					<< "\t" << alnCount << "\t" << timmerInt.getRunTime() << std::endl;
+			setUp.logging_ <<"int64_t\tlocal\t" << alnCount << "\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmerInt)
+					<< std::endl;
 		}
 	}
 
@@ -732,18 +721,19 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 	randomGenerator gen;
 	//std::cout << mtGen.max() << std::endl;
 	//std::cout << mtGen64.max() << std::endl;
+	setUp.extraInfo_.emplace_back("runTimes", to_string(stop));
 	if(setUp.header_){
-		std::cout << "generator\trunTimes\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\ttime" << std::endl;
+		setUp.logging_ <<"generator\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 	if(randDeviceAsWell){
 		timeTracker timmer("random_device", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			rd();
 		}
-		std::cout << "random_device\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"random_device\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -751,8 +741,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen();
 		}
-		std::cout << "mt19937\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"mt19937\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -760,8 +750,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen64();
 		}
-		std::cout << "mt19937_64\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"mt19937_64\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -769,8 +759,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			gen.unifRand();
 		}
-		std::cout << "randomGenerator\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"randomGenerator\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -778,8 +768,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			disIntMt(mtGen);
 		}
-		std::cout << "uniIntMt\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"uniIntMt\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -787,8 +777,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			disIntMt64(mtGen64);
 		}
-		std::cout << "uniIntMt64\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"uniIntMt64\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -796,8 +786,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			disDoubMt(mtGen);
 		}
-		std::cout << "uniDoubMt\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"uniDoubMt\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -805,8 +795,8 @@ int randomNumberGeneration(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			disDoubMt64(mtGen64);
 		}
-		std::cout << "uniDoubMt64\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"uniDoubMt64\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	return 0;
@@ -826,17 +816,17 @@ int customRandomGenerator(MapStrStr inputCommands) {
 	//std::cout << mtGen.max() << std::endl;
 	//std::cout << mtGen64.max() << std::endl;
 	if(setUp.header_){
-		std::cout << "generator\trunTimes\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\ttime" << std::endl;
+		setUp.logging_ <<"generator\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 	if(randDeviceAsWell){
 		timeTracker timmer("random_device", false);
 		for(uint64_t run = 0; run < stop; ++run	){
 			rd();
 		}
-		std::cout << "random_device\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"random_device\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -844,8 +834,8 @@ int customRandomGenerator(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen();
 		}
-		std::cout << "mt19937\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"mt19937\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -853,8 +843,8 @@ int customRandomGenerator(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			mtGen64();
 		}
-		std::cout << "mt19937_64\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"mt19937_64\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	{
@@ -862,8 +852,8 @@ int customRandomGenerator(MapStrStr inputCommands) {
 		for(uint64_t run = 0; run < stop; ++run	){
 			gen.unifRand();
 		}
-		std::cout << "randomGenerator\t" << stop << "\t"
-							<< getCompilerInfo("\t", false, setUp.extraInfo) << "\t"
+		setUp.logging_ <<"randomGenerator\t"
+							<< getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
 							<< timmer.getRunTime() << std::endl;
 	}
 	return 0;
@@ -903,10 +893,13 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
+	setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+	setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
 	if(setUp.header_){
-		std::cout << "mapType\tmaxSize\tminSize\tstrNum\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\ttime" << std::endl;
+		setUp.logging_ <<"mapType\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 
 	VecStr randoms = evenRandStrsRandLen(minSize,maxSize,
@@ -922,18 +915,18 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 			for(const auto & str : randoms){
 				++strCounts[str];
 			}
-			std::cout << "unordered_map\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo)
-					<< "\t" <<  timmer.getRunTime() << std::endl;
+			setUp.logging_ <<"unordered_map\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+					<< std::endl;
 		}
 		{
 			timeTracker timmer("unordered_map", false);
 			for(const auto & str : randomsMix){
 				strCounts[str];
 			}
-			std::cout << "unordered_mapAccess\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo)
-					<< "\t" <<  timmer.getRunTime() << std::endl;
+			setUp.logging_ <<"unordered_mapAccess\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+					<< std::endl;
 		}
 		if(setUp.verbose_){
 			for(const auto & codon : strCounts){
@@ -948,18 +941,18 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 			for(const auto & str : randoms){
 				++strCounts[str];
 			}
-			std::cout << "map\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo)
-					<< "\t" <<  timmer.getRunTime() << std::endl;
+			setUp.logging_ <<"map\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+					<< std::endl;
 		}
 		{
 			timeTracker timmer("map", false);
 			for(const auto & str : randomsMix){
 				strCounts[str];
 			}
-			std::cout << "mapAccess\t" << maxSize << "\t" << minSize << "\t" << strNum << "\t"
-					<< getCompilerInfo("\t", false, setUp.extraInfo)
-					<< "\t" <<  timmer.getRunTime() << std::endl;
+			setUp.logging_ <<"mapAccess\t"
+					<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+					<< std::endl;
 		}
 		if(setUp.verbose_){
 			for(const auto & codon : strCounts){
@@ -967,6 +960,137 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 			}
 		}
 	}
+	return 0;
+}
+
+class infoLogging {
+public:
+	infoLogging(const std::string & logFilName){
+
+	}
+
+
+};
+
+int mapVsUnorderedMapRepeat(MapStrStr inputCommands) {
+	uint32_t maxSize = 50;
+	uint32_t minSize = 50;
+	uint32_t strNum = 50;
+	uint32_t repeatNumber = 4;
+	std::string alphStr = "A,C,G,T";
+	std::string alphDelim = ",";
+	bool veryVerbose = false;
+	profilerSetUp setUp(inputCommands);
+	setUp.setOption(maxSize, "-maxSize", "maxSize");
+	if(!setUp.setOption(minSize, "-minSize", "minSize")){
+		minSize = maxSize;
+	}
+
+	if(minSize > maxSize){
+		std::cout << "minSize can't be larger than maxSize, setting minSize to maxSize" << std::endl;
+		minSize = maxSize;
+	}
+	setUp.setOption(repeatNumber, "-repeatNumber", "repeatNumber");
+	setUp.setOption(strNum, "-strNum", "strNum");
+	setUp.setOption(alphStr, "-alphStr", "alphStr");
+	setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+	setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+	setUp.finishSetUp(std::cout);
+	auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+	std::vector<char> alphabet = processAlph.first;
+	std::vector<uint32_t> alphCounts = processAlph.second;
+	if(setUp.verbose_){
+		std::cout << "minSize: " << minSize << std::endl;
+		std::cout << "maxSize: " << maxSize << std::endl;
+		std::cout << "strNum: " << strNum << std::endl;
+		std::cout << "repeatNumber: " << repeatNumber << std::endl;
+		std::cout << "alphStr: " << alphStr << std::endl;
+		std::cout << "alphDelim: " << alphDelim << std::endl;
+		std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
+	}
+	setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+	setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
+	setUp.extraInfo_.emplace_back("repeatNumber", to_string(repeatNumber));
+
+	randomGenerator gen;
+	if(setUp.header_){
+		setUp.logging_ << "mapType\t"
+									<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+									<< std::endl;
+	}
+
+	VecStr randomsPreset = evenRandStrsRandLen(minSize,maxSize,
+			alphabet, alphCounts,  gen, strNum/repeatNumber);
+	VecStr randoms;
+	randoms.reserve(strNum);
+	for(uint32_t i = 0; i < repeatNumber; ++i){
+		addOtherVec(randoms, randomsPreset);
+	}
+	std::shuffle(randoms.begin(), randoms.end(), gen.mtGen_);
+
+	VecStr randomsMix = evenRandStrsRandLen(minSize,maxSize,
+			alphabet, alphCounts,  gen, strNum/2);
+	addOtherVec(randomsMix, gen.unifRandSelectionVec(randoms, strNum/2, false));
+
+	{
+		std::unordered_map<std::string, uint32_t> strCounts;
+		{
+			timeTracker timmer("unordered_map", false);
+			for(const auto & str : randoms){
+				++strCounts[str];
+			}
+			setUp.logging_ << "unordered_map\t"
+												<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+												<< std::endl;
+
+		}
+		{
+			timeTracker timmer("unordered_map", false);
+			for(const auto & str : randomsMix){
+				strCounts[str];
+			}
+			setUp.logging_ << "unordered_mapAccess\t"
+												<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+												<< std::endl;
+
+		}
+		if(setUp.verbose_){
+			for(const auto & codon : strCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+	{
+		std::map<std::string, uint32_t> strCounts;
+		{
+			timeTracker timmer("map", false);
+			for(const auto & str : randoms){
+				++strCounts[str];
+			}
+			setUp.logging_ << "map\t"
+												<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+												<< std::endl;
+
+		}
+		{
+			timeTracker timmer("map", false);
+			for(const auto & str : randomsMix){
+				strCounts[str];
+			}
+			setUp.logging_ << "mapAccess\t"
+												<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+												<< std::endl;
+
+		}
+		if(setUp.verbose_){
+			for(const auto & codon : strCounts){
+				std::cout << codon.first << "\t" << codon.second << std::endl;
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -999,10 +1123,12 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
+	setUp.extraInfo_.emplace_back("len", to_string(len));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
 	if(setUp.header_){
-		std::cout << "mapType\tlen\tstrNum\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\ttime" << std::endl;
+		setUp.logging_ <<"mapType\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 
 	VecStr randoms = evenRandStrs(len,
@@ -1016,18 +1142,18 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
 				++codonCounts[str.substr(pos, 3)];
 			}
 		}
-		std::cout << "unordered_map\t" << len << "\t" << strNum << "\t"
-				<< getCompilerInfo("\t", false, setUp.extraInfo)
-				<< "\t" <<  timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"unordered_map\t"
+				<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+				<< std::endl;
 		timmer.reset();
 		for(const auto & str : randoms){
 			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
 				codonCounts[str.substr(pos, 3)];
 			}
 		}
-		std::cout << "unordered_mapAccess\t" << len << "\t" << strNum << "\t"
-				<< getCompilerInfo("\t", false, setUp.extraInfo)
-				<< "\t" <<  timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"unordered_mapAccess\t"
+				<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+				<< std::endl;
 		if(setUp.verbose_){
 			for(const auto & codon : codonCounts){
 				std::cout << codon.first << "\t" << codon.second << std::endl;
@@ -1043,19 +1169,18 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
 			}
 		}
 
-		std::cout << "mapAccess\t" << len << "\t" << strNum << "\t"
-						<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" <<   timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"mapAccess\t"
+						<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+						<< std::endl;
 		timmer.reset();
 		for(const auto & str : randoms){
 			for(const auto & pos : iter::range<uint64_t>(0, str.size(), 3)){
 				codonCounts[str.substr(pos, 3)];
 			}
 		}
-
-		std::cout << "map\t" << len << "\t" << strNum << "\t"
-						<< getCompilerInfo("\t", false, setUp.extraInfo)
-						<< "\t" <<   timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"map\t"
+						<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+						<< std::endl;
 		if(setUp.verbose_){
 			for(const auto & codon : codonCounts){
 				std::cout << codon.first << "\t" << codon.second << std::endl;
@@ -1339,10 +1464,12 @@ int translation(MapStrStr inputCommands) {
 		std::cout << "alphCounts: " << vectorToString(alphCounts, ", ") << std::endl;
 	}
 	randomGenerator gen;
+	setUp.extraInfo_.emplace_back("len", to_string(len));
+	setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
 	if(setUp.header_){
-		std::cout << "mapType\tlen\tstrNum\t"
-				<< getCompilerInfo("\t", true, setUp.extraInfo)
-				<< "\ttime" << std::endl;
+		setUp.logging_ <<"mapType\t"
+				<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+				<< std::endl;
 	}
 
 	VecStr randoms = evenRandStrs(len,
@@ -1370,9 +1497,9 @@ int translation(MapStrStr inputCommands) {
 		for(const auto & str : randoms){
 			translated = convertToProtein(str, 0, false);
 		}
-		std::cout << "oldWay\t" << len << "\t" << strNum << "\t"
-				<< getCompilerInfo("\t", false, setUp.extraInfo)
-				<< "\t" <<  timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"oldWay\t"
+				<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+				<< std::endl;
 	}
 	{
 		timeTracker timmer("map", false);
@@ -1380,9 +1507,9 @@ int translation(MapStrStr inputCommands) {
 		for(const auto & str : randoms){
 			translated = convertToProteinWithMap(str, 0, false);
 		}
-		std::cout << "map\t" << len << "\t" << strNum << "\t"
-				<< getCompilerInfo("\t", false, setUp.extraInfo)
-				<< "\t" <<  timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"map\t"
+				<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+				<< std::endl;
 	}
 	{
 		timeTracker timmer("mapNoCheck", false);
@@ -1390,9 +1517,9 @@ int translation(MapStrStr inputCommands) {
 		for(const auto & str : randoms){
 			translated = convertToProteinWithMapNoCheck(str, 0, false);
 		}
-		std::cout << "mapNoCheck\t" << len << "\t" << strNum << "\t"
-				<< getCompilerInfo("\t", false, setUp.extraInfo)
-				<< "\t" <<  timmer.getRunTime() << std::endl;
+		setUp.logging_ <<"mapNoCheck\t"
+				<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+				<< std::endl;
 	}
 	return 0;
 }
@@ -1431,6 +1558,7 @@ profilerRunner::profilerRunner()
 					 addFunc("randomNumberGeneration", randomNumberGeneration, false),
 					 addFunc("mapVsUnorderedMapCodon", mapVsUnorderedMapCodon, false),
 					 addFunc("mapVsUnorderedMap", mapVsUnorderedMap, false),
+					 addFunc("mapVsUnorderedMapRepeat", mapVsUnorderedMapRepeat, false),
 					 addFunc("translation", translation, false)
            },
           "profilerRunner") {}

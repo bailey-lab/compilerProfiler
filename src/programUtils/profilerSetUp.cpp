@@ -13,6 +13,11 @@ void profilerSetUp::initializeDefaults(){
 	processHeader();
 	processVerbose();
 	processExtra();
+	processLogFileName();
+	//only add the header if file doesn't exist if logging to file
+	if(logFileName_ != ""){
+		header_ = !(fexists(logFileName_));
+	}
 }
 
 void profilerSetUp::processHeader(){
@@ -21,6 +26,9 @@ void profilerSetUp::processHeader(){
 
 void profilerSetUp::processVerbose(){
 	setOption(verbose_, "-verbose,-v", "verbose");
+}
+void profilerSetUp::processLogFileName(){
+	setOption(logFileName_, "-log,-logFilename", "logFilename");
 }
 
 void profilerSetUp::processExtra(){
@@ -32,7 +40,7 @@ void profilerSetUp::processExtra(){
 				std::cout << "Error, extra info needs to two strings separated by a colon, eg. COLNAME:COLINFO" << std::endl;
 				std::cout << "This was given " << extraInfoStr_ <<std::endl;
 			}else{
-				extraInfo.emplace_back(std::make_pair(subToks[0], subToks[1]));
+				extraInfo_.emplace_back(std::make_pair(subToks[0], subToks[1]));
 			}
 		}
 	}
