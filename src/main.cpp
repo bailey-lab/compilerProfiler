@@ -1524,7 +1524,62 @@ int translation(MapStrStr inputCommands) {
 	return 0;
 }
 
+void f1(randomGenerator & gen, std::vector<double> & row){
+	for(const auto & pos : iter::range(row.size())){
+		row[pos] = gen();
+	}
+}
 
+int testThreads(MapStrStr inputCommands) {
+	profilerSetUp setUp(inputCommands);
+	uint32_t numThreads = 2;
+	uint32_t rowNum = 1000;
+	uint32_t colNum = 10;
+	setUp.setOption(numThreads, "-threads,-numThreads", "numThreads");
+	setUp.setOption(rowNum, "-rowNum", "rowNum");
+	setUp.setOption(colNum, "-colNum", "colNum");
+	setUp.finishSetUp(std::cout);
+	setUp.extraInfo_.emplace_back("numThreads", to_string(numThreads));
+	setUp.extraInfo_.emplace_back("rowNum", to_string(rowNum));
+	setUp.extraInfo_.emplace_back("colNum", to_string(colNum));
+	if(setUp.header_){
+		setUp.logging_ << "runType\t" << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_) << std::endl;
+	}
+  {
+	  std::vector<randomGenerator> gens(numThreads);
+	  std::vector<std::vector<double>> randomNums (rowNum, std::vector<double>(colNum));
+  	timeTracker timmer("threaded", false);
+    for(const auto & currentRow : iter::range<uint64_t>(0, randomNums.size(), numThreads)){
+    	std::vector<std::thread> threads;
+			for(const auto & i : iter::range(numThreads)){
+				if((currentRow + i) < randomNums.size()){
+					threads.emplace_back(std::thread(f1, std::ref(gens[i]), std::ref(randomNums[currentRow + i])));
+				}
+			}
+			for(auto & t : threads){
+				t.join();
+			}
+    }
+    setUp.logging_ << "threaded\t" << getRunInfo("\t", false, setUp.extraInfo_, timmer)<< std::endl;
+  }
+  {
+    std::vector<randomGenerator> gens(numThreads);
+    std::vector<std::vector<double>> randomNums (rowNum, std::vector<double>(colNum));
+  	timeTracker timmer("non-threaded", false);
+    uint32_t currentRow = 0;
+    while(currentRow < randomNums.size()){
+      for(const auto & i : iter::range(numThreads)){
+      	if(currentRow >= randomNums.size()){
+      		break;
+      	}
+      	f1(gens[i], randomNums[currentRow]);
+      	++currentRow;
+      }
+    }
+    setUp.logging_ << "non-threaded\t" << getRunInfo("\t", false, setUp.extraInfo_, timmer)<< std::endl;
+  }
+	return 0;
+}
 /* profiler template
  * int nameOfProgram(MapStrStr inputCommands) {
  *  //programSetUp for easy command line parsing
@@ -1559,7 +1614,8 @@ profilerRunner::profilerRunner()
 					 addFunc("mapVsUnorderedMapCodon", mapVsUnorderedMapCodon, false),
 					 addFunc("mapVsUnorderedMap", mapVsUnorderedMap, false),
 					 addFunc("mapVsUnorderedMapRepeat", mapVsUnorderedMapRepeat, false),
-					 addFunc("translation", translation, false)
+					 addFunc("translation", translation, false),
+					 addFunc("testThreads", testThreads, false)
            },
           "profilerRunner") {}
 

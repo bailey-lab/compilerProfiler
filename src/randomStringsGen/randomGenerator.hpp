@@ -17,10 +17,11 @@ class randomGenerator {
     seed(true);
     needToSeed_ = false;
   }
+  /*
   randomGenerator(uint64_t givenSeed) {
   	seedNum(givenSeed);
     needToSeed_ = false;
-  }
+  }*/
   // Members
   std::mt19937 mtGen_;
   bool needToSeed_;
