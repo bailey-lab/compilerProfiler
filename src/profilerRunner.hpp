@@ -4,7 +4,7 @@
  *  Created on: Jun 26, 2014
  *      Author: nickhathaway
  */
-
+#include "all.h"
 namespace compro{
 class profilerRunner : public programRunner {
  public:

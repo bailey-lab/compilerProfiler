@@ -14,7 +14,6 @@
 #include <vector>
 #include <array>
 #include <stdint.h>
-#include "all.h"
 #include "profilerRunner.hpp"
 
 using namespace compro;
@@ -62,7 +61,7 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
 	randomGenerator gen;
 	gapScoringParameters <int32_t> gapPars(5,1);
 	substituteMatrix scoreMatrix(2,-2);
-	alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+	aligner <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 	for(uint32_t run = 0; run < runTimes; ++run){
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
@@ -145,7 +144,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <double> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <double> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <double> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -171,7 +170,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <float> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <float> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <float> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -196,7 +195,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -221,7 +220,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
@@ -246,7 +245,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -271,7 +270,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <double> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <double> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <double> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -297,7 +296,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <float> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <float> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <float> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -322,7 +321,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -347,7 +346,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
@@ -372,7 +371,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -451,7 +450,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <double> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <double> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <double> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -477,7 +476,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <float> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <float> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <float> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -502,7 +501,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -527,7 +526,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
@@ -552,7 +551,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -577,7 +576,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <double> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <double> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <double> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -603,7 +602,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <float> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <float> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <float> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -628,7 +627,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int16_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{
@@ -653,7 +652,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int32_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 					alphabet, alphCounts,  gen, strNum);
 		{
@@ -678,7 +677,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
 		 */
 		gapScoringParameters <int64_t> gapPars(5,1);
 		substituteMatrix scoreMatrix(2,-2);
-		alignerTemp <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
+		aligner <int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
 		std::vector<std::string> randStrings = evenRandStrsRandLen(minSize, maxSize,
 				alphabet, alphCounts,  gen, strNum);
 		{

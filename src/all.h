@@ -7,8 +7,9 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 
-#include "common.h"
-#include "utils.h"
-#include "alignment.h"
-#include "randomStringsGen.h"
-#include "programUtils.h"
+#include "compro/common.h"
+#include "compro/utils.h"
+#include "compro/alignment.h"
+#include "compro/randomStringsGen.h"
+#include "compro/programUtils.h"
+#include "compro/getInfo.h"
