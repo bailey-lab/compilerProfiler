@@ -1,5 +1,5 @@
 /*
- * 
+ *
  *
 
 
@@ -9,7 +9,7 @@
 #include "compro/utils/stringUtils.hpp"
 #include "compro/utils/numUtils.hpp"
 
-namespace compro{
+namespace compro {
 std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
                           int secondsDecimalPlaces) {
   std::stringstream duration;
@@ -99,7 +99,6 @@ std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
   return duration.str();
 }
 
-
 void stringToUpper(std::string& str) {
   for (auto& c : str) {
     c = toupper(c);
@@ -154,19 +153,18 @@ std::string get_cwd() {
   // return "";
 }
 
-
-
-std::vector<std::string> tokenizeString(const std::string& str, const std::string& delim,
-                      bool addEmptyToEnd) {
-	std::vector<std::string> output;
-  if("whitespace" == delim){
+std::vector<std::string> tokenizeString(const std::string& str,
+                                        const std::string& delim,
+                                        bool addEmptyToEnd) {
+  std::vector<std::string> output;
+  if ("whitespace" == delim) {
     std::stringstream tempStream(str);
     while (!tempStream.eof()) {
       std::string tempName;
       tempStream >> tempName;
       output.emplace_back(tempName);
     }
-  }else{
+  } else {
     if (str.find(delim.c_str()) == std::string::npos) {
       output.push_back(str);
     } else {
@@ -190,29 +188,30 @@ std::vector<std::string> tokenizeString(const std::string& str, const std::strin
   return output;
 }
 
-std::vector<char> processAlphStrVecChar(const std::string & alphabetStr, const std::string & delim){
-	std::vector<char> ans;
-	std::vector<std::string> toks = tokenizeString(alphabetStr, delim);
-	for(const auto & t : toks){
-		ans.emplace_back(t[0]);
-	}
-	return ans;
+std::vector<char> processAlphStrVecChar(const std::string& alphabetStr,
+                                        const std::string& delim) {
+  std::vector<char> ans;
+  std::vector<std::string> toks = tokenizeString(alphabetStr, delim);
+  for (const auto& t : toks) {
+    ans.emplace_back(t[0]);
+  }
+  return ans;
 }
 
-std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(const std::string & alphabetStr,
-		const std::string & delim){
-	std::vector<char> ansLets;
-	std::vector<uint32_t> ansCounts;
-	std::vector<std::string> toks = tokenizeString(alphabetStr, delim);
-	for(const auto & t : toks){
-		ansLets.emplace_back(t[0]);
-		if(t.length() > 2){
-			ansCounts.emplace_back(std::stof(t.substr(1)));
-		}else{
-			ansCounts.emplace_back(1);
-		}
-	}
-	return {ansLets, ansCounts};
+std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(
+    const std::string& alphabetStr, const std::string& delim) {
+  std::vector<char> ansLets;
+  std::vector<uint32_t> ansCounts;
+  std::vector<std::string> toks = tokenizeString(alphabetStr, delim);
+  for (const auto& t : toks) {
+    ansLets.emplace_back(t[0]);
+    if (t.length() > 2) {
+      ansCounts.emplace_back(std::stof(t.substr(1)));
+    } else {
+      ansCounts.emplace_back(1);
+    }
+  }
+  return {ansLets, ansCounts};
 }
 
 bool stringContainsAllDigits(const std::string& str) {

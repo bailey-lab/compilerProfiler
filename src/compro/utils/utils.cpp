@@ -1,11 +1,11 @@
 /*
- * 
+ *
  *
  *  Created on: Jun 25, 2014
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/utils/utils.hpp"
-namespace compro{
+namespace compro {
 std::string convertBoolToString(bool convert) {
   if (convert) {
     return "true";
@@ -27,20 +27,18 @@ bool fexists(const std::string &filename) {
   }
 }
 
-void openTextFile(std::ofstream &file, std::string filename,
-                  bool overWrite,
-                  bool append,
-                  bool exitOnFailure) {
+void openTextFile(std::ofstream &file, std::string filename, bool overWrite,
+                  bool append, bool exitOnFailure) {
   // std::ofstream file;
   if (fexists(filename) && !overWrite) {
-  	if(append){
-  		file.open(filename.data(), std::ios::app);
-  	}else{
+    if (append) {
+      file.open(filename.data(), std::ios::app);
+    } else {
       std::cout << filename << " already exists" << std::endl;
       if (exitOnFailure) {
         exit(1);
       }
-  	}
+    }
 
   } else {
     file.open(filename.data());

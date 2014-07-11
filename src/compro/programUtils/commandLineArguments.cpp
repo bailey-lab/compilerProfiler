@@ -1,16 +1,17 @@
 /*
- * 
+ *
  *
  *  Created on: Jun 25, 2014
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/programUtils/commandLineArguments.hpp"
 #include "compro/utils/stringUtils.hpp"
-namespace compro{
-std::string& commandLineArguments::lowerCaseGetArguments(const std::string& str) {
+namespace compro {
+std::string& commandLineArguments::lowerCaseGetArguments(
+    const std::string& str) {
   if (arguments[stringToLowerReturn(str)] == "") {
-    std::cout << "Argument " << str
-              << " requires an option but none was given" << std::endl;
+    std::cout << "Argument " << str << " requires an option but none was given"
+              << std::endl;
     exit(1);
   }
   return arguments[stringToLowerReturn(str)];
@@ -21,7 +22,8 @@ std::string& commandLineArguments::operator[](const std::string& str) {
 }
 
 // string
-bool commandLineArguments::lookForOption(std::string& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(std::string& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = lowerCaseGetArguments(flag);
     return true;
@@ -30,7 +32,8 @@ bool commandLineArguments::lookForOption(std::string& option, const std::string&
   }
 }
 // bool
-bool commandLineArguments::lookForOption(bool& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(bool& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = true;
     return true;
@@ -39,7 +42,8 @@ bool commandLineArguments::lookForOption(bool& option, const std::string& flag) 
   }
 }
 // bool false
-bool commandLineArguments::lookForOptionFalse(bool& option, const std::string& flag) {
+bool commandLineArguments::lookForOptionFalse(bool& option,
+                                              const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = false;
     return true;
@@ -57,7 +61,8 @@ bool commandLineArguments::lookForOption(int& option, const std::string& flag) {
   }
 }
 // int_64t
-bool commandLineArguments::lookForOption(int64_t& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(int64_t& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = std::stoi(lowerCaseGetArguments(flag));
     return true;
@@ -67,7 +72,8 @@ bool commandLineArguments::lookForOption(int64_t& option, const std::string& fla
 }
 /*
 // size_t
-bool commandLineArguments::lookForOption(size_t& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(size_t& option, const std::string&
+flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = std::stoi(lowerCaseGetArguments(flag));
     return true;
@@ -77,7 +83,8 @@ bool commandLineArguments::lookForOption(size_t& option, const std::string& flag
 }*/
 
 // uint32_t
-bool commandLineArguments::lookForOption(uint32_t& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(uint32_t& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = std::stoi(lowerCaseGetArguments(flag));
     return true;
@@ -87,7 +94,8 @@ bool commandLineArguments::lookForOption(uint32_t& option, const std::string& fl
 }
 
 // uint64_t
-bool commandLineArguments::lookForOption(uint64_t& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(uint64_t& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = std::stoull(lowerCaseGetArguments(flag));
     return true;
@@ -97,7 +105,8 @@ bool commandLineArguments::lookForOption(uint64_t& option, const std::string& fl
 }
 
 // double
-bool commandLineArguments::lookForOption(double& option, const std::string& flag) {
+bool commandLineArguments::lookForOption(double& option,
+                                         const std::string& flag) {
   if (containsFlagCaseInsensitive(flag)) {
     option = std::stof(lowerCaseGetArguments(flag));
     return true;
@@ -112,14 +121,14 @@ bool commandLineArguments::containsFlagCaseSensitive(const std::string& flag) {
     return false;
   }
 }
-bool commandLineArguments::containsFlagCaseInsensitive(const std::string& flag) {
+bool commandLineArguments::containsFlagCaseInsensitive(
+    const std::string& flag) {
   if (arguments.find(stringToLowerReturn(flag)) != arguments.end()) {
     return true;
   } else {
     return false;
   }
 }
-
 
 uint32_t commandLineArguments::numberOfCommands() {
   int offSet = 0;
@@ -132,7 +141,8 @@ uint32_t commandLineArguments::numberOfCommands() {
   return arguments.size() - offSet;
 }
 
-void commandLineArguments::logRunArgumnets(std::ostream& out, int argc, char* argv[]){
+void commandLineArguments::logRunArgumnets(std::ostream& out, int argc,
+                                           char* argv[]) {
   std::string directory = get_cwd();
 
   out << "Command ran from " << directory << std::endl;
@@ -141,11 +151,13 @@ void commandLineArguments::logRunArgumnets(std::ostream& out, int argc, char* ar
   }
   out << std::endl << std::endl;
 }
-void commandLineArguments::logRunArgumnets(std::ostream& out, const std::string& commandLine){
-	out << commandLine;
+void commandLineArguments::logRunArgumnets(std::ostream& out,
+                                           const std::string& commandLine) {
+  out << commandLine;
 }
 
-MapStrStr commandLineArguments::convertCommandLineArguments(int argc, char* argv[]){
+MapStrStr commandLineArguments::convertCommandLineArguments(int argc,
+                                                            char* argv[]) {
   MapStrStr storage;
   for (int i = 1; i < argc; i++) {
     std::string nextParam = stringToLowerReturn(argv[i]);

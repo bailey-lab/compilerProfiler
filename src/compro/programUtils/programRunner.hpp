@@ -7,7 +7,7 @@
  */
 #include "compro/common.h"
 #include "compro/utils/stringUtils.hpp"
-namespace compro{
+namespace compro {
 class programRunner {
  protected:
   struct funcInfo {
@@ -38,7 +38,6 @@ class programRunner {
   virtual std::pair<std::string, int> closestProgram(const std::string& program)
       const;
 
-
   int runByNumber(size_t num, MapStrStr inputCommands) const;
   int runByNumber(std::string numStr, MapStrStr inputCommands) const;
 
@@ -65,6 +64,4 @@ class programRunner {
     }
   }
 };
-
 }
-

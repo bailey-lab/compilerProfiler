@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -9,7 +9,7 @@
 
 #include "compro/common.h"
 #include "compro/utils/vectorUtils.hpp"
-namespace compro{
+namespace compro {
 class randomGenerator {
 
  public:
@@ -19,7 +19,7 @@ class randomGenerator {
   }
   /*
   randomGenerator(uint64_t givenSeed) {
-  	seedNum(givenSeed);
+        seedNum(givenSeed);
     needToSeed_ = false;
   }*/
   // Members
@@ -56,30 +56,32 @@ class randomGenerator {
     return (T)(stop - start) * unifRand() + start;
   }
   template <typename T>
-  T unifRandSelection(const std::vector<T> & vec) {
+  T unifRandSelection(const std::vector<T>& vec) {
     return vec[unifRand<uint32_t>(0, vec.size())];
   }
   template <typename T>
-  std::vector<T> unifRandSelectionVec(const std::vector<T> & vec, uint32_t amt, bool withReplacement) {
-  	std::vector<T> ans;
-  	std::vector<uint32_t> rSel;
-  	if(withReplacement){
-  		rSel = unifRandVector<uint32_t>(0, vec.size(), amt);
-  	}else{
-  		if(amt > vec.size()){
-  			std::cout << "Error in unifRandSelectionVec, requesting more than is in vec but said without replacement" << std::endl;
-  			//std::cout << "Just return the original vector" << std::endl;
-  			exit(1);
-  		}else{
-  			std::vector<uint32_t> rSelPos(vec.size());
-  			std::iota(rSel.begin(), rSel.end(), 0);
-  			std::shuffle(rSel.begin(), rSel.end(), mtGen_);
-  			rSel = getSubVector<uint32_t>(rSelPos, 0, amt);
-  		}
-  	}
-		for(const auto & pos : rSel){
-			ans.emplace_back(vec[pos]);
-		}
+  std::vector<T> unifRandSelectionVec(const std::vector<T>& vec, uint32_t amt,
+                                      bool withReplacement) {
+    std::vector<T> ans;
+    std::vector<uint32_t> rSel;
+    if (withReplacement) {
+      rSel = unifRandVector<uint32_t>(0, vec.size(), amt);
+    } else {
+      if (amt > vec.size()) {
+        std::cout << "Error in unifRandSelectionVec, requesting more than is "
+                     "in vec but said without replacement" << std::endl;
+        // std::cout << "Just return the original vector" << std::endl;
+        exit(1);
+      } else {
+        std::vector<uint32_t> rSelPos(vec.size());
+        std::iota(rSel.begin(), rSel.end(), 0);
+        std::shuffle(rSel.begin(), rSel.end(), mtGen_);
+        rSel = getSubVector<uint32_t>(rSelPos, 0, amt);
+      }
+    }
+    for (const auto& pos : rSel) {
+      ans.emplace_back(vec[pos]);
+    }
     return ans;
   }
   template <typename T>
@@ -92,21 +94,21 @@ class randomGenerator {
     return ans;
   }
   template <typename T>
-  std::vector<std::vector<T>> unifRandVecVec(T start, T stop, uint32_t totalNum, uint32_t subNum) {
+  std::vector<std::vector<T>> unifRandVecVec(T start, T stop, uint32_t totalNum,
+                                             uint32_t subNum) {
     if (needToSeed_) {
       seed(true);
     }
     std::vector<std::vector<T>> ans(totalNum);
-  	std::generate(ans.begin(), ans.end(),[&](){ return unifRandVector<T>(start,stop,subNum);} );
+    std::generate(ans.begin(), ans.end(),
+                  [&]() { return unifRandVector<T>(start, stop, subNum); });
     return ans;
   }
   // Reset the random number generator with the system clock.
   void seed(bool useRDevice) {
-  	std::random_device rd;
-  	mtGen_.seed(rd());
+    std::random_device rd;
+    mtGen_.seed(rd());
   }
-  void seedNum(uint64_t givenSeed) {
-  	mtGen_.seed(givenSeed);
-  }
+  void seedNum(uint64_t givenSeed) { mtGen_.seed(givenSeed); }
 };
 }

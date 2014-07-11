@@ -7,7 +7,7 @@
  */
 
 #include "compro/common/allSystemIncludes.h"
-namespace compro{
+namespace compro {
 class timeTracker;
 /*
  * get compiler version
@@ -21,7 +21,7 @@ std::string getCompilerVersion();
 #if defined(__clang__)
 static std::string compilerUsed = "clang";
 #elif defined(__GNUC__) || defined(__GNUG__)
-static std::string compilerUsed =  "gxx";
+static std::string compilerUsed = "gxx";
 #else
 static std::string compilerUsed = "unrecognized";
 #endif
@@ -60,9 +60,8 @@ static std::string unrollLoopsUsed = "false";
  * doens't seem to be a way to get processor difference in
  */
 
-
-std::string getRunInfo(const std::string & delim, bool getHeader,
-		const std::vector<std::pair<std::string, std::string>> & extraInfo,
-		const timeTracker & timmer);
-
+std::string getRunInfo(
+    const std::string& delim, bool getHeader,
+    const std::vector<std::pair<std::string, std::string>>& extraInfo,
+    const timeTracker& timmer);
 }

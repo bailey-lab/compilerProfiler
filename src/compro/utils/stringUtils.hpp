@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -9,7 +9,7 @@
 
 #include "compro/common.h"
 
-namespace compro{
+namespace compro {
 template <typename T>
 std::string leftPadNumStr(T num, T highestNumber = 10) {
   std::stringstream ans;
@@ -29,7 +29,7 @@ void stringToUpper(std::string& str);
 void stringToLower(std::string& str);
 std::string stringToUpperReturn(std::string str);
 std::string stringToLowerReturn(std::string str);
-void changeStringVectorToLowerCase(VecStr& vec) ;
+void changeStringVectorToLowerCase(VecStr& vec);
 std::string get_cwd();
 bool stringContainsAllDigits(const std::string& str);
 
@@ -46,10 +46,12 @@ std::string vectorToString(const std::vector<T>& vectorToConvert,
   returnString.erase(returnString.size() - (int)delim.size());
   return returnString;
 }
-std::vector<std::string> tokenizeString(const std::string& str, const std::string& delim,
-                      bool addEmptyToEnd = false);
+std::vector<std::string> tokenizeString(const std::string& str,
+                                        const std::string& delim,
+                                        bool addEmptyToEnd = false);
 
-std::vector<char> processAlphStrVecChar(const std::string & alphabetStr, const std::string & delim);
-std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(const std::string & alphabetStr,
-		const std::string & delim);
+std::vector<char> processAlphStrVecChar(const std::string& alphabetStr,
+                                        const std::string& delim);
+std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(
+    const std::string& alphabetStr, const std::string& delim);
 }

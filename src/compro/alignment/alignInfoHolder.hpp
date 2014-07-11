@@ -1,19 +1,19 @@
 #pragma once
 /*
- * 
+ *
  *
  *  Created on: Jun 25, 2014
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/common.h"
-namespace compro{
+namespace compro {
 struct gapInfo {
 
   gapInfo() : pos_(0), size_(0) {}
   gapInfo(uint32_t pos, uint32_t size, bool gapInA)
       : pos_(pos), size_(size), gapInA_(gapInA) {}
 
-  //member
+  // member
   uint32_t pos_;
   uint32_t size_;
   bool gapInA_;
@@ -76,8 +76,9 @@ struct alnInfoLocal {
   /*
   // functions
   static alnInfoLocal readInfo(std::stringstream& ss,
-  		std::vector<std::string>& info, std::vector<std::string>& inputGapInfo,
-  		std::vector<gapInfo> & gInfos, std::string & out);
+                std::vector<std::string>& info, std::vector<std::string>&
+  inputGapInfo,
+                std::vector<gapInfo> & gInfos, std::string & out);
   //
   void writeInfo(const std::string& filename, const std::string& seq1,
                  const std::string& seq2, std::ostream& indexFile) const;
@@ -97,7 +98,6 @@ struct alnInfoLocal {
     }
     out << "}" << std::endl;
   }
-
 };
 
 struct alnInfoGlobal {
@@ -114,8 +114,9 @@ struct alnInfoGlobal {
   /*
   //function
   static alnInfoGlobal readInfo(std::stringstream& ss,
-    		std::vector<std::string>& info, std::vector<std::string>& inputGapInfo,
-    		std::vector<gapInfo> & gInfos, std::string & out);
+                std::vector<std::string>& info, std::vector<std::string>&
+  inputGapInfo,
+                std::vector<gapInfo> & gInfos, std::string & out);
 
   void writeInfo(const std::string& filename, const std::string& seq1,
                  const std::string& seq2, std::ostream& indexFile) const;

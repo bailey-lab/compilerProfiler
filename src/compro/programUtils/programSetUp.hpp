@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -11,7 +11,7 @@
 #include "compro/programUtils/parameter.hpp"
 #include "compro/timeProfiler/timerTracker.hpp"
 #include "compro/utils/ansiUtils.hpp"
-namespace compro{
+namespace compro {
 class programSetUp {
 
  public:
@@ -33,8 +33,8 @@ class programSetUp {
   // parameters for logging
   parametersHolder pars_;
 
-  //void writeParametersFile(const std::string &fileName, bool overWrite,
-    //                       bool failOnWriteFailure);
+  // void writeParametersFile(const std::string &fileName, bool overWrite,
+  //                       bool failOnWriteFailure);
   // check for valid commands
   void lookForInvalidOptions();
   void printWarnings(std::ostream &out);
@@ -49,16 +49,14 @@ class programSetUp {
                  bool required = false);
   // flag processing
   VecStr processFlag(std::string &flag);
-  std::string getRunTime() {
-  	return timer_.getStringRunTime(true, 2);
-  }
+  std::string getRunTime() { return timer_.getStringRunTime(true, 2); }
   void logRunTime(std::ostream &out) {
     timer_.print(timer_.prefix_, out, 0, 2);
     return;
   }
   bool needsHelp(uint32_t minAmountOfArgs = 1);
-  //void writeOutCommandLineArguments(const MapStrStr &commandLineArgumentsMap,
-    //                                std::ostream &out);
+  // void writeOutCommandLineArguments(const MapStrStr &commandLineArgumentsMap,
+  //                                std::ostream &out);
 };
 
 template <typename T>

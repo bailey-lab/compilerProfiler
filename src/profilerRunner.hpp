@@ -5,10 +5,9 @@
  *      Author: nickhathaway
  */
 #include "all.h"
-namespace compro{
+namespace compro {
 class profilerRunner : public programRunner {
  public:
-	profilerRunner();
-
+  profilerRunner();
 };
-} //compro
+}  // compro

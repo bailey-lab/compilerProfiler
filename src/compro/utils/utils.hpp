@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -9,14 +9,12 @@
 
 #include "compro/common.h"
 
-namespace compro{
+namespace compro {
 
 std::string convertBoolToString(bool convert);
 
 bool fexists(const std::string &filename);
 
-void openTextFile(std::ofstream &file, std::string filename,
-                  bool overWrite, bool append,
-                  bool exitOnFailure);
-
+void openTextFile(std::ofstream &file, std::string filename, bool overWrite,
+                  bool append, bool exitOnFailure);
 }

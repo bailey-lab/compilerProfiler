@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -8,7 +8,7 @@
  */
 
 #include "compro/common.h"
-namespace compro{
+namespace compro {
 class commandLineArguments {
 
  public:
@@ -23,32 +23,32 @@ class commandLineArguments {
       : arguments(inputCommands) {
     lookForOption(commandLine, "-commandline");
   }
-  //members
+  // members
 
   MapStrStr arguments;
   std::string commandLine;
 
  private:
-  std::string& lowerCaseGetArguments(const std::string& str) ;
+  std::string& lowerCaseGetArguments(const std::string& str);
 
  public:
   std::string& operator[](const std::string& str);
   // string
   bool lookForOption(std::string& option, const std::string& flag);
   // bool
-  bool lookForOption(bool& option, const std::string& flag) ;
+  bool lookForOption(bool& option, const std::string& flag);
   // bool false
-  bool lookForOptionFalse(bool& option, const std::string& flag) ;
+  bool lookForOptionFalse(bool& option, const std::string& flag);
   // int
-  bool lookForOption(int& option, const std::string& flag) ;
+  bool lookForOption(int& option, const std::string& flag);
   // int_64t
   bool lookForOption(int64_t& option, const std::string& flag);
   // size_t
-  //bool lookForOption(size_t& option, const std::string& flag) ;
+  // bool lookForOption(size_t& option, const std::string& flag) ;
   // uint32_t
-  bool lookForOption(uint32_t& option, const std::string& flag) ;
+  bool lookForOption(uint32_t& option, const std::string& flag);
   // uint64_t
-  bool lookForOption(uint64_t& option, const std::string& flag) ;
+  bool lookForOption(uint64_t& option, const std::string& flag);
 
   // double
   bool lookForOption(double& option, const std::string& flag);
@@ -56,8 +56,9 @@ class commandLineArguments {
   bool containsFlagCaseInsensitive(const std::string& flag);
 
   static void logRunArgumnets(std::ostream& out, int argc, char* argv[]);
-  static void logRunArgumnets(std::ostream& out, const std::string& commandLine);
+  static void logRunArgumnets(std::ostream& out,
+                              const std::string& commandLine);
   static MapStrStr convertCommandLineArguments(int argc, char* argv[]);
-  uint32_t numberOfCommands() ;
+  uint32_t numberOfCommands();
 };
 }

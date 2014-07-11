@@ -7,36 +7,35 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/common.h"
-namespace compro{
-
-
+namespace compro {
 
 class timeTracker {
  public:
   // Constructors
-	timeTracker() : prefix_(""), printAtDeath_(true), fileName_("") {
-		start_ = std::chrono::high_resolution_clock::now();
-	}
+  timeTracker() : prefix_(""), printAtDeath_(true), fileName_("") {
+    start_ = std::chrono::high_resolution_clock::now();
+  }
 
-	timeTracker(const std::string s)
+  timeTracker(const std::string s)
       : prefix_(s), printAtDeath_(true), fileName_("") {
-		start_ = std::chrono::high_resolution_clock::now();
-	}
+    start_ = std::chrono::high_resolution_clock::now();
+  }
 
-	timeTracker(const std::string s, bool printAtDeath)
+  timeTracker(const std::string s, bool printAtDeath)
       : prefix_(s), printAtDeath_(printAtDeath), fileName_("") {
-		start_ = std::chrono::high_resolution_clock::now();
-	}
+    start_ = std::chrono::high_resolution_clock::now();
+  }
 
-	timeTracker(const std::string s, bool printAtDeath, const std::string& fileName)
+  timeTracker(const std::string s, bool printAtDeath,
+              const std::string& fileName)
       : prefix_(s), printAtDeath_(printAtDeath), fileName_(fileName) {
-		start_ = std::chrono::high_resolution_clock::now();
-	}
+    start_ = std::chrono::high_resolution_clock::now();
+  }
 
-	timeTracker(const std::string s, const std::string& fileName)
+  timeTracker(const std::string s, const std::string& fileName)
       : prefix_(s), printAtDeath_(true), fileName_(fileName) {
-		start_ = std::chrono::high_resolution_clock::now();
-	}
+    start_ = std::chrono::high_resolution_clock::now();
+  }
   // deconstructor
   ~timeTracker() {
     if (printAtDeath_) {
@@ -58,11 +57,9 @@ class timeTracker {
   uint32_t defaultIndent_ = 0;
   // functions
   void reset();
-  double getRunTime() const ;
+  double getRunTime() const;
   std::string getStringRunTime(bool wordy, int decPlaces) const;
   void print(const std::string& pre, std::ostream& out, uint32_t indentAmount,
              int decPlaces) const;
 };
-
-
 }

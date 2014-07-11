@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -9,7 +9,7 @@
 
 #include "compro/common.h"
 #include "compro/utils.h"
-namespace compro{
+namespace compro {
 class parameter {
  public:
   // bool constructor
@@ -38,16 +38,16 @@ class parameter {
     }
   }
 
-  template<typename T>
+  template <typename T>
   parameter(const std::string& parName, T inValue, bool commandLine) {
-		name = parName;
-		value = to_string(inValue);
-		if (commandLine) {
-			defaultOrCommandline = "commandLine";
-		} else {
-			defaultOrCommandline = "default";
-		}
-	}
+    name = parName;
+    value = to_string(inValue);
+    if (commandLine) {
+      defaultOrCommandline = "commandLine";
+    } else {
+      defaultOrCommandline = "default";
+    }
+  }
 
   std::string name;
   std::string value;

@@ -1,13 +1,13 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/common/allSystemIncludes.h"
-namespace compro{
+namespace compro {
 template <typename NUM>
 std::string to_string(NUM number) {
   std::stringstream tempStream;

@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 
+ *
  *
 
  *  Created on: Jun 25, 2014
@@ -9,6 +9,6 @@
 
 #include "compro/common.h"
 
-namespace compro{
+namespace compro {
 double roundDecPlaces(double num, int decPlaces);
 }

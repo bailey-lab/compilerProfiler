@@ -9,7 +9,7 @@
 
 #include "compro/alignment/aligner.hpp"
 #include "compro/programUtils/commandLineArguments.hpp"
-namespace compro{
+namespace compro {
 programRunner::~programRunner() {}
 
 int programRunner::run(int argc, char *argv[]) {
@@ -19,7 +19,8 @@ int programRunner::run(int argc, char *argv[]) {
   }
   std::stringstream commandLine;
   commandLineArguments::logRunArgumnets(commandLine, argc, argv);
-  MapStrStr commands = commandLineArguments::convertCommandLineArguments(argc, argv);
+  MapStrStr commands =
+      commandLineArguments::convertCommandLineArguments(argc, argv);
   commands["-program"] = stringToLowerReturn(argv[1]);
   commands["-commandline"] = commandLine.str();
   if (stringContainsAllDigits(commands["-program"])) {
@@ -62,8 +63,8 @@ bool programRunner::containsProgram(const std::string &program) const {
 
 std::pair<std::string, int> programRunner::closestProgram(
     const std::string &program) const {
-  gapScoringParameters <int32_t> gapPars(5, 1);
-  aligner <int32_t> alignerObj(500, gapPars, substituteMatrix(1, -1));
+  gapScoringParameters<int32_t> gapPars(5, 1);
+  aligner<int32_t> alignerObj(500, gapPars, substituteMatrix(1, -1));
   std::pair<std::string, int> ans = {"", 0};
   for (const auto &prog : cmdToFunc_) {
     alignerObj.alignSeqSave(prog.first, program, false);
@@ -100,6 +101,3 @@ void programRunner::listPrograms(std::ostream &out, const std::string &command,
   listCommands(out);
 }
 }
-
-
-
