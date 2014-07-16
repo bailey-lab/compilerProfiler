@@ -67,7 +67,7 @@ std::pair<std::string, int> programRunner::closestProgram(
   aligner<int32_t> alignerObj(500, gapPars, substituteMatrix(1, -1));
   std::pair<std::string, int> ans = {"", 0};
   for (const auto &prog : cmdToFunc_) {
-    alignerObj.alignSeqSave(prog.first, program, false);
+    alignerObj.alignSeqScore(prog.first, program, false);
     if (alignerObj.parts_.score_ > ans.second) {
       ans = {prog.first, alignerObj.parts_.score_};
     }

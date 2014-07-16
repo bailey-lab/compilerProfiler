@@ -24,7 +24,7 @@ std::string leftPadNumStr(T num, T highestNumber = 10) {
 
 std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
                           int secondsDecimalPlaces);
-
+bool containsSubString(const std::string& str, const std::string& subString);
 void stringToUpper(std::string& str);
 void stringToLower(std::string& str);
 std::string stringToUpperReturn(std::string str);

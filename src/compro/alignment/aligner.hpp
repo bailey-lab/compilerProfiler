@@ -11,12 +11,7 @@
 #include "compro/alignment/alignInfoHolder.hpp"
 #include "compro/utils/vectorUtils.hpp"
 namespace compro {
-/*! \brief Aligner Class
- *
- *
- *  This class can do local or global alignment using simple scoring or using a
- *provide scoring matrix
- */
+
 template <typename NUM>
 struct scoreMatrixCell {
   NUM upInherit;
@@ -329,6 +324,7 @@ class alignCalc {
         parts.ScoreMatrix_[icursor][jcursor].upInherit,
         parts.ScoreMatrix_[icursor][jcursor].leftInherit,
         parts.ScoreMatrix_[icursor][jcursor].diagInherit, tracerNext);
+    parts.gHolder_.score_ = parts.score_;
     uint32_t gapBSize = 0;
     uint32_t gapASize = 0;
     // std::cout <<"rnv2" << std::endl;
@@ -375,6 +371,7 @@ class alignCalc {
     } else if (tracerNext == 'L' && gapASize != 0) {
       parts.gHolder_.gapInfos_.emplace_back(gapInfo(icursor, gapASize, true));
     }
+
     // std::cout <<"rnv4" << std::endl;
     // rearrangeGlobal(objA, objB);
     // std::cout <<"rnv5" << std::endl;
@@ -576,6 +573,7 @@ class alignCalc {
     parts.lHolder_.localASize_ = bestI - icursor;
     parts.lHolder_.localBStart_ = jcursor;
     parts.lHolder_.localBSize_ = bestJ - jcursor;
+    parts.lHolder_.score_ = parts.score_;
     // rearrangeLocal(objA, objB);
     // alnInfoLocal_.addFromFile_ = false;
     // alnHolders_.locaparts.lHolder__[parts.gapScores_.getIdentifer()]
@@ -598,7 +596,6 @@ class alignCalc {
                              const alnInfoLocal& lHolder) {
     readA = getSubVector(readA, lHolder.localAStart_, lHolder.localASize_);
     readB = getSubVector(readB, lHolder.localBStart_, lHolder.localBSize_);
-
     for (const auto& g : lHolder.gapInfos_) {
       if (g.gapInA_) {
         readA.insert(readA.begin() + g.pos_ - lHolder.localAStart_, g.size_,
@@ -637,15 +634,17 @@ class aligner {
    */
   aligner(uint32_t maxSize, const gapScoringParameters<NUM>& gapPars,
           const substituteMatrix& scoreMatrix)
-      : parts_(maxSize, gapPars, scoreMatrix) {}
+      : parts_(maxSize, gapPars, scoreMatrix),
+        alnHolder_(alnInfoMasterHolder<NUM>(gapPars, scoreMatrix)) {}
 
   // to hold the sequence alignments
   std::string alignObjectA_;
   std::string alignObjectB_;
 
   alnParts<NUM> parts_;
+  alnInfoMasterHolder<NUM> alnHolder_;
   // Aligner
-  void alignSeqSave(const std::string& firstSeq, const std::string& secondSeq,
+  void alignSeqScore(const std::string& firstSeq, const std::string& secondSeq,
                     bool local) {
     if (local) {
       alignCalc<NUM>::runSmithSave(firstSeq, secondSeq, parts_);
@@ -653,6 +652,33 @@ class aligner {
       alignCalc<NUM>::runNeedleSave(firstSeq, secondSeq, parts_);
     }
   }
+  void alignSeqCache(const std::string& firstSeq, const std::string& secondSeq,
+                bool local) {
+    alignObjectA_ = firstSeq;
+    alignObjectB_ = secondSeq;
+    if (local) {
+    	if(alnHolder_.localHolder_[parts_.gapScores_.getIdentifer()]
+            .getAlnInfo(firstSeq, secondSeq, parts_.lHolder_)){
+    		parts_.score_ = parts_.lHolder_.score_;
+    	}else{
+    		alignCalc<NUM>::runSmithSave(firstSeq, secondSeq, parts_);
+    		alnHolder_.localHolder_[parts_.gapScores_.getIdentifer()].addAlnInfo(firstSeq, secondSeq, parts_.lHolder_);
+    	}
+      alignCalc<NUM>::rearrangeLocal(alignObjectA_, alignObjectB_, '-',
+                                     parts_.lHolder_);
+    } else {
+    	if(alnHolder_.globalHolder_[parts_.gapScores_.getIdentifer()]
+    	            .getAlnInfo(firstSeq, secondSeq, parts_.gHolder_)){
+    		parts_.score_ = parts_.gHolder_.score_;
+			}else{
+				alignCalc<NUM>::runNeedleSave(firstSeq, secondSeq, parts_);
+				alnHolder_.globalHolder_[parts_.gapScores_.getIdentifer()].addAlnInfo(firstSeq, secondSeq, parts_.gHolder_);
+			}
+      alignCalc<NUM>::rearrangeGlobal(alignObjectA_, alignObjectB_, '-',
+                                      parts_.gHolder_);
+    }
+  }
+
   void alignSeq(const std::string& firstSeq, const std::string& secondSeq,
                 bool local) {
     alignObjectA_ = firstSeq;

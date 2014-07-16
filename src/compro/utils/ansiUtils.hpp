@@ -20,5 +20,5 @@ std::string changeBackground(const std::string& colorCode);
 std::string changeColor(const std::string& colorCode);
 std::string changeColor(uint32_t colorCode);
 std::string changeBackground(uint32_t colorCode);
-std::string endAllAttributes(const std::string& add);
+std::string endAllAttributes(const std::string& add = "");
 }

@@ -188,6 +188,10 @@ std::vector<std::string> tokenizeString(const std::string& str,
   return output;
 }
 
+bool containsSubString(const std::string& str, const std::string& subString) {
+  return (str.find(subString) != std::string::npos);
+}
+
 std::vector<char> processAlphStrVecChar(const std::string& alphabetStr,
                                         const std::string& delim) {
   std::vector<char> ans;

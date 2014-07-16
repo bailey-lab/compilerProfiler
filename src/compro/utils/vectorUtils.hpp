@@ -8,6 +8,7 @@
  */
 
 #include "compro/common.h"
+#include "compro/utils/stringUtils.hpp"
 namespace compro {
 template <class T>
 void addOtherVec(std::vector<T>& reads, const std::vector<T>& otherVec) {
@@ -30,5 +31,23 @@ std::vector<T> getSubVector(const std::vector<T>& vec, uint32_t start,
   std::vector<T> ans(vec.begin() + start, vec.begin() + size + start);
   return ans;
 }
+
 std::string getSubVector(const std::string& vec, uint32_t start, uint32_t size);
+
+template <typename T>
+std::vector<T> convertStringToVector(const std::string& str,
+                                     const std::string& delim) {
+  std::vector<T> ans;
+  VecStr toks = tokenizeString(str, delim);
+  for (const auto& t : toks) {
+    std::stringstream tempStream;
+    tempStream << t;
+    T tempObject;
+    tempStream >> tempObject;
+    ans.push_back(tempObject);
+  }
+  return ans;
 }
+
+} // compro
+

@@ -22,12 +22,12 @@ struct gapScoringParameters {
     setIdentifer();
   };
   gapScoringParameters()
-      : gapOpen_(7.0),
-        gapExtend_(0.5),
-        gapRightOpen_(7.0),
-        gapRightExtend_(0.5),
-        gapLeftOpen_(7.0),
-        gapLeftExtend_(0.5) {
+      : gapOpen_(7),
+        gapExtend_(1),
+        gapRightOpen_(7),
+        gapRightExtend_(1),
+        gapLeftOpen_(7),
+        gapLeftExtend_(1) {
     setIdentifer();
   }
   gapScoringParameters(NUM gapOpen, NUM gapExtend)

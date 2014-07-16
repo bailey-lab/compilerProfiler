@@ -1,6 +1,7 @@
 #include <catch.hpp>
 
 #include "../../src/compro/alignment/aligner.hpp"
+#include "../../src/compro/randomStringsGen.h"
 using namespace compro;
 
 TEST_CASE("Basic tests for aligner", "[aligner]" ){
@@ -65,6 +66,62 @@ TEST_CASE("Basic tests for aligner", "[aligner]" ){
     REQUIRE(ansA == alignerObjTest.alignObjectA_);
     REQUIRE(ansB == alignerObjTest.alignObjectB_);
     REQUIRE(ansScore == alignerObjTest.parts_.score_);
+  }
+  SECTION ("comparing cache versus regular global"){
+    gapScoringParameters<uint32_t> gapPars(5, 1);
+    substituteMatrix scoreMatrix(2, -2);
+    aligner<uint32_t> alignerObj(500, gapPars, scoreMatrix);
+    aligner<uint32_t> alignerObjCache(500, gapPars, scoreMatrix);
+    randomGenerator gen;
+    std::vector<std::string> randStrings = evenRandStrsRandLen(
+        100, 100, std::vector<char>{'A','C','G','T'}, std::vector<uint32_t>{1,1,1,1}, gen, 50);
+    for(const auto & pos : iter::range(randStrings.size())){
+    	for(const auto & secondPos : iter::range((randStrings.size()))){
+    		alignerObj.alignSeq(randStrings[pos], randStrings[secondPos], false);
+    		alignerObjCache.alignSeqCache(randStrings[pos], randStrings[secondPos], false);
+        REQUIRE(alignerObjCache.alignObjectA_ == alignerObj.alignObjectA_);
+        REQUIRE(alignerObjCache.alignObjectB_ == alignerObj.alignObjectB_);
+        REQUIRE(alignerObjCache.parts_.score_ == alignerObj.parts_.score_);
+    	}
+    }
+    //second round around so should be cached now
+    for(const auto & pos : iter::range(randStrings.size())){
+    	for(const auto & secondPos : iter::range((randStrings.size()))){
+    		alignerObj.alignSeq(randStrings[pos], randStrings[secondPos], false);
+    		alignerObjCache.alignSeqCache(randStrings[pos], randStrings[secondPos], false);
+        REQUIRE(alignerObjCache.alignObjectA_ == alignerObj.alignObjectA_);
+        REQUIRE(alignerObjCache.alignObjectB_ == alignerObj.alignObjectB_);
+        REQUIRE(alignerObjCache.parts_.score_ == alignerObj.parts_.score_);
+    	}
+    }
+  }
+  SECTION ("comparing cache versus regular local"){
+    gapScoringParameters<uint32_t> gapPars(5, 1);
+    substituteMatrix scoreMatrix(2, -2);
+    aligner<uint32_t> alignerObj(500, gapPars, scoreMatrix);
+    aligner<uint32_t> alignerObjCache(500, gapPars, scoreMatrix);
+    randomGenerator gen;
+    std::vector<std::string> randStrings = evenRandStrsRandLen(
+        100, 100, std::vector<char>{'A','C','G','T'}, std::vector<uint32_t>{1,1,1,1}, gen, 50);
+    for(const auto & pos : iter::range(randStrings.size())){
+    	for(const auto & secondPos : iter::range((randStrings.size()))){
+    		alignerObj.alignSeq(randStrings[pos], randStrings[secondPos], true);
+    		alignerObjCache.alignSeqCache(randStrings[pos], randStrings[secondPos], true);
+        REQUIRE(alignerObjCache.alignObjectA_ == alignerObj.alignObjectA_);
+        REQUIRE(alignerObjCache.alignObjectB_ == alignerObj.alignObjectB_);
+        REQUIRE(alignerObjCache.parts_.score_ == alignerObj.parts_.score_);
+    	}
+    }
+    //second round around so should be cached now
+    for(const auto & pos : iter::range(randStrings.size())){
+    	for(const auto & secondPos : iter::range((randStrings.size()))){
+    		alignerObj.alignSeq(randStrings[pos], randStrings[secondPos], true);
+    		alignerObjCache.alignSeqCache(randStrings[pos], randStrings[secondPos], true);
+        REQUIRE(alignerObjCache.alignObjectA_ == alignerObj.alignObjectA_);
+        REQUIRE(alignerObjCache.alignObjectB_ == alignerObj.alignObjectB_);
+        REQUIRE(alignerObjCache.parts_.score_ == alignerObj.parts_.score_);
+    	}
+    }
   }
 }
 
