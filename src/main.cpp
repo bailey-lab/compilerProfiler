@@ -2234,7 +2234,7 @@ int testThreads(MapStrStr inputCommands) {
   return 0;
 }
 
-int testDifferntRandStrs(MapStrStr inputCommands) {
+int randomStringsGen(MapStrStr inputCommands) {
   uint32_t maxSize = 50;
   uint32_t minSize = 50;
   uint32_t strNum = 50;
@@ -2275,162 +2275,63 @@ int testDifferntRandStrs(MapStrStr inputCommands) {
   }
   randomGenerator gen;
   randStrGen strGen(gen, alphabet, alphCounts);
-  randStrGenTest strGenTest(gen, alphabet, alphCounts);
-  randObjectGen<char> objGen(alphabet, alphCounts);
-  randObjectGen<char> objGen2(alphabet, alphCounts);
+
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
   setUp.logging_ << std::fixed;
   if (setUp.header_) {
-    setUp.logging_ << "rStrType\trStrGen"
+    setUp.logging_ << "rStrGen\t"
                    << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
                    << std::endl;
   }
   if(veryVerbose){
   	VecStr randStringsOut = strGen.rStrs(minSize, maxSize, strNum);
   	std::for_each(randStringsOut.begin(), randStringsOut.end(), [](const std::string & str){std::cout << str << std::endl;});
-  	VecStr randStringsOutTest = strGenTest.rStrs(minSize, maxSize, strNum);
-  	std::cout << std::endl;
-  	std::cout << changeColor(196);
-  	std::for_each(randStringsOutTest.begin(), randStringsOutTest.end(), [](const std::string & str){std::cout << str << std::endl;});
-  	std::cout << endAllAttributes("");
-  	auto like = strGenTest.createLikelihood(alphabet, alphCounts);
-  	for(const auto & l : like){
-  		std::cout << l.first << " " << l.second << std::endl;
-  	}
-  	{
-    	std::cout << changeColor(215);
-  		auto likeli = objGen.createLikelihood(alphabet, alphCounts);
-			for(const auto & l : likeli){
-				std::cout << l.first << " " << l.second << std::endl;
-			}
-			auto testRand = objGen.genObjs(10);
-			//std::for_each(testRand.begin(), testRand.end(), [](char c){std::cout << c << std::endl;});
-			std::cout << endAllAttributes("");
-  	}
-  	{
-    	std::cout << changeColor(203);
-  		auto likeli = objGen.createLikelihoodDoub(alphabet, alphCounts);
-			for(const auto & l : likeli){
-				std::cout << l.first << " " << l.second << std::endl;
-			}
-			std::cout << endAllAttributes("");
-  	}
-
   }
   {
     /*
-     * uint64_t rChar
+     * rStr
      */
-  	timeTracker timmer("uint64_t", false);
-  	for(uint32_t i = 0; i < runTimes; ++i){
-  		auto rando = objGen.genObj();
-  	}
-    setUp.logging_ << "uint64_t\trChar\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< "\n";
-  }
-  {
-    /*
-     * double rStr
-     */
-  	timeTracker timmer("double", false);
-  	for(uint32_t i = 0; i < runTimes; ++i){
-  		auto rando = objGen2.genObjDoub();
-  	}
-    setUp.logging_ << "double\trChar\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< std::endl;
-  }
-  {
-    /*
-     * uint64_t rStrs
-     */
-  	timeTracker timmer("uint64_t", false);
-  	for(uint32_t i = 0; i < runTimes; ++i){
-  		std::string randString = strGenTest.rStr(maxSize);
-  	}
-    setUp.logging_ << "uint64_t\trStr\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< std::endl;
-  }
-  {
-    /*
-     * double rStr
-     */
-  	timeTracker timmer("double", false);
+  	timeTracker timmer("rStr", false);
   	for(uint32_t i = 0; i < runTimes; ++i){
   		std::string randString = strGen.rStr(maxSize);
   	}
-    setUp.logging_ << "double\trStr\t"
+    setUp.logging_ << "rStr\t"
     		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
     		<< std::endl;
   }
   {
     /*
-     * uint64_t rStrs
+     * rStrs
      */
-  	timeTracker timmer("uint64_t", false);
-    VecStr randStrings = strGenTest.rStrs(maxSize, strNum);
-    setUp.logging_ << "uint64_t\trStrs\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< std::endl;
-  }
-  {
-    /*
-     * double rStrs
-     */
-  	timeTracker timmer("double", false);
+  	timeTracker timmer("rStrs", false);
     VecStr randStrings = strGen.rStrs(maxSize, strNum);
-    setUp.logging_ << "double\trStrs\t"
+    setUp.logging_ << "rStrs\t"
     		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
     		<< std::endl;
   }
   {
     /*
-     * uint64_t rStr rand length
+     *  rStr rand length
      */
-  	timeTracker timmer("uint64_t", false);
-  	for(uint32_t i = 0; i < runTimes; ++i){
-  		std::string randString = strGenTest.rStr(minSize, maxSize);
-  	}
-
-    setUp.logging_ << "uint64_t\trStrRLen\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< std::endl;
-  }
-  {
-    /*
-     * double rStr rand length
-     */
-  	timeTracker timmer("double", false);
+  	timeTracker timmer("rStr rand length", false);
   	for(uint32_t i = 0; i < runTimes; ++i){
   		std::string randString = strGen.rStr(minSize, maxSize);
   	}
 
-    setUp.logging_ << "double\trStrRLen\t"
+    setUp.logging_ << "rStrRLen\t"
     		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
     		<< std::endl;
   }
   {
     /*
-     * uint64_t rStrs rand length
+     *  rStrs rand length
      */
-  	timeTracker timmer("uint64_t", false);
-    VecStr randStrings = strGenTest.rStrs(minSize, maxSize, strNum);
-    setUp.logging_ << "uint64_t\trStrRLen\t"
-    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
-    		<< std::endl;
-  }
-  {
-    /*
-     * double rStrs rand length
-     */
-  	timeTracker timmer("double", false);
+  	timeTracker timmer("rStrs rand length", false);
     VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
-    setUp.logging_ << "double\trStrRLen\t"
+    setUp.logging_ << "rStrRLen\t"
     		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
     		<< std::endl;
   }
@@ -2607,7 +2508,7 @@ profilerRunner::profilerRunner()
            addFunc("translation", translation, false),
            addFunc("testThreads", testThreads, false),
            addFunc("testRandStr", testRandStr, false),
-           addFunc("testDifferntRandStrs", testDifferntRandStrs, false)},
+           addFunc("randomStringsGen", randomStringsGen, false)},
           "profilerRunner") {}
 
 int main(int argc, char *argv[]) {
