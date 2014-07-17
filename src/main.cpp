@@ -15,6 +15,55 @@
 #include "profilerRunner.hpp"
 
 using namespace compro;
+int testRandStr(MapStrStr inputCommands) {
+  uint32_t maxSize = 50;
+  uint32_t minSize = 40;
+  uint32_t strNum = 50;
+  uint32_t runTimes = 1;
+  bool local = false;
+  std::string alphStr = "A40,C10,G10,T40";
+  std::string alphDelim = ",";
+  bool veryVerbose = false;
+  bool simple = false;
+  profilerSetUp setUp(inputCommands);
+  setUp.setOption(maxSize, "-maxSize", "maxSize");
+  setUp.setOption(minSize, "-minSize", "minSize");
+  if (minSize > maxSize) {
+    std::cout
+        << "minSize can't be larger than maxSize, setting minSize to maxSize"
+        << std::endl;
+    minSize = maxSize;
+  }
+  setUp.setOption(simple, "-simple", "simple");
+  setUp.setOption(strNum, "-strNum", "strNum");
+  setUp.setOption(runTimes, "-runTimes", "runTimes");
+  setUp.setOption(local, "-local", "local");
+  setUp.setOption(alphStr, "-alphStr", "alphStr");
+  setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+  setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+  setUp.finishSetUp(std::cout);
+  auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+  std::vector<char> alphabet = processAlph.first;
+  std::vector<uint32_t> alphCounts = processAlph.second;
+  if (setUp.verbose_) {
+    std::cout << "minSize: " << minSize << std::endl;
+    std::cout << "maxSize: " << maxSize << std::endl;
+    std::cout << "strNum: " << strNum << std::endl;
+    std::cout << "runTimes: " << runTimes << std::endl;
+    std::cout << "local: " << local << std::endl;
+    std::cout << "alphStr: " << alphStr << std::endl;
+    std::cout << "alphDelim: " << alphDelim << std::endl;
+    std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+    std::cout << "alphCounts: " << vectorToString(alphCounts, ", ")
+              << std::endl;
+  }
+  randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
+
+  VecStr randStrs = strGen.rStrs(minSize, maxSize, strNum);
+  std::for_each(randStrs.begin(), randStrs.end(), [](const std::string & str){std::cout << str << std::endl;});
+  return 0;
+}
 
 int simpleAlignmentProfiler(MapStrStr inputCommands) {
   uint32_t maxSize = 50;
@@ -41,7 +90,6 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
   setUp.setOption(local, "-local", "local");
   setUp.setOption(alphStr, "-alphStr", "alphStr");
   setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
-
   setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
   setUp.finishSetUp(std::cout);
   auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
@@ -60,12 +108,13 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   gapScoringParameters<int32_t> gapPars(5, 1);
   substituteMatrix scoreMatrix(2, -2);
   aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
   for (uint32_t run = 0; run < runTimes; ++run) {
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(
+        minSize, maxSize, strNum);
     alignerObj.alignSeq(randStrings.front(), randStrings.back(), local);
     if (veryVerbose) {
       std::for_each(
@@ -131,6 +180,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
@@ -148,8 +198,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -175,8 +224,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -201,8 +249,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -227,8 +274,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -253,8 +299,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -279,8 +324,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -305,8 +349,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -330,8 +373,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -355,8 +397,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -380,8 +421,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -445,6 +485,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
@@ -462,8 +503,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -489,8 +529,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -515,8 +554,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -541,8 +579,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -567,8 +604,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -593,8 +629,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -619,8 +654,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -644,8 +678,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -669,8 +702,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -694,8 +726,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -719,8 +750,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -746,8 +776,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -772,8 +801,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -798,8 +826,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -824,8 +851,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -850,8 +876,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -876,8 +901,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -901,8 +925,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -926,8 +949,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -951,8 +973,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -969,7 +990,6 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
                      << std::endl;
     }
   }
-
   if (setUp.verbose_) {
     setUp.logRunTime(std::cout);
   }
@@ -1016,6 +1036,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
@@ -1032,8 +1053,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -1059,8 +1079,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -1085,8 +1104,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -1111,8 +1129,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -1137,8 +1154,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -1163,8 +1179,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<double> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<double> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("double", false);
       uint64_t alnCount = 0;
@@ -1190,8 +1205,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<float> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<float> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerdoub("float", false);
       uint64_t alnCount = 0;
@@ -1216,8 +1230,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int16_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int16_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int16_t", false);
       uint64_t alnCount = 0;
@@ -1242,8 +1255,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int32_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int32_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int32_t", false);
       uint64_t alnCount = 0;
@@ -1268,8 +1280,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
     gapScoringParameters<int64_t> gapPars(5, 1);
     substituteMatrix scoreMatrix(2, -2);
     aligner<int64_t> alignerObj(maxSize, gapPars, scoreMatrix);
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
     {
       timeTracker timmerInt("int64_t", false);
       uint64_t alnCount = 0;
@@ -1328,7 +1339,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
   {
     timeTracker timmer("mt", false);
     for (uint64_t run = 0; run < stop; ++run) {
-      mtGen();
+    	uint64_t ran =  mtGen();
     }
     setUp.logging_ << "mt19937\t"
                    << getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
@@ -1337,9 +1348,27 @@ int randomNumberGeneration(MapStrStr inputCommands) {
   {
     timeTracker timmer("mt64", false);
     for (uint64_t run = 0; run < stop; ++run) {
-      mtGen64();
+      uint64_t ran = mtGen64();
     }
     setUp.logging_ << "mt19937_64\t"
+                   << getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
+                   << timmer.getRunTime() << std::endl;
+  }
+  {
+    timeTracker timmer("mtDoub", false);
+    for (uint64_t run = 0; run < stop; ++run) {
+      double ran = mtGen()/static_cast<double>(mtGen.max());
+    }
+    setUp.logging_ << "mt19937Doub\t"
+                   << getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
+                   << timmer.getRunTime() << std::endl;
+  }
+  {
+    timeTracker timmer("mt64Doub", false);
+    for (uint64_t run = 0; run < stop; ++run) {
+      double ran = mtGen64()/static_cast<double>(mtGen64.max());
+    }
+    setUp.logging_ << "mt19937_64Doub\t"
                    << getRunInfo("\t", false, setUp.extraInfo_, timmer) << "\t"
                    << timmer.getRunTime() << std::endl;
   }
@@ -1484,6 +1513,7 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
@@ -1493,9 +1523,8 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
   }
 
   VecStr randoms =
-      evenRandStrsRandLen(minSize, maxSize, alphabet, alphCounts, gen, strNum);
-  VecStr randomsMix = evenRandStrsRandLen(minSize, maxSize, alphabet,
-                                          alphCounts, gen, strNum / 2);
+  		strGen.rStrs(minSize, maxSize, strNum);
+  VecStr randomsMix = strGen.rStrs(minSize, maxSize, strNum / 2);
   addOtherVec(randomsMix, gen.unifRandSelectionVec(randoms, strNum / 2, false));
 
   {
@@ -1622,13 +1651,14 @@ int mapVsUnorderedMapRepeat(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("repeatNumber", to_string(repeatNumber));
 
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   if (setUp.header_) {
     setUp.logging_ << "mapType\t" << getRunInfo("\t", true, setUp.extraInfo_,
                                                 setUp.timer_) << std::endl;
   }
 
-  VecStr randomsPreset = evenRandStrsRandLen(
-      minSize, maxSize, alphabet, alphCounts, gen, strNum / repeatNumber);
+  VecStr randomsPreset = strGen.rStrs(
+      minSize, maxSize, strNum / repeatNumber);
   VecStr randoms;
   randoms.reserve(strNum);
   for (uint32_t i = 0; i < repeatNumber; ++i) {
@@ -1636,8 +1666,7 @@ int mapVsUnorderedMapRepeat(MapStrStr inputCommands) {
   }
   std::shuffle(randoms.begin(), randoms.end(), gen.mtGen_);
 
-  VecStr randomsMix = evenRandStrsRandLen(minSize, maxSize, alphabet,
-                                          alphCounts, gen, strNum / 2);
+  VecStr randomsMix = strGen.rStrs(minSize, maxSize, strNum / 2);
   addOtherVec(randomsMix, gen.unifRandSelectionVec(randoms, strNum / 2, false));
 
   {
@@ -1744,6 +1773,7 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("len", to_string(len));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   if (setUp.header_) {
@@ -1751,7 +1781,7 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
                                                 setUp.timer_) << std::endl;
   }
 
-  VecStr randoms = evenRandStrs(len, alphabet, alphCounts, gen, strNum);
+  VecStr randoms = strGen.rStrs(len, strNum);
 
   {
     timeTracker timmer("unordered_map", false);
@@ -2081,6 +2111,7 @@ int translation(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("len", to_string(len));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   if (setUp.header_) {
@@ -2088,7 +2119,7 @@ int translation(MapStrStr inputCommands) {
                                                 setUp.timer_) << std::endl;
   }
 
-  VecStr randoms = evenRandStrs(len, alphabet, alphCounts, gen, strNum);
+  VecStr randoms = strGen.rStrs(len, strNum);
 
   // check to see if translation is the same
   std::string translated1 = convertToProtein(randoms.front(), 0, false);
@@ -2202,6 +2233,210 @@ int testThreads(MapStrStr inputCommands) {
   }
   return 0;
 }
+
+int testDifferntRandStrs(MapStrStr inputCommands) {
+  uint32_t maxSize = 50;
+  uint32_t minSize = 50;
+  uint32_t strNum = 50;
+  uint32_t runTimes = 1;
+  std::string alphStr = "A,C,G,T";
+  std::string alphDelim = ",";
+  bool veryVerbose = false;
+  profilerSetUp setUp(inputCommands);
+  setUp.setOption(maxSize, "-maxSize", "maxSize");
+  if (!setUp.setOption(minSize, "-minSize", "minSize")) {
+    minSize = maxSize;
+  }
+  if (minSize > maxSize) {
+    std::cout
+        << "minSize can't be larger than maxSize, setting minSize to maxSize"
+        << std::endl;
+    minSize = maxSize;
+  }
+  setUp.setOption(strNum, "-strNum", "strNum");
+  setUp.setOption(runTimes, "-runTimes", "runTimes");
+  setUp.setOption(alphStr, "-alphStr", "alphStr");
+  setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+  setUp.setOption(veryVerbose, "-veryVerbose,-vv", "veryVerbose");
+  setUp.finishSetUp(std::cout);
+  auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+  std::vector<char> alphabet = processAlph.first;
+  std::vector<uint32_t> alphCounts = processAlph.second;
+  if (setUp.verbose_) {
+    std::cout << "minSize: " << minSize << std::endl;
+    std::cout << "maxSize: " << maxSize << std::endl;
+    std::cout << "strNum: " << strNum << std::endl;
+    std::cout << "runTimes: " << runTimes << std::endl;
+    std::cout << "alphStr: " << alphStr << std::endl;
+    std::cout << "alphDelim: " << alphDelim << std::endl;
+    std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+    std::cout << "alphCounts: " << vectorToString(alphCounts, ", ")
+              << std::endl;
+  }
+  randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
+  randStrGenTest strGenTest(gen, alphabet, alphCounts);
+  randObjectGen<char> objGen(alphabet, alphCounts);
+  randObjectGen<char> objGen2(alphabet, alphCounts);
+  setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+  setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+  setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
+  setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
+  setUp.logging_ << std::fixed;
+  if (setUp.header_) {
+    setUp.logging_ << "rStrType\trStrGen"
+                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << std::endl;
+  }
+  if(veryVerbose){
+  	VecStr randStringsOut = strGen.rStrs(minSize, maxSize, strNum);
+  	std::for_each(randStringsOut.begin(), randStringsOut.end(), [](const std::string & str){std::cout << str << std::endl;});
+  	VecStr randStringsOutTest = strGenTest.rStrs(minSize, maxSize, strNum);
+  	std::cout << std::endl;
+  	std::cout << changeColor(196);
+  	std::for_each(randStringsOutTest.begin(), randStringsOutTest.end(), [](const std::string & str){std::cout << str << std::endl;});
+  	std::cout << endAllAttributes("");
+  	auto like = strGenTest.createLikelihood(alphabet, alphCounts);
+  	for(const auto & l : like){
+  		std::cout << l.first << " " << l.second << std::endl;
+  	}
+  	{
+    	std::cout << changeColor(215);
+  		auto likeli = objGen.createLikelihood(alphabet, alphCounts);
+			for(const auto & l : likeli){
+				std::cout << l.first << " " << l.second << std::endl;
+			}
+			auto testRand = objGen.genObjs(10);
+			//std::for_each(testRand.begin(), testRand.end(), [](char c){std::cout << c << std::endl;});
+			std::cout << endAllAttributes("");
+  	}
+  	{
+    	std::cout << changeColor(203);
+  		auto likeli = objGen.createLikelihoodDoub(alphabet, alphCounts);
+			for(const auto & l : likeli){
+				std::cout << l.first << " " << l.second << std::endl;
+			}
+			std::cout << endAllAttributes("");
+  	}
+
+  }
+  {
+    /*
+     * uint64_t rChar
+     */
+  	timeTracker timmer("uint64_t", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		auto rando = objGen.genObj();
+  	}
+    setUp.logging_ << "uint64_t\trChar\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< "\n";
+  }
+  {
+    /*
+     * double rStr
+     */
+  	timeTracker timmer("double", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		auto rando = objGen2.genObjDoub();
+  	}
+    setUp.logging_ << "double\trChar\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * uint64_t rStrs
+     */
+  	timeTracker timmer("uint64_t", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		std::string randString = strGenTest.rStr(maxSize);
+  	}
+    setUp.logging_ << "uint64_t\trStr\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * double rStr
+     */
+  	timeTracker timmer("double", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		std::string randString = strGen.rStr(maxSize);
+  	}
+    setUp.logging_ << "double\trStr\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * uint64_t rStrs
+     */
+  	timeTracker timmer("uint64_t", false);
+    VecStr randStrings = strGenTest.rStrs(maxSize, strNum);
+    setUp.logging_ << "uint64_t\trStrs\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * double rStrs
+     */
+  	timeTracker timmer("double", false);
+    VecStr randStrings = strGen.rStrs(maxSize, strNum);
+    setUp.logging_ << "double\trStrs\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * uint64_t rStr rand length
+     */
+  	timeTracker timmer("uint64_t", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		std::string randString = strGenTest.rStr(minSize, maxSize);
+  	}
+
+    setUp.logging_ << "uint64_t\trStrRLen\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * double rStr rand length
+     */
+  	timeTracker timmer("double", false);
+  	for(uint32_t i = 0; i < runTimes; ++i){
+  		std::string randString = strGen.rStr(minSize, maxSize);
+  	}
+
+    setUp.logging_ << "double\trStrRLen\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * uint64_t rStrs rand length
+     */
+  	timeTracker timmer("uint64_t", false);
+    VecStr randStrings = strGenTest.rStrs(minSize, maxSize, strNum);
+    setUp.logging_ << "uint64_t\trStrRLen\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  {
+    /*
+     * double rStrs rand length
+     */
+  	timeTracker timmer("double", false);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
+    setUp.logging_ << "double\trStrRLen\t"
+    		<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+    		<< std::endl;
+  }
+  return 0;
+}
+
 int testCacheAlign(MapStrStr inputCommands) {
   uint32_t maxSize = 50;
   uint32_t minSize = 50;
@@ -2248,6 +2483,7 @@ int testCacheAlign(MapStrStr inputCommands) {
               << std::endl;
   }
   randomGenerator gen;
+  randStrGen strGen(gen, alphabet, alphCounts);
   setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
@@ -2269,8 +2505,7 @@ int testCacheAlign(MapStrStr inputCommands) {
     	alignerObj.alnHolder_ = alnInfoMasterHolder<double>(alnInfoDir,
     			alignerObj.parts_.gapScores_, alignerObj.parts_.scoring_);
     }
-    std::vector<std::string> randStrings = evenRandStrsRandLen(
-        minSize, maxSize, alphabet, alphCounts, gen, strNum);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
 
     /*
      * CACCTAAACATACGTCACGACTTCTCAGCCAGGAACCGCTGGACGAGATG
@@ -2370,15 +2605,78 @@ profilerRunner::profilerRunner()
            addFunc("mapVsUnorderedMap", mapVsUnorderedMap, false),
            addFunc("mapVsUnorderedMapRepeat", mapVsUnorderedMapRepeat, false),
            addFunc("translation", translation, false),
-           addFunc("testThreads", testThreads, false)},
+           addFunc("testThreads", testThreads, false),
+           addFunc("testRandStr", testRandStr, false),
+           addFunc("testDifferntRandStrs", testDifferntRandStrs, false)},
           "profilerRunner") {}
 
 int main(int argc, char *argv[]) {
-  // std::cout << __VERSION__ << std::endl;
-  // std::cout << getCompilerVersion() << std::endl;
-  // std::cout << optimizationLevel << std::endl;
-  // std::cout << processorInfo << std::endl;
-  // std::cout << TESTMACRO << std::endl;
+	/*
+	uint8_t t8;
+	uint16_t t16;
+	uint32_t t32;
+	uint64_t t64;
+	double dt;
+	long double dlt;
+	float ft;
+	size_t st;
+	std::cout << "t8 : " << sizeof(t8) << std::endl;
+	std::cout << "t16: " << sizeof(t16) << std::endl;
+	std::cout << "t32: " << sizeof(t32) << std::endl;
+	std::cout << "t64: " << sizeof(t64) << std::endl;
+	std::cout << "st : " << sizeof(st) << std::endl;
+	std::cout << "dt : " << sizeof(dt) << std::endl;
+	std::cout << "dlt : " << sizeof(dlt) << std::endl;
+	std::cout << "ft : " << sizeof(ft) << std::endl;
+	std::cout << "uint32_t max: " << std::numeric_limits<uint32_t>::max() << std::endl;
+	std::cout << "uint32_t max: " << UINT32_MAX << std::endl;
+	std::cout << "uint32_t min: " << std::numeric_limits<uint32_t>::min() << std::endl;*/
+	/*
+	randomGenerator gen;
+	uint64_t mtMax = gen.mtGen_.max();
+	double mtMaxDoub = static_cast<double>(gen.mtGen_.max());
+	uint64_t fourthMax = mtMax/4;
+	std::cout << UINT64_MAX << std::endl;
+	std::cout << mtMax << std::endl;
+	std::cout << fourthMax << std::endl;
+	uint64_t addUp = fourthMax + fourthMax + fourthMax + fourthMax;
+	std::cout << addUp << std::endl;
+	std::cout << mtMax << std::endl;
+	std::cout << gen.mtGen_.max() << std::endl;
+	std::cout << std::fixed << mtMaxDoub << std::endl;
+	std::cout << static_cast<uint64_t>(mtMaxDoub )<< std::endl;
+	std::cout << static_cast<uint32_t>(mtMaxDoub ) << std::endl;
+	std::cout << std::log2(mtMaxDoub) << std::endl;
+	std::cout << std::log2(mtMax) << std::endl;
+	double mtMaxDoubMore = mtMaxDoub + fourthMax;
+	std::cout << std::fixed << mtMaxDoubMore << std::endl;
+	std::cout << std::fixed << std::numeric_limits<double>::max() << std::endl;
+	std::cout << std::fixed << std::numeric_limits<double>::max()/std::numeric_limits<uint64_t>::max() << std::endl;
+	std::cout << std::log2(std::numeric_limits<double>::max()) << std::endl;
+	*/
+	/*long double maxLong = 17;
+	double max = 17;
+	uint64_t count = 3;
+	uint64_t uMax = std::numeric_limits<uint64_t>::max();
+
+	profilerSetUp setUp(argc,argv);
+	//setUp.setOption(max, "-max", "max");
+	setUp.setOption(count, "-count", "count");
+	setUp.finishSetUp(std::cout);
+	uint64_t result1 = (count/max) * uMax;
+	uint64_t result2 = (uMax/max) * count;
+	std::cout << std::fixed << (count/max) * uMax << std::endl;
+	std::cout << result1 << std::endl;
+	std::cout << std::fixed << (uMax/max) * count << std::endl;
+	std::cout << result2 << std::endl;
+
+	uint64_t result1Long = (count/maxLong) * uMax;
+	uint64_t result2Long = (uMax/maxLong) * count;
+	std::cout << std::fixed << (count/maxLong) * uMax << std::endl;
+	std::cout << result1Long << std::endl;
+	std::cout << std::fixed << (uMax/maxLong) * count << std::endl;
+	std::cout << result2Long << std::endl;
+	return 0;*/
   profilerRunner proRunner;
   if (argc > 1) {
     return proRunner.run(argc, argv);

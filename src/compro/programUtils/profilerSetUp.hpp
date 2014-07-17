@@ -44,7 +44,7 @@ class profilerSetUp : public programSetUp {
       openTextFile(logFile, logFileName_, false, true, false);
       logFile << logging_.str();
     } else {
-      std::cout << logging_.str();
+      std::cout << std::fixed << logging_.str();
     }
   }
 

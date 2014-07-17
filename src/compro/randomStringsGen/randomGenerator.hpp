@@ -23,9 +23,9 @@ class randomGenerator {
     needToSeed_ = false;
   }*/
   // Members
-  std::mt19937 mtGen_;
+  std::mt19937_64 mtGen_;
   bool needToSeed_;
-  // Generate a random number between 0 and 1
+  // Generate a random number between 0 and 1 not inclusive
   double unifRand() {
     double ans = mtGen_() / double(mtGen_.max());
     // to protect latter functions from producing inclusion upper bound...i

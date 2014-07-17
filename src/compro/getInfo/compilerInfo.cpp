@@ -39,6 +39,7 @@ std::string getRunInfo(
     const std::vector<std::pair<std::string, std::string>>& extraInfo,
     const timeTracker& timmer) {
   std::stringstream tempStream;
+  tempStream << std::fixed;
   if (getHeader) {
     for (const auto& extra : extraInfo) {
       tempStream << extra.first << delim;
