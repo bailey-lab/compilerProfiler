@@ -2461,6 +2461,97 @@ GCAATCCCGGAGCACGACGGGACCTACGCCATTCGACAGACCCGTAGAGT
   }
   return 0;
 }
+
+
+int unsDiff(MapStrStr inputCommands) {
+  uint32_t maxSize = 50;
+  uint32_t minSize = 50;
+  uint32_t runTimes = 1000;
+  uint32_t vecSize = 1000;
+  bool veryVerbose = false;
+  profilerSetUp setUp(inputCommands);
+  setUp.setOption(maxSize, "-maxSize", "maxSize");
+  setUp.setOption(veryVerbose, "-vv,-veryVerbose", "verbose");
+  if (!setUp.setOption(minSize, "-minSize", "minSize")) {
+    minSize = maxSize;
+  }
+  if (minSize > maxSize) {
+    std::cout
+        << "minSize can't be larger than maxSize, setting minSize to maxSize"
+        << std::endl;
+    minSize = maxSize;
+  }
+  setUp.setOption(runTimes, "-runTimes", "runTimes");
+  setUp.setOption(vecSize, "-vecSize", "vecSize");
+  setUp.finishSetUp(std::cout);
+  setUp.extraInfo_.emplace_back("minSize", to_string(minSize));
+  setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
+  setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
+  setUp.extraInfo_.emplace_back("vecSize", to_string(vecSize));
+  if(setUp.header_){
+  	setUp.logging_ << "diffCompute\t"
+  			<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+  			<< std::endl;
+  }
+
+  randomGenerator gen;
+  std::vector<uint32_t> ranNums = gen.unifRandVector(minSize, maxSize, vecSize);
+  if(setUp.verbose_){
+  	std::for_each(ranNums.begin(), ranNums.end(), [](uint32_t num){ std::cout << num << std::endl;});
+  }
+  if(veryVerbose){
+  	for(auto p : {1,2,3,4,5,6,7,8,9,10}){
+    	for(auto s : {1,2,3,4,5,6,7,8,9,10}){
+    		std::cout << ranNums[p] << " - " << ranNums[s] << " = " << uAbsdiff(ranNums[p], ranNums[s]) << std::endl;
+    	}
+  	}
+  	uint64_t first = std::numeric_limits<uint64_t>::max();
+  	uint64_t second = std::numeric_limits<uint64_t>::max() - 10;
+  	std::cout << first << " - " << second << " = " << uAbsdiff(first, second) << std::endl;;
+
+  }
+  {
+  	timeTracker timmer("check", false);
+  	for(const auto & firstNum : ranNums){
+  		for(const auto & secondNum : ranNums){
+  			uint32_t ans = 0;
+  			if(firstNum < secondNum){
+  				ans = secondNum - firstNum;
+  			}else{
+  				ans = firstNum - secondNum;
+  			}
+  		}
+  	}
+  	setUp.logging_ << "check\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;
+  }
+  {
+  	timeTracker timmer("no-check", false);
+  	for(const auto & firstNum : ranNums){
+  		for(const auto & secondNum : ranNums){
+  			uint32_t ans = 0;
+  			ans = secondNum - firstNum;
+  		}
+  	}
+  	setUp.logging_ << "no-check\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;
+  }
+  {
+  	timeTracker timmer("udiff", false);
+  	for(const auto & firstNum : ranNums){
+  		for(const auto & secondNum : ranNums){
+  			uint32_t ans = 0;
+  			ans = uAbsdiff(firstNum, secondNum);
+  		}
+  	}
+  	setUp.logging_ << "udiff\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;
+  }
+  return 0 ;
+}
 /* profiler template
  * int nameOfProgram(MapStrStr inputCommands) {
  *  //programSetUp for easy command line parsing
@@ -2496,6 +2587,7 @@ GCAATCCCGGAGCACGACGGGACCTACGCCATTCGACAGACCCGTAGAGT
 profilerRunner::profilerRunner()
     : programRunner(
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
+					 addFunc("unsDiff", unsDiff, false),
 					 addFunc("testCacheAlign", testCacheAlign, false),
            addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
            addFunc("justScoreAlignmentProfiler", justScoreAlignmentProfiler,

@@ -192,6 +192,15 @@ bool containsSubString(const std::string& str, const std::string& subString) {
   return (str.find(subString) != std::string::npos);
 }
 
+bool stringContainsAllDigits(const std::string& str) {
+  for (const auto& c : str) {
+    if (!isdigit(c)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 std::vector<char> processAlphStrVecChar(const std::string& alphabetStr,
                                         const std::string& delim) {
   std::vector<char> ans;
@@ -218,12 +227,5 @@ std::pair<std::vector<char>, std::vector<uint32_t>> processAlphStrVecCharCounts(
   return {ansLets, ansCounts};
 }
 
-bool stringContainsAllDigits(const std::string& str) {
-  for (const auto& c : str) {
-    if (!isdigit(c)) {
-      return false;
-    }
-  }
-  return true;
-}
+
 }

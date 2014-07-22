@@ -11,4 +11,6 @@
 
 namespace compro {
 double roundDecPlaces(double num, int decPlaces);
+unsigned uAbsdiff( unsigned a, unsigned b );
+
 }
