@@ -8,20 +8,19 @@
 
 #include "compro/common.h"
 #include "compro/utils.h"
-#include "compro/programUtils/programSetUp.hpp"
-
+#include "cppprogutils/programSetUp.hpp"
 namespace compro {
 
-class profilerSetUp : public programSetUp {
+class profilerSetUp : public cppprogutils::programSetUp {
  public:
-  profilerSetUp(int argc, char* argv[]) : programSetUp(argc, argv) {
+  profilerSetUp(int argc, char* argv[]) : cppprogutils::programSetUp(argc, argv) {
     initializeDefaults();
   }
-  profilerSetUp(const commandLineArguments& inputCommands)
-      : programSetUp(inputCommands) {
+  profilerSetUp(const cppprogutils::commandLineArguments& inputCommands)
+      : cppprogutils::programSetUp(inputCommands) {
     initializeDefaults();
   }
-  profilerSetUp(const MapStrStr& inputCommands) : programSetUp(inputCommands) {
+  profilerSetUp(const MapStrStr& inputCommands) : cppprogutils::programSetUp(inputCommands) {
     initializeDefaults();
   }
 

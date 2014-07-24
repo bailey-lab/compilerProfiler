@@ -13,3 +13,4 @@
 #include "compro/randomStringsGen.h"
 #include "compro/programUtils.h"
 #include "compro/getInfo.h"
+#include "compro/timeProfiler.h"

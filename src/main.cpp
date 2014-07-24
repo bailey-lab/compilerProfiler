@@ -134,7 +134,7 @@ int simpleAlignmentProfiler(MapStrStr inputCommands) {
   if (setUp.verbose_) {
     setUp.logRunTime(std::cout);
   } else {
-    std::cout << setUp.timer_.getRunTime() << std::endl;
+    std::cout << setUp.getRunTime() << std::endl;
   }
   return 0;
 }
@@ -188,7 +188,7 @@ int fullAlignmentProfiler(MapStrStr inputCommands) {
 
   if (setUp.header_) {
     setUp.logging_ << "numType\talnType\talnCount\t"
-                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
                    << std::endl;
   }
   {
@@ -493,7 +493,7 @@ int fullAlnCacheProfiler(MapStrStr inputCommands) {
 
   if (setUp.header_) {
     setUp.logging_ << "numType\talnType\talnCount\t"
-                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
                    << std::endl;
   }
   {
@@ -1043,7 +1043,7 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
   if (setUp.header_) {
     setUp.logging_ << "numType\talnType\talnCount"
-                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
                    << std::endl;
   }
   {
@@ -1068,6 +1068,32 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
         }
       }
       setUp.logging_ << "double\tglobal\t" << alnCount << "\t"
+                     << getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+                     << std::endl;
+    }
+  }
+  {
+    /*
+     * long double
+     */
+    gapScoringParameters<long double> gapPars(5, 1);
+    substituteMatrix scoreMatrix(2, -2);
+    aligner<long double> alignerObj(maxSize, gapPars, scoreMatrix);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
+    {
+      timeTracker timmerdoub("double", false);
+      uint64_t alnCount = 0;
+      for (uint32_t run = 0; run < runTimes; ++run) {
+
+        for (auto pos : iter::range(randStrings.size())) {
+          for (auto secondPos : iter::range(randStrings.size())) {
+            alignerObj.alignSeqScore(randStrings[pos], randStrings[secondPos],
+                                    false);
+            ++alnCount;
+          }
+        }
+      }
+      setUp.logging_ << "long_double\tglobal\t" << alnCount << "\t"
                      << getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
                      << std::endl;
     }
@@ -1200,6 +1226,32 @@ int justScoreAlignmentProfiler(MapStrStr inputCommands) {
   }
   {
     /*
+     * long double
+     */
+    gapScoringParameters<long double> gapPars(5, 1);
+    substituteMatrix scoreMatrix(2, -2);
+    aligner<long double> alignerObj(maxSize, gapPars, scoreMatrix);
+    VecStr randStrings = strGen.rStrs(minSize, maxSize, strNum);
+    {
+      timeTracker timmerdoub("double", false);
+      uint64_t alnCount = 0;
+      for (uint32_t run = 0; run < runTimes; ++run) {
+
+        for (auto pos : iter::range(randStrings.size())) {
+          for (auto secondPos : iter::range(randStrings.size())) {
+            alignerObj.alignSeqScore(randStrings[pos], randStrings[secondPos],
+                                    true);
+            ++alnCount;
+          }
+        }
+      }
+      setUp.logging_ << "long_double\tlocal\t" << alnCount << "\t"
+                     << getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
+                     << std::endl;
+    }
+  }
+  {
+    /*
      * float
      */
     gapScoringParameters<float> gapPars(5, 1);
@@ -1325,7 +1377,7 @@ int randomNumberGeneration(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("runTimes", to_string(stop));
   if (setUp.header_) {
     setUp.logging_ << "generator\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                  setUp.timer_) << std::endl;
+                                                  timeTracker("none", false)) << std::endl;
   }
   if (randDeviceAsWell) {
     timeTracker timmer("random_device", false);
@@ -1435,7 +1487,7 @@ int customRandomGenerator(MapStrStr inputCommands) {
   // std::cout << mtGen64.max() << std::endl;
   if (setUp.header_) {
     setUp.logging_ << "generator\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                  setUp.timer_) << std::endl;
+                                                  timeTracker("none", false)) << std::endl;
   }
   if (randDeviceAsWell) {
     timeTracker timmer("random_device", false);
@@ -1519,7 +1571,7 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   if (setUp.header_) {
     setUp.logging_ << "mapType\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                setUp.timer_) << std::endl;
+                                                timeTracker("none", false)) << std::endl;
   }
 
   VecStr randoms =
@@ -1654,7 +1706,7 @@ int mapVsUnorderedMapRepeat(MapStrStr inputCommands) {
   randStrGen strGen(gen, alphabet, alphCounts);
   if (setUp.header_) {
     setUp.logging_ << "mapType\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                setUp.timer_) << std::endl;
+                                                timeTracker("none", false)) << std::endl;
   }
 
   VecStr randomsPreset = strGen.rStrs(
@@ -1778,7 +1830,7 @@ int mapVsUnorderedMapCodon(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   if (setUp.header_) {
     setUp.logging_ << "mapType\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                setUp.timer_) << std::endl;
+                                                timeTracker("none", false)) << std::endl;
   }
 
   VecStr randoms = strGen.rStrs(len, strNum);
@@ -2116,7 +2168,7 @@ int translation(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("strNum", to_string(strNum));
   if (setUp.header_) {
     setUp.logging_ << "mapType\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                setUp.timer_) << std::endl;
+                                                timeTracker("none", false)) << std::endl;
   }
 
   VecStr randoms = strGen.rStrs(len, strNum);
@@ -2189,7 +2241,7 @@ int testThreads(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("colNum", to_string(colNum));
   if (setUp.header_) {
     setUp.logging_ << "runType\t" << getRunInfo("\t", true, setUp.extraInfo_,
-                                                setUp.timer_) << std::endl;
+                                                timeTracker("none", false)) << std::endl;
   }
   {
     std::vector<randomGenerator> gens(numThreads);
@@ -2283,7 +2335,7 @@ int randomStringsGen(MapStrStr inputCommands) {
   setUp.logging_ << std::fixed;
   if (setUp.header_) {
     setUp.logging_ << "rStrGen\t"
-                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
                    << std::endl;
   }
   if(veryVerbose){
@@ -2391,7 +2443,7 @@ int testCacheAlign(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
   if (setUp.header_) {
     setUp.logging_ << "numType\talnType\talnCount"
-                   << getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+                   << getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
                    << std::endl;
   }
   {
@@ -2462,14 +2514,16 @@ GCAATCCCGGAGCACGACGGGACCTACGCCATTCGACAGACCCGTAGAGT
   return 0;
 }
 
-
 int unsDiff(MapStrStr inputCommands) {
   uint32_t maxSize = 50;
   uint32_t minSize = 50;
   uint32_t runTimes = 1000;
   uint32_t vecSize = 1000;
+  uint32_t roundPlaces = 2;
+
   bool veryVerbose = false;
   profilerSetUp setUp(inputCommands);
+  setUp.setOption(roundPlaces, "-roundPlaces", "roundPlaces");
   setUp.setOption(maxSize, "-maxSize", "maxSize");
   setUp.setOption(veryVerbose, "-vv,-veryVerbose", "verbose");
   if (!setUp.setOption(minSize, "-minSize", "minSize")) {
@@ -2488,14 +2542,16 @@ int unsDiff(MapStrStr inputCommands) {
   setUp.extraInfo_.emplace_back("maxSize", to_string(maxSize));
   setUp.extraInfo_.emplace_back("runTimes", to_string(runTimes));
   setUp.extraInfo_.emplace_back("vecSize", to_string(vecSize));
+  setUp.extraInfo_.emplace_back("roundPlaces", to_string(roundPlaces));
   if(setUp.header_){
   	setUp.logging_ << "diffCompute\t"
-  			<< getRunInfo("\t", true, setUp.extraInfo_, setUp.timer_)
+  			<< getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
   			<< std::endl;
   }
 
   randomGenerator gen;
   std::vector<uint32_t> ranNums = gen.unifRandVector(minSize, maxSize, vecSize);
+  std::vector<double> ranDoubNums = gen.unifRandVector<double>(minSize, maxSize, vecSize * vecSize);
   if(setUp.verbose_){
   	std::for_each(ranNums.begin(), ranNums.end(), [](uint32_t num){ std::cout << num << std::endl;});
   }
@@ -2539,18 +2595,22 @@ int unsDiff(MapStrStr inputCommands) {
   			<< std::endl;
   }
   {
-  	timeTracker timmer("udiff", false);
+  	timeTracker timmer("uAbsdiff", false);
   	for(const auto & firstNum : ranNums){
   		for(const auto & secondNum : ranNums){
   			uint32_t ans = 0;
   			ans = uAbsdiff(firstNum, secondNum);
   		}
   	}
-  	setUp.logging_ << "udiff\t"
+  	setUp.logging_ << "uAbsdiffIn\t"
   			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
   			<< std::endl;
   }
-  return 0 ;
+
+
+
+
+  return 0;
 }
 /* profiler template
  * int nameOfProgram(MapStrStr inputCommands) {
@@ -2585,7 +2645,7 @@ int unsDiff(MapStrStr inputCommands) {
  */
 
 profilerRunner::profilerRunner()
-    : programRunner(
+    : cppprogutils::programRunner(
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
 					 addFunc("unsDiff", unsDiff, false),
 					 addFunc("testCacheAlign", testCacheAlign, false),
@@ -2604,6 +2664,7 @@ profilerRunner::profilerRunner()
           "profilerRunner") {}
 
 int main(int argc, char *argv[]) {
+
 	/*
 	uint8_t t8;
 	uint16_t t16;

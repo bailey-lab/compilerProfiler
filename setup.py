@@ -26,6 +26,7 @@ class Paths():
         self.paths = {}
         self.paths["zi_lib"] = self.__zi_lib()
         self.paths["cppitertools"] = self.__cppitertools()
+        self.paths["cppprogutils"] = self.__cppprogutils()
         self.paths["boost"] = self.__boost()
         self.paths["R-devel"] = self.__Rdevel()
         self.paths["cppcms"] = self.__cppcms()
@@ -59,6 +60,11 @@ class Paths():
     def __cppitertools(self):
         url = 'https://github.com/ryanhaining/cppitertools.git'
         local_dir = os.path.join(self.install_dir, "cppitertools")
+        return BuildPaths(url, '', '', local_dir)
+    
+    def __cppprogutils(self):
+        url = 'https://github.com/bailey-lab/cppprogutils.git'
+        local_dir = os.path.join(self.install_dir, "cppprogutils")
         return BuildPaths(url, '', '', local_dir)
 
     def __pear(self):
@@ -109,7 +115,7 @@ class Setup:
         self.setUps = {}
         self.installed = []
         self.failedInstall = []
-        self.bibCppSetUps = ["zi_lib", "cppitertools", "boost", "R-devel", "bamtools", "pear"]
+        self.bibCppSetUps = ["zi_lib", "cppitertools", "cppprogutils",  "boost", "R-devel", "bamtools", "pear"]
         self.allSetUps = self.bibCppSetUps + ["cppcms", "mathgl", "armadillo", "mlpack", "liblinear"]
         self.__initSetUps()
         self.__processArgs()
@@ -118,6 +124,7 @@ class Setup:
         self.setUps = {"zi_lib": self.zi_lib,
                        "boost": self.boost,
                        "cppitertools": self.cppitertools,
+                       "cppprogutils": self.cppprogutils,
                        "R-devel": self.Rdevel,
                        "bamtools": self.bamtools,
                        "cppcms": self.cppcms,
@@ -353,6 +360,9 @@ mkdir -p build
         i = self.__path('cppitertools')
         cmd = "cd {d} && git checkout d4f79321842dd584f799a7d51d3e066a2cdb7cac".format(d=shellquote(i.local_dir))
         Utils.run(cmd)
+    
+    def cppprogutils(self):
+        self.__git(self.__path('cppprogutils'))
 
     def ubuntu(self):
         pkgs = """libbz2-dev python2.7-dev cmake libpcre3-dev zlib1g-dev libgcrypt11-dev libicu-dev

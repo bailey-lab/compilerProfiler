@@ -9,31 +9,28 @@
 #include "compro/randomStringsGen/randomGenerator.hpp"
 namespace compro {
 
-template<typename T>
+template<typename T, typename N>
 class randObjectGen {
 public:
-
 	//constructor
 	randObjectGen(const std::vector<T> & objs):
-	objs_(objs), objCounts_(std::vector<uint32_t>(objs.size(),1)),
+	objs_(objs), objCounts_(std::vector<N>(objs.size(),1)),
 	likelihoods_(createLikelihood(objs_,objCounts_)){
 		std::random_device rd;
 		mtGen_.seed(rd());
 	}
-
-	randObjectGen(const std::vector<T> & letters,
-			const std::vector<uint32_t> & counts):
-					objs_(letters), objCounts_(counts),
-	likelihoods_(createLikelihood(objs_,objCounts_)){
+	randObjectGen(const std::vector<T> & objs,
+			const std::vector<N> & counts):
+					objs_(objs), objCounts_(counts),
+	likelihoods_(createLikelihood(objs_, objCounts_)){
 		std::random_device rd;
 		mtGen_.seed(rd());
 	}
-
 private:
 	//members
 	std::mt19937_64 mtGen_;
 	std::vector<T> objs_;
-	std::vector<uint32_t> objCounts_;
+	std::vector<N> objCounts_;
 	std::multimap<uint64_t, T, std::less<uint64_t>> likelihoods_;
 public:
 	//functions
@@ -54,7 +51,7 @@ public:
 		return ans;
 	}
 	static std::multimap<uint64_t, T, std::less<uint64_t>> createLikelihood(
-	    const std::vector<T> &objs, const std::vector<uint32_t> &counts){
+	    const std::vector<T> &objs, const std::vector<N> &counts){
 	  if (counts.size() != objs.size()) {
 	    std::cout << "Error in createLikelihood(const std::vector<T> &objs,"
 	                 " const std::vector<uint32_t> & counts)" << std::endl;
@@ -78,7 +75,7 @@ public:
 	//constructor
 	randStrGen(randomGenerator rGen,
 			const std::vector<char> & letters):
-				charGen_(randObjectGen<char>(letters)),
+				charGen_(randObjectGen<char,uint32_t>(letters)),
 				rGen_(rGen),
 				lets_(letters),
 				letCounts_(std::vector<uint32_t>(letters.size(),1)){}
@@ -86,14 +83,14 @@ public:
 	randStrGen(randomGenerator rGen,
 			const std::vector<char> & letters,
 			const std::vector<uint32_t> & counts):
-					charGen_(randObjectGen<char>(letters,counts)),
+					charGen_(randObjectGen<char, uint32_t>(letters,counts)),
 					rGen_(rGen),
 					lets_(letters),
 					letCounts_(counts){}
 
 private:
 	//members
-	randObjectGen<char> charGen_;
+	randObjectGen<char, uint32_t> charGen_;
 	randomGenerator rGen_;
 	std::vector<char> lets_;
 	std::vector<uint32_t> letCounts_;

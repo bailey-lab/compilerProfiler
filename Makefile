@@ -3,6 +3,7 @@ EXT_PATH=$(realpath external)
 LIB_DIR=$(realpath lib)
 
 USE_CPPITERTOOLS = 1
+USE_CPPPROGUTILS = 1
 HATHAWAY = 1
 
 include $(ROOT)/makefile-common.mk
@@ -13,8 +14,8 @@ UNAME_S := $(shell uname -s)
 HEADERS = $(call rwildcard, src/, *.h) \
 	$(call rwildcard, src/, *.hpp)
 
-OBJ_DIR = $(addsuffix Build, $(CXXOUTNAME))
-OBJ_DIRSO = $(addsuffix BuildSo, $(CXXOUTNAME))
+OBJ_DIR = $(addprefix build/, $(addsuffix Build, $(CXXOUTNAME)))
+OBJ_DIRSO = $(addprefix build/, $(addsuffix BuildSo, $(CXXOUTNAME)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
 OBJNOMAIN = $(filter-out $(addsuffix /src/main.o, $(OBJ_DIR)), $(OBJ))
 
