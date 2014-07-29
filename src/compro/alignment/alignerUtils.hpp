@@ -7,6 +7,7 @@
  *      Author: nickhathaway <nickjhathaway@gmail.com>
  */
 #include "compro/common.h"
+#include "compro/utils/stringUtils.hpp"
 namespace compro {
 template <typename NUM>
 struct gapScoringParameters {
@@ -74,6 +75,16 @@ struct gapScoringParameters {
     out << gapOpen_ << "," << gapExtend_ << "," << gapLeftOpen_ << ","
         << gapLeftExtend_ << "," << gapRightOpen_ << "," << gapRightExtend_
         << std::endl;
+  }
+  static void processGapStr(const std::string & gapStr, NUM & open, NUM & extend){
+    auto gapToks = tokenizeString(gapStr, ",");
+    if(gapToks.size() <2){
+    	std::cout << "Gap String needs to be two numbers seperated by a comma, eg. 7,2" << std::endl
+    			<< "first number is gapOpen pen and second is gapExtend pen" << std::endl;
+    	exit(1);
+    }
+    open = std::stod(gapToks[0]);
+    extend = std::stod(gapToks[1]);
   }
   bool operator==(const gapScoringParameters& otherPars) const {
     return (gapOpen_ == otherPars.gapOpen_ &&

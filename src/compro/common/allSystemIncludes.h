@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <memory>
 #include <thread>
+#include <deque>
 // For toupper()
 #include <cctype>
 

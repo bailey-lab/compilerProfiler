@@ -61,6 +61,7 @@ int testRandStr(MapStrStr inputCommands) {
   randStrGen strGen(gen, alphabet, alphCounts);
 
   VecStr randStrs = strGen.rStrs(minSize, maxSize, strNum);
+  emplace_all(randStrs, std::string("this"), std::string("andThat"));
   std::for_each(randStrs.begin(), randStrs.end(), [](const std::string & str){std::cout << str << std::endl;});
   return 0;
 }
@@ -2389,6 +2390,129 @@ int randomStringsGen(MapStrStr inputCommands) {
   }
   return 0;
 }
+int vecVsString(MapStrStr inputCommands) {
+
+  uint64_t stop;
+  std::string alphStr = "A,C,G,T";
+  std::string alphDelim = ",";
+  profilerSetUp setUp(inputCommands);
+  setUp.setOption(stop, "-stop", "stop", true);
+  setUp.setOption(alphStr, "-alphStr", "alphStr");
+  setUp.setOption(alphDelim, "-alphDelim", "alphDelim");
+  setUp.finishSetUp(std::cout);
+  auto processAlph = processAlphStrVecCharCounts(alphStr, alphDelim);
+  std::vector<char> alphabet = processAlph.first;
+  std::vector<uint32_t> alphCounts = processAlph.second;
+  if (setUp.verbose_) {
+  	std::vector<char> testVecSize;
+  	std::deque<char> testDequeSize;
+  	std::cout << testVecSize.capacity() << std::endl;
+  	testVecSize.emplace_back('A');
+  	std::cout << testVecSize.capacity() << std::endl;
+  	std::cout << testVecSize.max_size() << std::endl;
+  	std::cout << "Deque" << std::endl;
+  	std::cout << testDequeSize.max_size() << std::endl;
+  	std::cout << alphStr.max_size() << std::endl;
+  	std::cout << alphStr.capacity() << std::endl;
+  	std::cout << std::numeric_limits<uint64_t>::max() << std::endl;
+  	std::cout << std::numeric_limits<uint32_t>::max() << std::endl;
+    std::cout << "alphStr: " << alphStr << std::endl;
+    std::cout << "alphDelim: " << alphDelim << std::endl;
+    std::cout << "alphabet: " << vectorToString(alphabet, ", ") << std::endl;
+    std::cout << "alphCounts: " << vectorToString(alphCounts, ", ")
+              << std::endl;
+  }
+  setUp.extraInfo_.emplace_back("stop", to_string(stop));
+  if(setUp.header_){
+  	setUp.logging_ << "vecVsStr\t"
+  			<< getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
+  			<< std::endl;;
+  }
+  {
+  	timeTracker timer("deque", false);
+  	std::deque<char> testDeque;
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testDeque.emplace_back('A');
+  	}
+  	setUp.logging_ << "deque\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("vec", false);
+  	std::vector<char> testVec;
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testVec.emplace_back('A');
+  	}
+  	setUp.logging_ << "vec\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("vecReserve", false);
+  	std::vector<char> testVec;
+  	testVec.reserve(stop);
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testVec.emplace_back('A');
+  	}
+  	setUp.logging_ << "vecReserved\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("string", false);
+  	std::string testStr;
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testStr.push_back('A');
+  	}
+  	setUp.logging_ << "string\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("stringReserve", false);
+  	std::string testStr;
+  	testStr.reserve(stop);
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testStr.push_back('A');
+  	}
+  	setUp.logging_ << "stringReserve\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  return 0;
+}
+
+int vecStrReallocSize(MapStrStr inputCommands) {
+	uint64_t start = 0;
+	uint64_t stop = 10;
+	profilerSetUp setUp(inputCommands);
+	setUp.setOption(stop, "-stop", "stop");
+	setUp.setOption(start, "-start", "start");
+	setUp.finishSetUp(std::cout);
+	std::vector<char> testVec(start);
+	std::string testStr;
+	if(start!= 0){
+		testStr.resize(start);
+	}
+	for(uint64_t i = 0; i < stop; ++i){
+		testVec.emplace_back('A');
+		testStr.push_back('A');
+		if(i % 2 == 0){
+			std::cout << "\033[1;38;5;210m";
+		}else{
+			std::cout << "\033[1;38;5;111m";
+		}
+		std::cout << "i: " << i << std::endl;
+		std::cout << "vec capacity: " << testVec.capacity() << std::endl;
+		std::cout << "str capacity: " << testStr.capacity() << std::endl << std::endl;
+		if(testVec.capacity() != testStr.capacity()){
+			exit(1);
+		}
+	}
+	std::cout << "\033[0m";
+	return 0;
+}
 
 int testCacheAlign(MapStrStr inputCommands) {
   uint32_t maxSize = 50;
@@ -2510,6 +2634,51 @@ GCAATCCCGGAGCACGACGGGACCTACGCCATTCGACAGACCCGTAGAGT
                      << getRunInfo("\t", false, setUp.extraInfo_, timmerdoub)
                      << std::endl;
     }
+  }
+  return 0;
+}
+int vectorVsDeque(MapStrStr inputCommands) {
+  uint32_t stop = 50;
+  profilerSetUp setUp(inputCommands);
+  setUp.setOption(stop, "-stop", "stop");
+  setUp.finishSetUp(std::cout);
+  setUp.extraInfo_.emplace_back("stop", to_string(stop));
+  if(setUp.header_){
+  	setUp.logging_ << "vecOrDeque\t"
+  			<< getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
+  			<< std::endl;
+  }
+
+  {
+  	timeTracker timmer("deque", false);
+  	std::deque<uint32_t> testDeque;
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testDeque.emplace_back(i);
+  	}
+  	setUp.logging_ << "deque\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;;
+  }
+  {
+  	timeTracker timmer("vec", false);
+  	std::vector<uint32_t> testVec;
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testVec.emplace_back(i);
+  	}
+  	setUp.logging_ << "vec\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;;
+  }
+  {
+  	timeTracker timmer("vecReserved", false);
+  	std::vector<uint32_t> testVec;
+  	testVec.reserve(stop);
+  	for(uint32_t i = 0; i < stop; ++i){
+  		testVec.emplace_back(i);
+  	}
+  	setUp.logging_ << "vecReserved\t"
+  			<< getRunInfo("\t", false, setUp.extraInfo_, timmer)
+  			<< std::endl;;
   }
   return 0;
 }
@@ -2647,6 +2816,9 @@ int unsDiff(MapStrStr inputCommands) {
 profilerRunner::profilerRunner()
     : cppprogutils::programRunner(
           {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
+					 addFunc("vecVsString", vecVsString, false),
+					 addFunc("vectorVsDeque", vectorVsDeque, false),
+					 addFunc("vecStrReallocSize", vecStrReallocSize, false),
 					 addFunc("unsDiff", unsDiff, false),
 					 addFunc("testCacheAlign", testCacheAlign, false),
            addFunc("simpleAlignmentProfiler", simpleAlignmentProfiler, false),
