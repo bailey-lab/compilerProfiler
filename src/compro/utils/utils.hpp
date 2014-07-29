@@ -27,4 +27,5 @@ std::map<std::string, std::pair<std::string, bool>> listFilesInDir(
     const std::string &directoryName, bool recursive);
 int getdir(const std::string &dir,
            std::map<std::string, std::pair<std::string, bool>> &files);
+
 }
