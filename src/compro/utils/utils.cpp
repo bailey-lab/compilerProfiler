@@ -22,6 +22,9 @@ bool fexists(const std::string &filename) {
   } else {
     return false;
   }
+  for(const auto & test : iter::range(5)){
+  	std::cout << test << std::endl;
+  }
 }
 
 void openTextFile(std::ofstream &file, std::string filename, bool overWrite,

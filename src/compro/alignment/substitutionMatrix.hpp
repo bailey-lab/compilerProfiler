@@ -19,20 +19,20 @@ class substituteMatrix {
   /*
    * Given match and mismatch values
    */
-  substituteMatrix(int32_t match, int32_t mismatch) {
+  substituteMatrix(int8_t match, int8_t mismatch) {
     setWithSimple(match, mismatch);
   }
 
   // members
-  std::array<std::array<int32_t, 127>, 127> mat_;
+  std::array<std::array<int8_t, 127>, 127> mat_;
 
   // functions
 
   void setWithZeros();
 
-  void setWithSimple(int32_t match, int32_t mismatch);
+  void setWithSimple(int8_t match, int8_t mismatch);
 
-  void setWithCaseInsensitive(int32_t match, int32_t mismatch);
+  void setWithCaseInsensitive(int8_t match, int8_t mismatch);
   void setWtihBlosum62();
   void setWithPam250();
 };

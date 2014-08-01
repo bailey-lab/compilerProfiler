@@ -11,3 +11,5 @@
 #include "compro/alignment/alignInfoHolder.hpp"
 #include "compro/alignment/substitutionMatrix.hpp"
 #include "compro/alignment/aligner.hpp"
+#include "compro/alignment/ssw_cpp.h"
+#include "compro/alignment/ssw.h"

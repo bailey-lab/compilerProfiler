@@ -16,7 +16,7 @@ void substituteMatrix::setWithZeros() {
   }
 }
 
-void substituteMatrix::setWithSimple(int32_t match, int32_t mismatch) {
+void substituteMatrix::setWithSimple(int8_t match, int8_t mismatch) {
   for (const auto& row : iter::range(mat_.size())) {
     for (const auto& col : iter::range(mat_[row].size())) {
       if (row == col) {
@@ -28,7 +28,7 @@ void substituteMatrix::setWithSimple(int32_t match, int32_t mismatch) {
   }
 }
 
-void substituteMatrix::setWithCaseInsensitive(int32_t match, int32_t mismatch) {
+void substituteMatrix::setWithCaseInsensitive(int8_t match, int8_t mismatch) {
   for (auto i : iter::range(mat_.size())) {
     for (auto j : iter::range(mat_[i].size())) {
       if (i == j) {

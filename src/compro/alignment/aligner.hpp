@@ -141,7 +141,7 @@ class alignCalc {
     parts.ScoreMatrix_[0][0].leftInheritPtr = '\0';
     parts.ScoreMatrix_[0][0].diagInheritPtr = '\0';
     // initialize first column:
-    for (int i = 1; i < parts.maxSize_; i++) {
+    for (uint32_t i = 1; i < parts.maxSize_; i++) {
       if (i == 1) {
         parts.ScoreMatrix_[i][0].upInherit = -parts.gapScores_.gapLeftOpen_;
         parts.ScoreMatrix_[i][0].leftInherit = 0;
@@ -161,7 +161,7 @@ class alignCalc {
       }
     }
     // initialize first row:
-    for (int j = 1; j < parts.maxSize_; j++) {
+    for (uint32_t j = 1; j < parts.maxSize_; j++) {
       if (j == 1) {
         parts.ScoreMatrix_[0][j].upInherit = 0;
         parts.ScoreMatrix_[0][j].leftInherit = -parts.gapScores_.gapLeftOpen_;
@@ -401,7 +401,7 @@ class alignCalc {
     parts.ScoreMatrix_[0][0].leftInheritPtr = '\0';
     parts.ScoreMatrix_[0][0].diagInheritPtr = '\0';
     // initialize first column:
-    for (int i = 1; i < parts.maxSize_; i++) {
+    for (uint32_t i = 1; i < parts.maxSize_; i++) {
       parts.ScoreMatrix_[i][0].upInherit = 0;
       parts.ScoreMatrix_[i][0].leftInherit = 0;
       parts.ScoreMatrix_[i][0].diagInherit = 0;
@@ -410,7 +410,7 @@ class alignCalc {
       parts.ScoreMatrix_[i][0].diagInheritPtr = '\0';
     }
     // initialize first row:
-    for (int j = 1; j < parts.maxSize_; j++) {
+    for (uint32_t j = 1; j < parts.maxSize_; j++) {
       parts.ScoreMatrix_[0][j].upInherit = 0;
       parts.ScoreMatrix_[0][j].leftInherit = 0;
       parts.ScoreMatrix_[0][j].diagInherit = 0;
