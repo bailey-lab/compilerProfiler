@@ -2248,9 +2248,10 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 										 << std::endl;
 		}
 		{
+			auto holdThis = strCounts.find("this");
 			timeTracker timmer("unordered_map", false);
 			for (const auto &str : randomsMix) {
-				strCounts.find(str);
+				holdThis = strCounts.find(str);
 			}
 			setUp.logging_ << "unordered_mapAccessFind\t"
 										 << getRunInfo("\t", false, setUp.extraInfo_, timmer)
@@ -2283,9 +2284,10 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 																							timmer) << std::endl;
 		}
 		{
+			auto holdThis = strCounts.find("this");
 			timeTracker timmer("map", false);
 			for (const auto &str : randomsMix) {
-				strCounts.find(str);
+				holdThis = strCounts.find(str);
 			}
 			setUp.logging_ << "mapAccessFind\t"
 										 << getRunInfo("\t", false, setUp.extraInfo_, timmer)
