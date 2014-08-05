@@ -2284,10 +2284,14 @@ int mapVsUnorderedMap(MapStrStr inputCommands) {
 																							timmer) << std::endl;
 		}
 		{
+			std::map<std::string, uint32_t> otherCounts;
 			auto holdThis = strCounts.find("this");
 			timeTracker timmer("map", false);
 			for (const auto &str : randomsMix) {
 				holdThis = strCounts.find(str);
+				if(holdThis != strCounts.end()){
+					otherCounts[holdThis->first] = holdThis->second;
+				}
 			}
 			setUp.logging_ << "mapAccessFind\t"
 										 << getRunInfo("\t", false, setUp.extraInfo_, timmer)
@@ -3048,6 +3052,156 @@ int randomStringsGen(MapStrStr inputCommands) {
   }
   return 0;
 }
+int numericMapVsUnoMap(MapStrStr inputCommands) {
+
+  uint64_t stop;
+  profilerSetUp setUp(inputCommands);
+  uint32_t lowerLimit = 0;
+  uint32_t upperLimit = 100;
+  setUp.setOption(stop, "-stop", "stop", true);
+  setUp.setOption(lowerLimit, "-lower,-lowerLimit", "lowerLimit");
+  setUp.setOption(upperLimit, "-upper,-upperLimit", "upperLimit");
+  setUp.finishSetUp(std::cout);
+
+  setUp.extraInfo_.emplace_back("stop", to_string(stop));
+  setUp.extraInfo_.emplace_back("lowerLimit", to_string(lowerLimit));
+  setUp.extraInfo_.emplace_back("upperLimit", to_string(upperLimit));
+
+  if(setUp.header_){
+  	setUp.logging_ << "numType\tmapType\t"
+  			<< getRunInfo("\t", true, setUp.extraInfo_, timeTracker("none", false))
+  			<< std::endl;;
+  }
+  randomGenerator gen;
+  std::vector<uint8_t> ui8Vec = gen.unifRandVector<uint8_t>(lowerLimit, upperLimit, stop);
+  std::vector<uint16_t> ui16Vec = gen.unifRandVector<uint16_t>(lowerLimit, upperLimit, stop);
+  std::vector<uint32_t> ui32Vec = gen.unifRandVector<uint32_t>(lowerLimit, upperLimit, stop);
+  std::vector<uint64_t> ui64Vec = gen.unifRandVector<uint64_t>(lowerLimit, upperLimit, stop);
+  std::vector<double> doubVec = gen.unifRandVector<double>(lowerLimit, upperLimit, stop);
+  std::vector<long double> longDoubVec = gen.unifRandVector<long double>(lowerLimit, upperLimit, stop);
+  {
+  	timeTracker timer("uno_uint8_t", false);
+  	std::unordered_map<uint8_t, uint32_t> counts;
+  	for(auto i : ui8Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint8_t\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_uint8_t", false);
+  	std::map<uint8_t, uint32_t> counts;
+  	for(auto i : ui8Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint8_t\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("uno_uint16_t", false);
+  	std::unordered_map<uint16_t, uint32_t> counts;
+  	for(auto i : ui16Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint16_t\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_uint16_t", false);
+  	std::map<uint16_t, uint32_t> counts;
+  	for(auto i : ui16Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint16_t\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("uno_uint32_t", false);
+  	std::unordered_map<uint32_t, uint32_t> counts;
+  	for(auto i : ui32Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint32_t\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_uint32_t", false);
+  	std::map<uint32_t, uint32_t> counts;
+  	for(auto i : ui32Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint32_t\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("uno_uint64_t", false);
+  	std::unordered_map<uint64_t, uint32_t> counts;
+  	for(auto i : ui64Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint64_t\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_uint64_t", false);
+  	std::map<uint64_t, uint32_t> counts;
+  	for(auto i : ui64Vec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "uint64_t\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("uno_double", false);
+  	std::unordered_map<double, uint32_t> counts;
+  	for(auto i : doubVec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "double\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_double", false);
+  	std::map<double, uint32_t> counts;
+  	for(auto i : doubVec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "double\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("uno_long_double", false);
+  	std::unordered_map<long double, uint32_t> counts;
+  	for(auto i : longDoubVec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "long_double\tunordered_map\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+  {
+  	timeTracker timer("map_long_double", false);
+  	std::map<long double, uint32_t> counts;
+  	for(auto i : longDoubVec){
+  		++counts[i];
+  	}
+  	setUp.logging_ << "long_double\tmap\t"
+  	  			<< getRunInfo("\t", false, setUp.extraInfo_, timer)
+  	  			<< std::endl;
+  }
+
+  return 0;
+}
 int vecVsString(MapStrStr inputCommands) {
 
   uint64_t stop;
@@ -3473,7 +3627,8 @@ int unsDiff(MapStrStr inputCommands) {
 
 profilerRunner::profilerRunner()
     : cppprogutils::programRunner(
-          {addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
+          {addFunc("numericMapVsUnoMap", numericMapVsUnoMap, false),
+				   addFunc("fullAlignmentProfiler", fullAlignmentProfiler, false),
 					 addFunc("vecVsString", vecVsString, false),
 					 addFunc("indexingSpeeds", indexingSpeeds, false),
 					 addFunc("testingAaginstOther", testingAaginstOther, false),

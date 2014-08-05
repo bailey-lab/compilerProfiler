@@ -28,7 +28,7 @@ bin/*
 *.fasta
 external/*
 profiles/*
-
+temp/*
 *.pyc
 TAGS
 \#*

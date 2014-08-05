@@ -14,7 +14,7 @@ class randomGenerator {
 
  public:
   randomGenerator() {
-    seed(true);
+    seed();
     needToSeed_ = false;
   }
   /*
@@ -27,26 +27,14 @@ class randomGenerator {
   bool needToSeed_;
   // Generate a random number between 0 and 1 not inclusive
   double unifRand() {
-    double ans = mtGen_() / double(mtGen_.max());
-    // to protect latter functions from producing inclusion upper bound...i
-    // think
-    if (1 == ans) {
-      return unifRand();
-    } else {
-      return ans;
-    }
+  	return mtGen_() /( static_cast<double>(mtGen_.max()) + 1);
   }
   double operator()() { return unifRand(); }
   // return a vector of random numbers between 0 and 1
-  std::vector<double> unifRandVector(int num) {
-    if (needToSeed_) {
-      seed(true);
-    }
-    std::vector<double> ans;
-    ans.reserve(num);
-    for (int i = 0; i < num; ++i) {
-      ans.push_back(unifRand());
-    }
+  std::vector<double> unifRandVector(uint32_t num) {
+    std::vector<double> ans(num);
+    std::generate(ans.begin(), ans.end(),[&](){
+    	return unifRand();} );
     return ans;
   }
   // return random number between start and stop, not inclusive of stop if T is
@@ -86,9 +74,6 @@ class randomGenerator {
   }
   template <typename T>
   std::vector<T> unifRandVector(T start, T stop, int num) {
-    if (needToSeed_) {
-      seed(true);
-    }
     std::vector<T> ans(num);
     std::generate_n(ans.begin(), num, [&]() { return unifRand(start, stop); });
     return ans;
@@ -96,16 +81,13 @@ class randomGenerator {
   template <typename T>
   std::vector<std::vector<T>> unifRandVecVec(T start, T stop, uint32_t totalNum,
                                              uint32_t subNum) {
-    if (needToSeed_) {
-      seed(true);
-    }
     std::vector<std::vector<T>> ans(totalNum);
     std::generate(ans.begin(), ans.end(),
                   [&]() { return unifRandVector<T>(start, stop, subNum); });
     return ans;
   }
   // Reset the random number generator with the system clock.
-  void seed(bool useRDevice) {
+  void seed() {
     std::random_device rd;
     mtGen_.seed(rd());
   }
