@@ -8,7 +8,8 @@
 
 #include "compro/common.h"
 #include "compro/utils.h"
-#include "cppprogutils/programSetUp.hpp"
+#include <cppprogutils/programSetUp.hpp>
+
 namespace compro {
 
 class profilerSetUp : public cppprogutils::programSetUp {

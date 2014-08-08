@@ -5,7 +5,7 @@
  *      Author: nickhathaway
  */
 #include "compro.h"
-#include "cppprogutils/programRunner.hpp"
+#include <cppprogutils/programRunner.hpp>
 namespace compro {
 class profilerRunner : public cppprogutils::programRunner {
  public:

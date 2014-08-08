@@ -10,6 +10,7 @@
 #include "compro/alignment/alignerUtils.hpp"
 #include "compro/alignment/alignInfoHolder.hpp"
 #include "compro/utils/vectorUtils.hpp"
+
 namespace compro {
 
 template <typename NUM>
@@ -63,6 +64,7 @@ class alignCalc {
    */
   // template <typename NUM>
   static NUM needleMaximum(NUM u, NUM l, NUM d, char& p) {
+
     if (u == l && u == d) {
       p = 'B';
       return u;
@@ -86,6 +88,7 @@ class alignCalc {
       p = 'D';
       return d;
     }
+
   }
   /*! \brief Smith Maximum
    *
