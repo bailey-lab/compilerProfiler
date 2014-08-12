@@ -198,7 +198,7 @@ class Setup:
                 print "Need to supply compfile to parse for needed libraries and compilers";
                 print "by giving -compfile";
                 exit(1);
-        print self.setUpNeeded
+                
             for libNeeded in self.setUpNeeded:
                 if(libNeeded == "USE_CPPITERTOOLS"):
                     libsToInstall.append( "cppitertools")
