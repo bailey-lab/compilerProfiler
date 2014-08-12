@@ -141,11 +141,10 @@ class Setup:
     def __processArgs(self):
         dirs = self.args.dirsToDelete
         if dirs:
-               if "all" == dirs[0]:
+            if "all" == dirs[0]:
                 dirs = []
                 for k, _ in self.paths.paths.iteritems():
                     dirs.append(k)
-
             for e in dirs:
                 if e in self.paths.paths.keys():
                     p = self.__path(e)
@@ -153,8 +152,9 @@ class Setup:
                         Utils.rm_rf(p.build_dir)
                     if p.local_dir:
                         Utils.rm_rf(p.local_dir)
-    if self.args.compfile:
-        self.parseSetUpNeeded(self.args.compfile[0]);
+    
+        if self.args.compfile:
+            self.parseSetUpNeeded(self.args.compfile[0]);
             self.parserForCompilers(self.args.compfile[0]);
     
     def parseSetUpNeeded(self, compfile):
