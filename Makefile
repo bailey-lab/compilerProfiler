@@ -1,10 +1,9 @@
 ROOT = $(realpath ./)
 EXT_PATH=$(realpath external)
-LIB_DIR=$(realpath lib)
+LIB_DIR=$(ROOT)/lib
 
 USE_CPPITERTOOLS = 1
 USE_CPPPROGUTILS = 1
-HATHAWAY = 1
 
 include $(ROOT)/makefile-common.mk
 include $(COMPFILE)
@@ -15,38 +14,58 @@ HEADERS = $(call rwildcard, src/, *.h) \
 	$(call rwildcard, src/, *.hpp)
 
 OBJ_DIR = $(addprefix build/, $(addsuffix Build, $(CXXOUTNAME)))
-OBJ_DIRSO = $(addprefix build/, $(addsuffix BuildSo, $(CXXOUTNAME)))
-OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
+OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp))) 
 OBJNOMAIN = $(filter-out $(addsuffix /src/main.o, $(OBJ_DIR)), $(OBJ))
 
-OBJSO = $(addprefix $(OBJ_DIRSO)/, $(patsubst %.cpp, %.o, $(call rwildcard, src/, *.cpp)))
-OBJNOMAINSO = $(filter-out $(addsuffix /src/main.o, $(OBJ_DIRSO)), $(OBJSO))
+
 
 BIN = $(addsuffix $(CXXOUTNAME), bin/)
 DYLIB = $(addprefix $(addsuffix $(CXXOUTNAME), $(LIB_DIR)/lib), .dylib)
 SOLIB = $(addprefix $(addsuffix $(CXXOUTNAME), $(LIB_DIR)/lib), .so)
 COMMON = $(CXXFLAGS) $(CXXOPT) $(COMLIBS)
-
+-include do_preReqs
 ############ main
 .PHONY: all
-all: $(OBJ_DIR) $(BIN)
+all: do_preReqs $(OBJ_DIR) $(BIN)
 	scripts/fixDyLinking_mac.sh bin external
-
+	
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 	mkdir -p bin
 	mkdir -p lib
 
-$(OBJ_DIR)/%.o: %.cpp $(HEADERS)
+$(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(OBJ_DIR)/$(shell dirname $<)
-	$(CXX) $(COMMON) -c $< -o $@
-
-$(OBJ_DIR)/%.d: %.cpp
-	$(SHELL) -ec '$(CPP) -M  $< | sed '\"s/$*.o/& $@/g'\" > $@'
+	$(CXX) $(COMMON) -fpic -c $< -o $@
 
 $(BIN): $(OBJ) $(OBJ_DIR)/src/main.o
 	$(CXX) $(COMMON) -o $@ $^ $(LD_FLAGS) 
+	
+############ remove the objects that were dependant the changed headers 
+.PHONY: do_script
+do_script:
+	scripts/rmNeedToRecompile.py -obj $(OBJ_DIR) -src src/
 
+prerequisites: do_script
+
+.PHONY: do_preReqs 
+do_preReqs: prerequisites
+
+	
+############ shared library
+.PHONY: sharedLibrary
+sharedLibrary: $(OBJ_DIR) $(SOLIB)
+	scripts/fixDyLinking_mac.sh lib external
+
+$(SOLIB): $(OBJNOMAIN)
+	$(CXX) $(COMMON) -shared -o $@ $^ $(LD_FLAGS) 
+	
+############ dylibLibrary
+.PHONY: dylibLibrary
+dylibLibrary: $(OBJ_DIR) $(DYLIB)
+	scripts/fixDyLinking_mac.sh lib external
+$(DYLIB): $(OBJNOMAIN)
+	$(CXX) $(COMMON) -dynamiclib -o $@ $^ $(LD_FLAGS) 
 
 
 ############ clean
@@ -54,30 +73,33 @@ $(BIN): $(OBJ) $(OBJ_DIR)/src/main.o
 clean:
 	@rm -f $(BIN)
 	@rm -rf $(OBJ_DIR)
-
-############ shared library
-.PHONY: sharedLibrary
-sharedLibrary: $(OBJ_DIRSO) $(SOLIB)
-
-$(OBJ_DIRSO):
-	mkdir -p $(OBJ_DIRSO)
-	mkdir -p lib
-
-$(OBJ_DIRSO)/%.o: %.cpp $(HEADERS)
-	@mkdir -p $(OBJ_DIRSO)/$(shell dirname $<)
-	$(CXX) $(COMMON) -fpic -c $< -o $@
-
-$(OBJ_DIRSO)/%.d: %.cpp
-	$(SHELL) -ec '$(CPP) -M  $< | sed '\"s/$*.o/& $@/g'\" > $@'
-
-$(SOLIB): $(OBJNOMAINSO)
-	$(CXX) $(COMMON) -shared -o $@ $^ $(LD_FLAGS) 
 	
-############ dylibLibrary
-.PHONY: dylibLibrary
-dylibLibrary: $(OBJ_DIR) $(DYLIB)
 	
-$(DYLIB): $(OBJNOMAIN)
-	$(CXX) $(COMMON) -dynamiclib -o $@ $^ $(LD_FLAGS) 
+############ install
+.PHONY: install
+install: $(INSTALL_DIR) moveHeaders $(OBJ_DIR) $(INSTALL_DIR)/lib/$(CXXOUTNAME).so $(INSTALL_DIR)/lib/$(CXXOUTNAME).dylib $(INSTALL_DIR)/bin/$(CXXOUTNAME) 
+	scripts/fixDyLinking_mac.sh $(INSTALL_DIR)/lib/ external
+	scripts/fixDyLinking_mac.sh $(INSTALL_DIR)/bin/ external
 	
+$(INSTALL_DIR):
+	@mkdir -p $(INSTALL_DIR)/include
+	@mkdir -p $(INSTALL_DIR)/bin
+	@mkdir -p $(INSTALL_DIR)/lib
+	
+$(INSTALL_DIR)/lib/$(CXXOUTNAME).so: $(OBJNOMAIN)
+	$(CXX) $(COMMON) -shared -o $(realpath $(INSTALL_DIR))/lib/$(CXXOUTNAME).so $^ $(LD_FLAGS) 
+
+$(INSTALL_DIR)/lib/$(CXXOUTNAME).dylib: $(OBJNOMAIN)
+	$(CXX) $(COMMON) -dynamiclib -o $(realpath $(INSTALL_DIR))/lib/$(CXXOUTNAME).dylib $^ $(LD_FLAGS)  
+
+$(INSTALL_DIR)/bin/$(CXXOUTNAME):$(OBJ) $(OBJ_DIR)/src/main.o
+	$(CXX) $(COMMON) -o $(realpath $(INSTALL_DIR))/bin/$(CXXOUTNAME) $^ $(LD_FLAGS) 
+
+
+.PHONY moveHeaders:
+moveHeaders: $(INSTALL_DIR)
+	scripts/reDirMove.sh src/ $(INSTALL_DIR)/include/
+	
+	
+
 	

@@ -9,3 +9,6 @@ endif
 LD_FLAGS += 
 #debug
 CXXDEBUG = -g -gstabs+ 
+
+INSTALL_DIR=tempInstallTest
+

@@ -20,7 +20,6 @@ struct gapInfo {
   uint32_t pos_;
   uint32_t size_;
   bool gapInA_;
-
   void writeInfo(std::ostream& out) const {
     out << pos_ << "," << size_ << "," << gapInA_ << std::endl;
   }

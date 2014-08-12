@@ -8,3 +8,5 @@ endif
 LD_FLAGS += -L /Users/nickhathaway/source_codes/gccs/gcc_toolchains/lib/ -Wl,-rpath,/Users/nickhathaway/source_codes/gccs/gcc_toolchains/lib/
 #debug
 CXXDEBUG = -g -gstabs+ 
+INSTALL_DIR=tempInstallTest
+

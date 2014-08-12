@@ -25,17 +25,17 @@ class timeTracker {
       : prefix_(s), printAtDeath_(printAtDeath), fileName_("") {
     start_ = std::chrono::high_resolution_clock::now();
   }
-
   timeTracker(const std::string s, bool printAtDeath,
               const std::string& fileName)
       : prefix_(s), printAtDeath_(printAtDeath), fileName_(fileName) {
     start_ = std::chrono::high_resolution_clock::now();
   }
-
   timeTracker(const std::string s, const std::string& fileName)
       : prefix_(s), printAtDeath_(true), fileName_(fileName) {
     start_ = std::chrono::high_resolution_clock::now();
   }
+
+
   // deconstructor
   ~timeTracker() {
     if (printAtDeath_) {

@@ -18,6 +18,7 @@ double timeTracker::getRunTime() const {
          static_cast<double>(std::chrono::high_resolution_clock::period::den);
 }
 
+
 std::string timeTracker::getStringRunTime(bool wordy, int decPlaces) const {
   return getTimeFormat(getRunTime(), true, decPlaces);
 }

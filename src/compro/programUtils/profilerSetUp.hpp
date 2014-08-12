@@ -23,8 +23,8 @@ class profilerSetUp : public cppprogutils::programSetUp {
   }
   profilerSetUp(const MapStrStr& inputCommands) : cppprogutils::programSetUp(inputCommands) {
     initializeDefaults();
-  }
 
+  }
   void initializeDefaults();
 
   // some defaults
