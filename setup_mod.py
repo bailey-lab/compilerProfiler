@@ -69,7 +69,7 @@ class Paths():
         return BuildPaths(url, '', '', local_dir)
 
     def __pear(self):
-        url = "http://sco.h-its.org/exelixis/web/software/pear/files/pear-0.9.0-src.tar.gz"
+        url = "http://sco.h-its.org/exelixis/web/software/pear/files/pear-0.9.4-src.tar.gz"
         return self.__package_dirs(url, "pear")
 
     def __Rdevel(self):
@@ -262,6 +262,7 @@ class Setup:
         print "\t getting file..."
         fnp = Utils.get_file_if_size_diff(i.url, self.paths.ext_tars)
         Utils.clear_dir(i.build_dir)
+
         Utils.untar(fnp, i.build_dir)
         try:
             Utils.run_in_dir(cmd, i.build_sub_dir)
@@ -281,7 +282,7 @@ class Setup:
     def pear(self):
         i = self.__path("pear")
         cmd = """
-            ./configure --prefix={local_dir}/../../../ && make -j {num_cores} && make install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+            echo $(pwd) && ./configure --prefix={local_dir}/../../../ && make -j {num_cores} && make install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
         self.__build(i, cmd)
 
     def Rdevel(self):
