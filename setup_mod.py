@@ -210,6 +210,8 @@ class Setup:
                     libsToInstall.append( "zi_lib")
                 elif(libNeeded == "USE_BOOST"):
                     libsToInstall.append( "boost")
+                elif(libNeeded == "USE_R"):
+                    libsToInstall.append( "R-devel")
                 elif(libNeeded == "USE_BAMTOOLS"):
                     libsToInstall.append( "bamtools")
                 elif(libNeeded == "USE_CPPCMS"):
