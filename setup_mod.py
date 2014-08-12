@@ -173,6 +173,8 @@ class Setup:
                 self.CC = values[1].strip();
             elif(values[0].strip() == "CXX"):
                 self.CXX = values[1].strip();
+                if "clang" in self.CXX:
+                    self.args.clang = True
     def __path(self, name):
         return self.paths.path(name)
 
@@ -267,16 +269,12 @@ class Setup:
 
     def boost(self):
         i = self.__path("boost")
-        if isMac():
-            
-          cmd = """
-               wget https://github.com/boostorg/atomic/commit/6bb71fdd.diff && wget https://github.com/boostorg/atomic/commit/e4bde20f.diff&&  wget https://gist.githubusercontent.com/philacs/375303205d5f8918e700/raw/d6ded52c3a927b6558984d22efe0a5cf9e59cd8c/0005-Boost.S11n-include-missing-algorithm.patch&&  patch -p2 -i 6bb71fdd.diff&&  patch -p2 -i e4bde20f.diff&&  patch -p1 -i 0005-Boost.S11n-include-missing-algorithm.patch&&  echo "using clang;  " >> tools/build/v2/user-config.jam&&  ./bootstrap.sh --with-toolset=clang --prefix={local_dir}&&  ./b2  -d 2 toolset=clang cxxflags=\"-stdlib=libc++\" linkflags=\"-stdlib=libc++\"  -j {num_cores} install&&  install_name_tool -change libboost_system.dylib {local_dir}/lib/libboost_system.dylib {local_dir}/lib/libboost_thread.dylib&&  install_name_tool -change libboost_system.dylib {local_dir}/lib/libboost_system.dylib {local_dir}/lib/libboost_filesystem.dylib""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
-        else:
-            if self.args.clang:
-                cmd = """
+        if self.args.clang:
+            cmd = """
                wget https://github.com/boostorg/atomic/commit/6bb71fdd.diff && wget https://github.com/boostorg/atomic/commit/e4bde20f.diff&&  wget https://gist.githubusercontent.com/philacs/375303205d5f8918e700/raw/d6ded52c3a927b6558984d22efe0a5cf9e59cd8c/0005-Boost.S11n-include-missing-algorithm.patch&&  patch -p2 -i 6bb71fdd.diff&&  patch -p2 -i e4bde20f.diff&&  patch -p1 -i 0005-Boost.S11n-include-missing-algorithm.patch&&  echo "using clang;  " >> tools/build/v2/user-config.jam&&  ./bootstrap.sh --with-toolset=clang --prefix={local_dir}&&  ./b2  -d 2 toolset=clang cxxflags=\"-stdlib=libc++ -I/home/hathawan/source_codes/openmp/libomp_oss/exports/common/include -I/home/hathawan/compilers/compiler/include/c++/4.8.3/ -I/home/hathawan/compilers/include/c++/4.8.3/x86_64-unknown-linux-gnu/ -L/home/hathawan/compilers/lib64 -Wl,-rpath,/home/hathawan/compilers/lib64 -L/home/hathawan/compilers/lib/ -Wl,-rpath,/home/hathawan/compilers/lib/ -L/home/hathawan/source_codes/openmp/libomp_oss/exports/lin_32e/lib -Wl,-rpath,/home/hathawan/source_codes/openmp/libomp_oss/exports/lin_32e/lib -liomp5\" linkflags=\"-stdlib=libc++\" -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
-            else:
-                cmd = """echo "using gcc : 4.8 : /usr/bin/g++-4.8 ; " >> tools/build/v2/user-config.jam &&./bootstrap.sh --prefix={local_dir} && ./b2 -d 2 toolset=gcc-4.8 -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+        else:
+            cmd = """echo "using gcc : 4.8 : g++-4.8 ; " >> tools/build/v2/user-config.jam &&./bootstrap.sh --prefix={local_dir} && ./b2 -d 2 toolset=gcc-4.8 -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+
         self.__build(i, cmd)
         
     def pear(self):
