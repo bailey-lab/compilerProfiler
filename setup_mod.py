@@ -140,26 +140,25 @@ class Setup:
                        }
     def __processArgs(self):
         dirs = self.args.dirsToDelete
-        if not dirs:
-            return
+        if dirs:
+               if "all" == dirs[0]:
+                dirs = []
+                for k, _ in self.paths.paths.iteritems():
+                    dirs.append(k)
 
-        if "all" == dirs[0]:
-            dirs = []
-            for k, _ in self.paths.paths.iteritems():
-                dirs.append(k)
-
-        for e in dirs:
-            if e in self.paths.paths.keys():
-                p = self.__path(e)
-                if p.build_dir:
-                    Utils.rm_rf(p.build_dir)
-                if p.local_dir:
-                    Utils.rm_rf(p.local_dir)
+            for e in dirs:
+                if e in self.paths.paths.keys():
+                    p = self.__path(e)
+                    if p.build_dir:
+                        Utils.rm_rf(p.build_dir)
+                    if p.local_dir:
+                        Utils.rm_rf(p.local_dir)
+    if self.args.compfile:
         self.parseSetUpNeeded(self.args.compfile[0]);
-        self.parserForCompilers(self.args.compfile[0]);
+            self.parserForCompilers(self.args.compfile[0]);
     
     def parseSetUpNeeded(self, compfile):
-        compfile = open(args.compfile);
+        compfile = open(compfile);
         for line in compfile:
             values = line.split("=");
             firstArg = values[0].strip();
@@ -167,7 +166,7 @@ class Setup:
                self.setUpNeeded.append(firstArg);
                     
     def parserForCompilers(self, compfile):
-        compfile = open(args.compfile[0]);
+        compfile = open(compfile);
         for line in compfile:
             values = line.split("=");
             if(values[0].strip()=="CC"):
@@ -199,29 +198,30 @@ class Setup:
                 print "Need to supply compfile to parse for needed libraries and compilers";
                 print "by giving -compfile";
                 exit(1);
+        print self.setUpNeeded
             for libNeeded in self.setUpNeeded:
                 if(libNeeded == "USE_CPPITERTOOLS"):
-                    libsToInstall += "cppitertools";
+                    libsToInstall.append( "cppitertools")
                 elif(libNeeded == "USE_CPPPROGUTILS"):
-                    libsToInstall += "cppprogutils";
+                    libsToInstall.append( "cppprogutils")
                 elif(libNeeded == "USE_ZI_LIB"):
-                    libsToInstall += "zi_lib";
+                    libsToInstall.append( "zi_lib")
                 elif(libNeeded == "USE_BOOST"):
-                    libsToInstall += "boost";
+                    libsToInstall.append( "boost")
                 elif(libNeeded == "USE_BAMTOOLS"):
-                    libsToInstall += "bamtools";
+                    libsToInstall.append( "bamtools")
                 elif(libNeeded == "USE_CPPCMS"):
-                    libsToInstall += "cppcms";
+                    libsToInstall.append( "cppcms")
                 elif(libNeeded == "USE_MATHGL"):
-                    libsToInstall += "mathgl";
+                    libsToInstall.append( "mathgl")
                 elif(libNeeded == "USE_ARMADILLO"):
-                    libsToInstall += "armadillo";
+                    libsToInstall.append( "armadillo")
                 elif(libNeeded == "USE_MLPACK"):
-                    libsToInstall += "mlpack";
+                    libsToInstall.append( "mlpack")
                 elif(libNeeded == "USE_liblinear"):
-                    libsToInstall += "liblinear";
+                    libsToInstall.append( "liblinear")
                 elif(libNeeded == "USE_PEAR"):
-                    libsToInstall += "pear";
+                    libsToInstall.append( "pear")
         else:
             libsToInstall = dirs
             if not self.args.CC:
