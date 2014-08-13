@@ -6,9 +6,9 @@ include $(COMPFILE)
 include $(ROOT)/makefile-common.mk
 
 
-#ifndef COMPFILE
-#	$(error $(COMPFILE) is not set)
-#endif
+ifndef COMPFILE
+	$(error $(COMPFILE) is not set)
+endif
 
 UNAME_S := $(shell uname -s)
 # from http://stackoverflow.com/a/8654800

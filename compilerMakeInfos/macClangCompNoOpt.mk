@@ -4,7 +4,7 @@ CXXOUTNAME = macClangProfilerNoOpt
 CXXFLAGS = -std=c++11 -Wall 
 CXXFLAGS += 
 CXXOPT += -DNDEBUG 
-ifneq ($(UNAME_S),Darwin)
+ifneq ($(shell uname -s),Darwin)
 	CXXOPT += -march=native -mtune=native 
 endif
 LD_FLAGS += 
