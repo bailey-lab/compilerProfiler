@@ -2,11 +2,13 @@ ROOT = $(realpath ./)
 EXT_PATH=$(realpath external)
 LIB_DIR=$(ROOT)/lib
 
-USE_CPPITERTOOLS = 1
-USE_CPPPROGUTILS = 1
-
-include $(ROOT)/makefile-common.mk
 include $(COMPFILE)
+include $(ROOT)/makefile-common.mk
+
+
+#ifndef COMPFILE
+#	$(error $(COMPFILE) is not set)
+#endif
 
 UNAME_S := $(shell uname -s)
 # from http://stackoverflow.com/a/8654800

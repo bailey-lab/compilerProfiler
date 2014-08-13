@@ -20,7 +20,6 @@ class timeTracker {
       : prefix_(s), printAtDeath_(true), fileName_("") {
     start_ = std::chrono::high_resolution_clock::now();
   }
-
   timeTracker(const std::string s, bool printAtDeath)
       : prefix_(s), printAtDeath_(printAtDeath), fileName_("") {
     start_ = std::chrono::high_resolution_clock::now();

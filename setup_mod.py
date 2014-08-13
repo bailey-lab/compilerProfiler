@@ -274,9 +274,16 @@ class Setup:
         i = self.__path("boost")
         if self.args.clang:
             cmd = """
-                wget https://github.com/boostorg/atomic/commit/6bb71fdd.diff && wget https://github.com/boostorg/atomic/commit/e4bde20f.diff&&  wget https://gist.githubusercontent.com/philacs/375303205d5f8918e700/raw/d6ded52c3a927b6558984d22efe0a5cf9e59cd8c/0005-Boost.S11n-include-missing-algorithm.patch&&  patch -p2 -i 6bb71fdd.diff&&  patch -p2 -i e4bde20f.diff&&  patch -p1 -i 0005-Boost.S11n-include-missing-algorithm.patch&&  echo "using clang;  " >> tools/build/v2/user-config.jam&&  ./bootstrap.sh --with-toolset=clang --prefix={local_dir}&&  ./b2  -d 2 toolset=clang -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+                wget https://github.com/boostorg/atomic/commit/6bb71fdd.diff && wget https://github.com/boostorg/atomic/commit/e4bde20f.diff&&  wget https://gist.githubusercontent.com/philacs/375303205d5f8918e700/raw/d6ded52c3a927b6558984d22efe0a5cf9e59cd8c/0005-Boost.S11n-include-missing-algorithm.patch&&  patch -p2 -i 6bb71fdd.diff&&  patch -p2 -i e4bde20f.diff&&  patch -p1 -i 0005-Boost.S11n-include-missing-algorithm.patch&&"""
         else:
-            cmd = """echo "using gcc : 4.8 : g++-4.8 ; " >> tools/build/v2/user-config.jam &&./bootstrap.sh --prefix={local_dir} && ./b2 -d 2 toolset=gcc-4.8 -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+            if isMac():
+                cmd = """echo "using gcc : 4.8 : g++-4.8 ; " >> tools/build/v2/user-config.jam &&./bootstrap.sh --prefix={local_dir} && ./b2 -d 2 toolset=darwin-4.8 -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+            else:
+                cmd = """echo "using gcc : 4.8 : g++-4.8 ; " >> tools/build/v2/user-config.jam &&./bootstrap.sh --prefix={local_dir} && ./b2 -d 2 toolset=gcc-4.8 -j {num_cores} install""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+
+        if isMac():
+            cmd += """ &&  install_name_tool -change libboost_system.dylib {local_dir}/lib/libboost_system.dylib {local_dir}/lib/libboost_thread.dylib&&  install_name_tool -change libboost_system.dylib {local_dir}/lib/libboost_system.dylib {local_dir}/lib/libboost_filesystem.dylib""".format(local_dir=shellquote(i.local_dir).replace(' ', '\ '), num_cores=self.num_cores())
+        
         self.__build(i, cmd)
         
     def pear(self):
@@ -382,6 +389,41 @@ mkdir -p build
         pkgs = """libbz2-dev python2.7-dev cmake libpcre3-dev zlib1g-dev libgcrypt11-dev libicu-dev
 python doxygen doxygen-gui auctex xindy graphviz libcurl4-openssl-dev""".split()
 
+def generateCompfile(outFileName):
+    outFile = open(outFileName, "w");
+    outFile.write("CC = gcc-4.8\n")
+    outFile.write("CXX = g++-4.8\n")
+    outFile.write("CXXOUTNAME = NAME_OF_PROGRAM\n")
+    outFile.write("CXXFLAGS = -std=c++11 -Wall\n")
+    outFile.write("CXXOPT += -O2 -funroll-loops -DNDEBUG  \n")
+    outFile.write("ifneq ($(UNAME_S,Darwin\n")
+    outFile.write("\tCXXOPT += -march=native -mtune=native" )
+    outFile.write("endif\n")
+    outFile.write("\n")
+    outFile.write("#debug\n")
+    outFile.write("CXXDEBUG = -g -gstabs+ \n")
+    outFile.write("INSTALL_DIR=INDATALL_LOCATION\n")
+    outFile.write("\n")
+    outFile.write("#USE_CPPITERTOOLS = 1\n")
+    outFile.write("#USE_CPPPROGUTILS = 1\n")
+    outFile.write("#USE_ZI_LIB = 1\n")
+    outFile.write("#USE_BOOST = 1\n")
+    outFile.write("#USE_R = 1\n")
+    outFile.write("#USE_BAMTOOLS = 1\n")
+    outFile.write("#USE_CPPCMS = 1\n")
+    outFile.write("#USE_MATHGL = 1\n")
+    outFile.write("#USE_ARMADILLO = 1\n")
+    outFile.write("#USE_MLPACK = 1\n")
+    outFile.write("#USE_liblinear = 1\n")
+    outFile.write("#USE_PEAR = 1\n")
+
+def startSrc():
+    if not os.path.isdir("src/"):
+        os.mkdir("src/")
+    if not os.path.isfile("src/main.cpp"):
+        cmd = "./scripts/genHelloWorldCpp.sh src/main.cpp"
+        Utils.run(cmd)
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-compfile', type=str, nargs=1);
@@ -392,10 +434,18 @@ def parse_args():
     parser.add_argument('-libs', dest = 'print_libs', action = 'store_true' );
     parser.add_argument('-addBashCompletion', dest = 'addBashCompletion', action = 'store_true' );
     parser.add_argument('-clang', dest = 'clang', action = 'store_true' );
+    parser.add_argument('-generate', type=str, nargs=1);
+    parser.add_argument('-generateSrc', dest = 'generateSrc', action = 'store_true' );
     return parser.parse_args()
 
 def main():
     args = parse_args()
+    if(args.generate):
+        generateCompfile(args.generate[0])
+        exit(1)
+    if(args.generateSrc):
+        startSrc()
+        exit(1)
     s = Setup(args)
     if args.print_libs:
         print "Available installs:"

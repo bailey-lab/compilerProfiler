@@ -1,3 +1,4 @@
+CC = clang
 CXX = clang++
 CXXOUTNAME = clangProfilerOpt3
 CXXFLAGS = -std=c++11 -Wall -stdlib=libstdc++
@@ -10,3 +11,7 @@ LD_FLAGS += -L /Users/nickhathaway/source_codes/gccs/gcc_toolchains/lib/ -Wl,-rp
 #debug
 CXXDEBUG = -g -gstabs+ 
 INSTALL_DIR=tempInstallTest
+
+USE_CPPITERTOOLS = 1
+USE_CPPPROGUTILS = 1
+

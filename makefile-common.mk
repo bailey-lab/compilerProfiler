@@ -1,11 +1,11 @@
 UNAME_S := $(shell uname -s)
 LOCAL_PATH = $(EXT_PATH)/local
-LD_FLAGS = 
+#LD_FLAGS += 
 #defaults for most progjects
 LOCALTOOLS = -I$(LOCAL_PATH)
 EXTTOOLS = -I$(EXT_PATH)
 SRC = -I./src/
-COMLIBS = $(LOCALTOOLS) $(EXTTOOLS) $(SRC)
+COMLIBS += $(LOCALTOOLS) $(EXTTOOLS) $(SRC)
 
 
 #CPPPROGUTILS
@@ -86,7 +86,7 @@ ifeq ($(USE_MLPACK),1)
 endif
 
 #qt5
-ifeq ($USE_QT5,1)
+ifeq ($(USE_QT5),1)
 	ifeq ($(UNAME_S),Darwin)
 		LD_FLAGS += -Wl,-rpath,/usr/local/opt/qt5/lib \
 	 				-L/usr/local/opt/qt5/lib \

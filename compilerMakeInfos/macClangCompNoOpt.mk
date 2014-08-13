@@ -1,3 +1,4 @@
+CC =  /usr/bin/clang
 CXX = /usr/bin/clang++
 CXXOUTNAME = macClangProfilerNoOpt
 CXXFLAGS = -std=c++11 -Wall 
@@ -12,3 +13,5 @@ CXXDEBUG = -g -gstabs+
 
 INSTALL_DIR=tempInstallTest
 
+USE_CPPITERTOOLS = 1
+USE_CPPPROGUTILS = 1
