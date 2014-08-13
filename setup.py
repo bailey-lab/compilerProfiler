@@ -395,13 +395,13 @@ def generateCompfile(outFileName):
     outFile.write("CXXOUTNAME = NAME_OF_PROGRAM\n")
     outFile.write("CXXFLAGS = -std=c++11 -Wall\n")
     outFile.write("CXXOPT += -O2 -funroll-loops -DNDEBUG  \n")
-    outFile.write("ifneq ($(shell uname -s),Darwin\n")
-    outFile.write("\tCXXOPT += -march=native -mtune=native" )
+    outFile.write("ifneq ($(shell uname -s),Darwin)\n")
+    outFile.write("\tCXXOPT += -march=native -mtune=native\n" )
     outFile.write("endif\n")
     outFile.write("\n")
     outFile.write("#debug\n")
     outFile.write("CXXDEBUG = -g -gstabs+ \n")
-    outFile.write("INSTALL_DIR=INDATALL_LOCATION\n")
+    outFile.write("INSTALL_DIR=INSTALL_LOCATION\n")
     outFile.write("\n")
     outFile.write("#USE_CPPITERTOOLS = 1\n")
     outFile.write("#USE_CPPPROGUTILS = 1\n")
@@ -415,7 +415,8 @@ def generateCompfile(outFileName):
     outFile.write("#USE_MLPACK = 1\n")
     outFile.write("#USE_liblinear = 1\n")
     outFile.write("#USE_PEAR = 1\n")
-
+    outFile.write("#USE_CURL = 1\n")
+    
 def startSrc():
     if not os.path.isdir("src/"):
         os.mkdir("src/")
