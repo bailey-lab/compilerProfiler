@@ -33,3 +33,4 @@ temp/*
 TAGS
 \#*
 .\#*
+build/*
