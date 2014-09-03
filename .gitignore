@@ -34,3 +34,4 @@ TAGS
 \#*
 .\#*
 build/*
+compfile.mk
