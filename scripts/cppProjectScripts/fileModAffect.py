@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import fnmatch, subprocess, sys, os, argparse, re, copy
-
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), "pyUtils"))
 from headInGraph import fileCollection
 from headInGraph import fileNode
 from headInGraph import headInGraph
@@ -31,13 +31,14 @@ def main():
     allFiles = fileCollection.getAllSourceFiles(args.src[0])
     
     graph = headInGraph();
-
+    allFileSize = []
     for file in allFiles:
+        allFileSize.append(os.path.getsize(file))
         statbuf = os.stat(file)
         if(".h" not in file):
-            graph.addNode(os.path.basename(file).replace(".", "_"), fileNode.cppColor, "internal", statbuf.st_mtime)
+            graph.addNode(os.path.basename(file).replace(".", "_"), fileNode.cppColor, "internal", statbuf.st_mtime, max(1, 50 * (os.path.getsize(file) /float(max(allFileSize)) ) ) )
         else:
-            graph.addNode(os.path.basename(file).replace(".", "_"), fileNode.headerColor, "internal", statbuf.st_mtime)
+            graph.addNode(os.path.basename(file).replace(".", "_"), fileNode.headerColor, "internal", statbuf.st_mtime,  max(1, 50 * (os.path.getsize(file) /float(max(allFileSize)) ) ) )
     pattern = re.compile("#include.*\".*\.h")
     for file in allFiles:
         for i, line in enumerate(open(file)):
