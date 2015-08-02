@@ -1,6 +1,6 @@
-CC = clang
-CXX = clang++
-CXXOUTNAME = clangProfiler
+CC = gcc-5
+CXX = g++-5
+CXXOUTNAME = gcc5Profiler
 CXXFLAGS = -std=c++14 -Wall -ftemplate-depth=1024
 CXXOPT += -O2 -funroll-loops -DNDEBUG  
 ifneq ($(shell uname -s),Darwin)
